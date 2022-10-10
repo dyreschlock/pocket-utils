@@ -1,13 +1,11 @@
 package com.schlock.pocket.entites;
 
-import com.schlock.bot.entities.Persisted;
-
 import javax.persistence.*;
 import java.io.File;
 
 @Entity
 @Table(name = "pocket_game")
-public class PocketGame extends Persisted
+public class PocketGame
 {
     @Id
     @GeneratedValue
@@ -41,7 +39,6 @@ public class PocketGame extends Persisted
     public PocketGame()
     {
     }
-
 
     public Long getId()
     {
