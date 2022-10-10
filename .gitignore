@@ -1,0 +1,8 @@
+.DS_Store
+.gradle
+.classpath
+.idea/workspace.xml
+.idea/gradle.xml
+out/
+build/
+src/config.properties
