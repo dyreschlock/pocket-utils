@@ -6,3 +6,6 @@
 out/
 build/
 src/config.properties
+pocket-utils.iml
+pocket-utils.ipr
+pocket-utils.iws
