@@ -1,0 +1,7 @@
+
+
+
+hibernate.connection.url.local=
+hibernate.connection.username.local=
+hibernate.connection.password.local=
+

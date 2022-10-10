@@ -3,9 +3,6 @@ plugins {
     id 'idea'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
@@ -27,6 +24,15 @@ test {
 }
 
 sourceSets {
-    main.java.srcDirs = []
-    main.java.srcDirs += "src"
+    main {
+        java.srcDirs = files('src')
+        resources.srcDirs = files('src')
+    }
+    test {
+        java.srcDirs = files('test')
+    }
+}
+
+clean {
+    delete files('build')
 }
