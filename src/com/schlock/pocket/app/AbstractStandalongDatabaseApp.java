@@ -1,4 +1,4 @@
-package com.schlock.pocket;
+package com.schlock.pocket.app;
 
 import com.schlock.pocket.services.DeploymentConfiguration;
 import org.hibernate.Session;

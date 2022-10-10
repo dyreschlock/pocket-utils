@@ -1,4 +1,4 @@
-package com.schlock.pocket;
+package com.schlock.pocket.app;
 
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
