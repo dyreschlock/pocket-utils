@@ -2,6 +2,7 @@ package com.schlock.pocket.app;
 
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
+import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketGameDAO;
 import org.apache.commons.io.FileUtils;
 
@@ -16,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.CRC32;
 
-public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
+public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 {
     private static final String URL = "https://raw.githubusercontent.com/libretro-thumbnails/";
     private static final String URL_BOXARTS = "/master/Named_Boxarts/";
@@ -27,6 +28,11 @@ public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
     private static final String LIBRARY_DIRECTORY = "/Volumes/Pocket/System/Library/Images/";
 
     private static final String COMMON = "common/";
+
+    protected CollectProcessLibraryThumbnails(String context)
+    {
+        super(context);
+    }
 
 
     void process()
@@ -230,6 +236,6 @@ public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
 
     public static void main(String[] args)
     {
-        new CollectPocketThumbnails().run();
+        new CollectProcessLibraryThumbnails(DeploymentConfiguration.LOCAL).run();
     }
 }

@@ -1,5 +1,6 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.services.DeploymentConfiguration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -11,7 +12,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
-public class MRAMovingScripting
+public class SortPrepareMRAFiles extends AbstractApplication
 {
     private static final String MRA_LOCATION = "/volumes/pocket/_mra/";
     private static final String ASSET_LOCATION = "/volumes/pocket/Assets/";
@@ -39,6 +40,11 @@ public class MRAMovingScripting
 
     private Set<String> namespaces = new HashSet<>();
     private Set<String> requiredRoms = new HashSet<>();
+
+    protected SortPrepareMRAFiles(String context)
+    {
+        super(context);
+    }
 
     public void run() throws Exception
     {
@@ -269,6 +275,6 @@ public class MRAMovingScripting
 
     public static void main(String[] args) throws Exception
     {
-        new MRAMovingScripting().run();
+        new SortPrepareMRAFiles(DeploymentConfiguration.LOCAL).run();
     }
 }

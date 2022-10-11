@@ -2,18 +2,24 @@ package com.schlock.pocket.app;
 
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
+import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketGameDAO;
 
 import java.io.File;
 import java.io.FileFilter;
 
-public class CreatePocketEntries extends AbstractStandalongDatabaseApp
+public class CreatePocketEntries extends AbstractDatabaseApplication
 {
     private static final String ASSET_LOCATION = "/Volumes/Pocket/Assets/";
     private static final String COMMON = "common/";
 
     private static final String UNSORTED = "__unsorted";
     private static final String ALL = "_all";
+
+    protected CreatePocketEntries(String context)
+    {
+        super(context);
+    }
 
     void process()
     {
@@ -106,6 +112,6 @@ public class CreatePocketEntries extends AbstractStandalongDatabaseApp
 
     public static void main(String[] args)
     {
-        new CreatePocketEntries().run();
+        new CreatePocketEntries(DeploymentConfiguration.LOCAL).run();
     }
 }

@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-public abstract class AbstractStandalongDatabaseApp
+public abstract class AbstractDatabaseApplication extends AbstractApplication
 {
     public final static String HIBERNATE_USERNAME = "hibernate.connection.username";
     public final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
@@ -16,10 +16,13 @@ public abstract class AbstractStandalongDatabaseApp
     public final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
     public final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
 
-    protected DeploymentConfiguration config;
-
     protected SessionFactory sessionFactory;
     protected Session session;
+
+    protected AbstractDatabaseApplication(String context)
+    {
+        super(context);
+    }
 
     abstract void process();
 
@@ -44,11 +47,9 @@ public abstract class AbstractStandalongDatabaseApp
 
     private void setupDatabase()
     {
-        config = DeploymentConfiguration.createDeploymentConfiguration(DeploymentConfiguration.LOCAL);
-
-        final String username = config.getHibernateProperty(HIBERNATE_USERNAME);
-        final String password = config.getHibernateProperty(HIBERNATE_PASSWORD);
-        final String url = config.getHibernateProperty(HIBERNATE_URL);
+        final String username = config().getHibernateProperty(HIBERNATE_USERNAME);
+        final String password = config().getHibernateProperty(HIBERNATE_PASSWORD);
+        final String url = config().getHibernateProperty(HIBERNATE_URL);
 
 
         Configuration dbconfig = new Configuration();
