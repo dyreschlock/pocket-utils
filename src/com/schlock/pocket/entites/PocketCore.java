@@ -6,6 +6,7 @@ import java.util.List;
 public enum PocketCore
 {
     SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
+    FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
 
     VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
