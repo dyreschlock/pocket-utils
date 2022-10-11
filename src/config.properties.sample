@@ -1,5 +1,16 @@
 
+pocket.assets.directory=
+pocket.library.directory=
 
+boxart.source.url=
+boxart.storage.directory=
+
+romzip.source.url=
+romzip.hbsource.url=
+romzip.storage.directory=
+
+preparation.mra.directory=
+preparation.library.directory=
 
 hibernate.connection.url.local=
 hibernate.connection.username.local=

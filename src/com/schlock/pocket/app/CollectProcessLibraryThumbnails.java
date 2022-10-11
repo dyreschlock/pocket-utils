@@ -19,21 +19,10 @@ import java.util.zip.CRC32;
 
 public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 {
-    private static final String URL = "https://raw.githubusercontent.com/libretro-thumbnails/";
-    private static final String URL_BOXARTS = "/master/Named_Boxarts/";
-
-    private static final String BOXART_IMAGE_DIRECTORY = "/Volumes/Pocket/_boxart/";
-    private static final String ROM_CORE_DIRECTORY = "/Volumes/Pocket/Assets/";
-    private static final String LIBRARY_SETUP_DIRECTORY = "/Volumes/Pocket/Tools/input/";
-    private static final String LIBRARY_DIRECTORY = "/Volumes/Pocket/System/Library/Images/";
-
-    private static final String COMMON = "common/";
-
     protected CollectProcessLibraryThumbnails(String context)
     {
         super(context);
     }
-
 
     void process()
     {
@@ -72,7 +61,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private void processGame(PocketGame game) throws Exception
     {
-        String OUTPUT_FOLDER = BOXART_IMAGE_DIRECTORY + game.getCore().getCoreCode();
+        String OUTPUT_FOLDER = config().getBoxartStorageDirectory() + game.getCore().getCoreCode();
         String OUTPUT_FILE = OUTPUT_FOLDER + "/" + game.getImageFilename();
 
         File imageFile = new File(OUTPUT_FILE);
@@ -126,10 +115,9 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
             }
         }
 
-        String URL_LOCATION = URL + coreRepo + URL_BOXARTS + imageFilename;
+        String URL_LOCATION = String.format(config().getBoxartSourceUrl(), coreRepo) + imageFilename;
         return URL_LOCATION;
     }
-
 
 
     private boolean verifyLibraryEntry(PocketGame game)
@@ -153,7 +141,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private void prepareLibraryThumbnail(PocketGame game) throws Exception
     {
-        String IMAGE_FILE = BOXART_IMAGE_DIRECTORY + game.getCore().getCoreCode() + "/" + game.getImageFilename();
+        String IMAGE_FILE = config().getBoxartStorageDirectory() + game.getCore().getCoreCode() + "/" + game.getImageFilename();
 
         File imageFile = new File(IMAGE_FILE);
         if (imageFile.exists())
@@ -197,10 +185,10 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
     {
         String coreCode = game.getCore().getCoreCode();
 
-        String ROM_FILE = ROM_CORE_DIRECTORY + coreCode + "/";
+        String ROM_FILE = config().getPocketAssetsDirectory() + coreCode + "/";
         if (!coreCode.contains("/"))
         {
-            ROM_FILE += COMMON;
+            ROM_FILE += COMMON_FOLDER;
         }
         ROM_FILE += game.getGenre() + "/" + game.getGameFilename();
 
@@ -214,7 +202,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             coreCode = coreCode.substring(0, coreCode.indexOf("/"));
         }
-        return LIBRARY_SETUP_DIRECTORY + coreCode + "/" + game.getFileHash() + ".png";
+        return config().getPreparationLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".png";
     }
 
     private String getLibraryFileLocation(PocketGame game)
@@ -224,7 +212,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             coreCode = coreCode.substring(0, coreCode.indexOf("/"));
         }
-        return LIBRARY_DIRECTORY + coreCode + "/" + game.getFileHash() + ".bin";
+        return config().getPocketLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bin";
     }
 
 

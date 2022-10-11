@@ -4,6 +4,9 @@ import com.schlock.pocket.services.DeploymentConfiguration;
 
 public abstract class AbstractApplication
 {
+    public static final String COMMON = "common";
+    public static final String COMMON_FOLDER = COMMON + "/";
+
     private DeploymentConfiguration config;
 
     protected AbstractApplication(String context)

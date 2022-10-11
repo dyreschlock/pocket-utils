@@ -5,13 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
 
 public class DeploymentConfiguration
 {
-    
+    private static final String BOXART_SOURCE_URL = "boxart.source.url";
+    private static final String BOXART_STORAGE_DIRECTORY = "boxart.storage.directory";
+
+    private static final String POCKET_ASSETS_DIRECTORY = "pocket.assets.directory";
+    private static final String POCKET_LIBRARY_DIRECTORY = "pocket.library.directory";
+
+    private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
+    private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
+    private static final String ROMZIP_STORAGE_DIRECTORY = "romzip.storage.directory";
+
+    private static final String PREPARATION_MRA_DIRECTORY = "preparation.mra.directory";
+    private static final String PREPARATION_LIBRARY_DIRECTORY = "preparation.library.directory";
 
     public static final String LOCAL = "local";
     public static final String TEST = "test";
@@ -38,11 +47,52 @@ public class DeploymentConfiguration
         this.context = context;
     }
 
+    public String getBoxartSourceUrl()
+    {
+        return getProperties().getProperty(BOXART_SOURCE_URL);
+    }
 
+    public String getBoxartStorageDirectory()
+    {
+        return getProperties().getProperty(BOXART_STORAGE_DIRECTORY);
+    }
 
+    public String getPocketAssetsDirectory()
+    {
+        return getProperties().getProperty(POCKET_ASSETS_DIRECTORY);
+    }
 
+    public String getPocketLibraryDirectory()
+    {
+        return getProperties().getProperty(POCKET_LIBRARY_DIRECTORY);
+    }
 
+    public String getRomzipSourceUrl()
+    {
+        //"https://archive.org/download/jogos_arcade"
+        //"https://archive.org/download/mame-merged/mame-merged/";
+        return getProperties().getProperty(ROMZIP_SOURCE_URL);
+    }
 
+    public String getRomzipHBSourceUrl()
+    {
+        return getProperties().getProperty(ROMZIP_HBSOURCE_URL);
+    }
+
+    public String getRomzipStorageDirectory()
+    {
+        return getProperties().getProperty(ROMZIP_STORAGE_DIRECTORY);
+    }
+
+    public String getPreparationMraDirectory()
+    {
+        return getProperties().getProperty(PREPARATION_MRA_DIRECTORY);
+    }
+
+    public String getPreparationLibraryDirectory()
+    {
+        return getProperties().getProperty(PREPARATION_LIBRARY_DIRECTORY);
+    }
 
     private Properties getProperties()
     {

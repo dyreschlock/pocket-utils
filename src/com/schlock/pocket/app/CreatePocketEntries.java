@@ -10,12 +10,6 @@ import java.io.FileFilter;
 
 public class CreatePocketEntries extends AbstractDatabaseApplication
 {
-    private static final String ASSET_LOCATION = "/Volumes/Pocket/Assets/";
-    private static final String COMMON = "common/";
-
-    private static final String UNSORTED = "__unsorted";
-    private static final String ALL = "_all";
-
     protected CreatePocketEntries(String context)
     {
         super(context);
@@ -64,9 +58,9 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         String coreCode = core.getCoreCode();
         if (coreCode.contains("/"))
         {
-            return ASSET_LOCATION + coreCode + "/";
+            return config().getPocketAssetsDirectory() + coreCode + "/";
         }
-        return ASSET_LOCATION + coreCode + "/" + COMMON;
+        return config().getPocketAssetsDirectory() + coreCode + "/" + COMMON_FOLDER;
     }
 
     private void processFolder(File folder, PocketCore core)

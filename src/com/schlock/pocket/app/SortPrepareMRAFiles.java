@@ -14,23 +14,16 @@ import java.util.*;
 
 public class SortPrepareMRAFiles extends AbstractApplication
 {
-    private static final String MRA_LOCATION = "/volumes/pocket/_mra/";
-    private static final String ASSET_LOCATION = "/volumes/pocket/Assets/";
-    private static final String COMMON_FOLDER = "common";
+    private static final String ROMZIP_NAMESPACE = "sega";
+
     private static final String MRA_FOLDER = "mra";
 
     private static final String MRA_FILE_EXT = ".mra";
     private static final String ROM_FILE_EXT = ".rom";
 
-    //https://archive.org/download/jogos_arcade
-//    private static final String ROM_URL = "https://archive.org/download/mame-merged/mame-merged/";
-    private static final String ROM_URL = "https://archive.org/download/fbnarcade-fullnonmerged/arcade/";
-    private static final String ROM_LOCATION = "/volumes/pocket/_roms/sega/";
-
-    private static final String HB_ROM_URL = "https://archive.org/download/hbmame0220/";
     private static final String HBMAME = "hbmame";
 
-    private static final String MRA_LINE = "./volumes/pocket/mra -z /volumes/pocket/_roms/temp -O /volumes/pocket/Assets/%s/common /volumes/pocket/Assets/%s/*.mra";
+    private static final String MRA_LINE = "./volumes/pocket/mra -z /volumes/pocket/_roms/"+ROMZIP_NAMESPACE+" -O /volumes/pocket/Assets/%s/common /volumes/pocket/Assets/%s/*.mra";
     private static final String ECHO_LINE = "echo \"%s complete\"\n";
 
     private static final String SCRIPT_LOCATION = "/volumes/pocket/make_new_roms.sh";
@@ -48,7 +41,8 @@ public class SortPrepareMRAFiles extends AbstractApplication
 
     public void run() throws Exception
     {
-        moveMRAfiles(MRA_LOCATION);
+        String NEW_MRA_DIRECTORY = config().getPreparationMraDirectory();
+        moveMRAfiles(NEW_MRA_DIRECTORY);
         downloadRomZips();
         writeFiles();
     }
@@ -75,9 +69,9 @@ public class SortPrepareMRAFiles extends AbstractApplication
             this.namespaces.add(mraInfo.namespace);
             this.requiredRoms.addAll(mraInfo.romZips);
 
-            String NAMESPACE_LOCATION = ASSET_LOCATION + mraInfo.namespace + "/";
+            String NAMESPACE_LOCATION = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
 
-            String COMMON_LOCATION = NAMESPACE_LOCATION + COMMON_FOLDER;
+            String COMMON_LOCATION = NAMESPACE_LOCATION + COMMON;
             String MRA_LOCATION = NAMESPACE_LOCATION + MRA_FOLDER;
 
             createFolders(COMMON_LOCATION, MRA_LOCATION);
@@ -187,15 +181,15 @@ public class SortPrepareMRAFiles extends AbstractApplication
 
     private boolean downloadRomZip(String romZip)
     {
-        String URL_LOCATION = ROM_URL + romZip;
-        String OUTPUT_FILE = ROM_LOCATION + romZip;
+        String URL_LOCATION = config().getRomzipSourceUrl() + romZip;
+        String OUTPUT_FILE = config().getRomzipStorageDirectory() + ROMZIP_NAMESPACE + "/" + romZip;
 
         if (romZip.startsWith(HBMAME))
         {
             String[] pathParts = romZip.split("/");
             String zipFilename = pathParts[pathParts.length - 1];
 
-            URL_LOCATION = HB_ROM_URL + zipFilename;
+            URL_LOCATION = config().getRomzipHBSourceUrl() + zipFilename;
         }
 
         File outputFile = new File(OUTPUT_FILE);
