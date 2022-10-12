@@ -17,7 +17,7 @@ romzip.storage.directory=
 processing.mra.directory=
 
 # This is where image files are placed after being converted by "CollectProcessLibraryThumbnails"
-# This is also where "update_library.sh" looks to convert these files into bin for the Pocket to read.
+# This is also where "make_library_images.sh" looks to convert these files into bin for the Pocket to read.
 processing.library.directory=
 
 hibernate.connection.url.local=
