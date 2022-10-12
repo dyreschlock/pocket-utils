@@ -1,19 +1,25 @@
 #!/usr/bin/env zsh
 
-./volumes/pocket/Tools/pocket_updater --all -p /volumes/pocket/
+source _load_properties.sh
 
+#Run Updater Program
 
-for f in /volumes/pocket/_overwrite/Platforms/*.json; do
+${utility_directory}pocket_updater --all -p ${pocket_directory}
+
+#Copy overwrites
+overwrite_directory="${utility_directory}overwrite/"
+
+for f in ${overwrite_directory}Platforms/*.json; do
 
   filename=${f#*Platforms/}
-  cp -v "$f" /volumes/pocket/Platforms/$filename
+  cp -v "$f" "${pocket_platforms_directory}${filename}"
 
 done
 
-for f in /volumes/pocket/_overwrite/Platforms/_images/*.bin; do
+for f in ${overwrite_directory}Platforms/_images/*.bin; do
 
   filename=${f#*images/}
-  cp -v "$f" /volumes/pocket/Platforms/_images/$filename
+  cp -v "$f" "${pocket_platforms_directory}_images/${filename}"
 
 done
 
