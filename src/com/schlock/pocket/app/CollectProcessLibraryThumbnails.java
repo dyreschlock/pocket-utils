@@ -6,6 +6,8 @@ import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketGameDAO;
 import org.apache.commons.io.FileUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -158,7 +160,9 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
             {
                 librarySetupFile.getParentFile().mkdirs();
 
-                FileUtils.copyFile(imageFile, librarySetupFile);
+                BufferedImage image = ImageIO.read(imageFile);
+
+                ImageIO.write(image, "bmp", librarySetupFile);
             }
         }
     }
@@ -202,7 +206,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             coreCode = coreCode.substring(0, coreCode.indexOf("/"));
         }
-        return config().getProcessingLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".png";
+        return config().getProcessingLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
     }
 
     private String getLibraryFileLocation(PocketGame game)

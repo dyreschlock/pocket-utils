@@ -10,12 +10,11 @@ for plat in "${platforms[@]}"; do
 
   if [ -d $image_directory ]; then
 
-    count=`ls -1 ${image_directory}*.png 2>/dev/null | wc -l`
-    if [ $count != 0 ]; then
+    for file in ${image_directory}*.bmp(N); do
 
-      ${utility_directory}AnaloguePocketLibraryImageConverter ${image_directory}*.png --output-dir=${pocket_library_directory}${plat}
+      ${utility_directory}AnaloguePocketLibraryImageConverter $file --output-dir=${pocket_library_directory}${plat}
 
-    fi
+    done
   fi
 
 done

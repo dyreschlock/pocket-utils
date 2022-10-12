@@ -73,7 +73,7 @@ public class SortPrepareMRAFiles extends AbstractApplication
             String COMMON_LOCATION = NAMESPACE_LOCATION + COMMON;
             String MRA_LOCATION = NAMESPACE_LOCATION + MRA_FOLDER;
 
-            createFolders(COMMON_LOCATION, MRA_LOCATION);
+            createDirectories(COMMON_LOCATION, MRA_LOCATION);
 
             String moveLocation = NAMESPACE_LOCATION + mraFile.getName();
 
@@ -102,18 +102,6 @@ public class SortPrepareMRAFiles extends AbstractApplication
         for (File folder : mraFolder.listFiles(isDirectory))
         {
             moveMRAfiles(folder.getAbsolutePath());
-        }
-    }
-
-    private void createFolders(String... locations)
-    {
-        for(String location : locations)
-        {
-            File folder = new File(location);
-            if (!folder.exists())
-            {
-                folder.mkdirs();
-            }
         }
     }
 
