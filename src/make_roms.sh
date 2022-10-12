@@ -2,25 +2,10 @@
 
 # This is a batch script to run the mra program.  The mra program will look at MRA files and zips of roms, and create rom files for each of the MRA.
 
-# The mra program takes in a rom path, and it looks for specific zips listed in the MRA files.
-# The next path is the output path for the generated rom file
-# The last path is the location of the mra files.
-
-# The batch script can run anywhere, but it needs a usb named pocket plugged in.
-
-# Roms can be found at : https://archive.org/download/mame-merged/mame-merged/
+source _load_properties.sh
 
 
-# Non-conformist Rom paths
-
-# ./volumes/pocket/mra -z /volumes/pocket/_roms/atari -O /volumes/pocket/Assets/lunarlander/ericlewis.LunarLander /volumes/pocket/Assets/lunarlander/*.mra
-# echo "Lunar Lander complete" 
-
-# ./volumes/pocket/mra -z /volumes/pocket/_roms/atari -O /volumes/pocket/Assets/asteroids/ericlewis.Asteroids /volumes/pocket/Assets/asteroids/*.mra
-# echo "Asteroid complete" 
-
-
-# To use this.  The first part is the _roms folder, and the second part is the core in the Assets folder.
+# The following is the rom folder that each individual core is sorted into.  For example, the rom zips for "asteroids" is sorted into the "atari" directory
 
 declare -a atari=("asteroids" "asteroidsdeluxe" "centipede" "dominos" "foodfight" "superbreakout" "ataritetris" "gauntlet" "sprint1" "sprint2")
 
@@ -53,36 +38,38 @@ declare -a various=("tiamc1" "robotron" "bagman" "joust2" "berzerK" "dorodon" "c
 declare -a jotego=("jt1942" "jt1943" "jtbiocom" "jtbtiger" "jtbubl" "jtcommando" "jtcomsc" "jtcontra" "jtcop" "jtdd" "jtdd2" "jtexed" "jtf1dream" "jtflane" "jtgng" "jtgunsmoke" "jthige" "jtkchamp" "jtkicker" "jtkunio" "jtlabrun" "jtmidres" "jtmikie" "jtmx5k" "jtninja" "jtoutrun" "jtpinpon" "jtrastan" "jtroadf" "jtroc" "jtrumble" "jtsarms" "jtsbask1" "jtsbaskt" "jtsectionz" "jtsf" "jtslyspy" "jttora" "jttrack" "jttrojan" "jtvigil" "jtvulgus" "jtyiear" "jtpang")
 
 
-declare -a coresets=("atari[@]" "irem[@]" "cave[@]" "cps[@]" "konami[@]" "midway[@]" "namco[@]" "nintendo[@]" "raizing[@]" "sega[@]" "tecmo[@]" "taito[@]" "various[@]" "jotego[@]")
+declare -a coresets=(atari irem cave cps konami midway namco nintendo raizing sega tecmo taito various jotego)
 
 echo "Checking for new MRA files..."
 
-for coreset in "${coresets[@]}"; do
+# This code will comb through every core directory listed above.
+# When it finds a new MRA file, it will generate the arcade ROM from the zips and place it into the core's common directory, even if the process fails.
+# Check the console for errors and fix accordingly
 
-  coreset_name=${coreset%[*} 
-  
-  for core in "${!coreset}"; do
+for coreset in $coresets; do
 
-    count=`ls -1 /volumes/pocket/Assets/${core}/*.mra 2>/dev/null | wc -l`
-    if [ $count != 0 ]; then
+  local -a cores=("${(Pkv@)coreset}")
+
+  for core in $cores; do
+
+    for file in ${pocket_assets_directory}${core}/*.mra(N); do
 
       echo "-----------"
-      echo "New MRA files found for ${coreset_name}/${core}. Generating..."
+      echo "New MRA file found at ${file}. Generating..."
 
-      ./volumes/pocket/tools/mra -z /volumes/pocket/_roms/${coreset_name} -O /volumes/pocket/Assets/${core}/common /volumes/pocket/Assets/${core}/*.mra
+      # This runs the 'mra' program, located in the utility directory
+      # It will look at a MRA file, which is a recipe for how to generate a rom file. It uses the contents of rom zips to do this.
 
-      echo ""
-      echo "${coreset_name}/${core} complete" 
+      # The first parameter is the location of the rom zips
+      # The second parameter is where the generated roms will be outputted
+      # The third parameter is the location of the MRA files used to generate the roms
 
-    fi
+      ${utility_directory}mra -z ${romzip_storage_directory}${coreset} -O ${pocket_assets_directory}${core}/common $file
 
-#    if [ $count == 0 ]; then
-#
-#       echo "skipping ${coreset_name}/${core}"
-#
-#    fi
+      echo "Complete!"
 
-  done  
+    done
+  done
 done
 
 echo "-----------"
