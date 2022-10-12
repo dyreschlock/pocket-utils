@@ -14,9 +14,9 @@ while IFS='=' read -r origKey value; do
   local key=${origKey}
   key=${key//[!a-zA-Z0-9_]/_}
   if [[ "${origKey}" == "#"*   ]]; then
-    local ignoreComments
+    local ignoreComments=0
   elif [ -z "${key}" ]; then
-    local emptyLine
+    local emptyLine=0
   else
     if [[ "${key}" =~ ^[0-9].* ]]; then
       key=_${key}
