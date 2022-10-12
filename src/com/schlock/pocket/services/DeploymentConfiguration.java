@@ -19,8 +19,8 @@ public class DeploymentConfiguration
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
     private static final String ROMZIP_STORAGE_DIRECTORY = "romzip.storage.directory";
 
-    private static final String PREPARATION_MRA_DIRECTORY = "preparation.mra.directory";
-    private static final String PREPARATION_LIBRARY_DIRECTORY = "preparation.library.directory";
+    private static final String PROCESSING_MRA_DIRECTORY = "processing.mra.directory";
+    private static final String PROCESSING_LIBRARY_DIRECTORY = "processing.library.directory";
 
     public static final String LOCAL = "local";
     public static final String TEST = "test";
@@ -84,14 +84,14 @@ public class DeploymentConfiguration
         return getProperties().getProperty(ROMZIP_STORAGE_DIRECTORY);
     }
 
-    public String getPreparationMraDirectory()
+    public String getProcessingMRADirectory()
     {
-        return getProperties().getProperty(PREPARATION_MRA_DIRECTORY);
+        return getProperties().getProperty(PROCESSING_MRA_DIRECTORY);
     }
 
-    public String getPreparationLibraryDirectory()
+    public String getProcessingLibraryDirectory()
     {
-        return getProperties().getProperty(PREPARATION_LIBRARY_DIRECTORY);
+        return getProperties().getProperty(PROCESSING_LIBRARY_DIRECTORY);
     }
 
     private Properties getProperties()

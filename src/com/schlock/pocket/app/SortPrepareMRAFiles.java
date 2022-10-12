@@ -41,7 +41,7 @@ public class SortPrepareMRAFiles extends AbstractApplication
 
     public void run() throws Exception
     {
-        String NEW_MRA_DIRECTORY = config().getPreparationMraDirectory();
+        String NEW_MRA_DIRECTORY = config().getProcessingMRADirectory();
         moveMRAfiles(NEW_MRA_DIRECTORY);
         downloadRomZips();
         writeFiles();

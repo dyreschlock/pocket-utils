@@ -202,7 +202,7 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             coreCode = coreCode.substring(0, coreCode.indexOf("/"));
         }
-        return config().getPreparationLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".png";
+        return config().getProcessingLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".png";
     }
 
     private String getLibraryFileLocation(PocketGame game)

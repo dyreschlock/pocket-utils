@@ -6,7 +6,7 @@ declare -a platforms=("a26" "a52" "coleco" "gb" "gba" "gbc" "genesis" "gg" "intv
 
 for plat in "${platforms[@]}"; do
 
-  image_directory=${preparation_library_directory}${plat}/
+  image_directory=${processing_library_directory}${plat}/
 
   if [ -d $image_directory ]; then
 
