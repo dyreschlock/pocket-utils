@@ -1,6 +1,10 @@
 
+pocket.directory=
 pocket.assets.directory=
+pocket.platforms.directory=
 pocket.library.directory=
+
+utility.directory=
 
 boxart.source.url=
 boxart.storage.directory=
