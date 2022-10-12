@@ -26,9 +26,8 @@ public class SortPrepareMRAFiles extends AbstractApplication
     private static final String MRA_LINE = "./volumes/pocket/mra -z /volumes/pocket/_roms/"+ROMZIP_NAMESPACE+" -O /volumes/pocket/Assets/%s/common /volumes/pocket/Assets/%s/*.mra";
     private static final String ECHO_LINE = "echo \"%s complete\"\n";
 
-    private static final String SCRIPT_LOCATION = "/volumes/pocket/make_new_roms.sh";
-
-    private static final String ROM_LIST_FILE = "/volumes/pocket/missing_roms.txt";
+    private static final String CREATION_SCRIPT_FILENAME = "make_new_roms.sh";
+    private static final String MISSING_ROMS_FILENAME = "missing_new_roms.txt";
 
 
     private Set<String> namespaces = new HashSet<>();
@@ -230,6 +229,8 @@ public class SortPrepareMRAFiles extends AbstractApplication
 
     private void writeScript() throws Exception
     {
+        String SCRIPT_LOCATION = config().getProcessingMRADirectory() + CREATION_SCRIPT_FILENAME;
+
         BufferedWriter writer = new BufferedWriter(new FileWriter(SCRIPT_LOCATION));
         for (String namespace : namespaces)
         {
@@ -257,6 +258,8 @@ public class SortPrepareMRAFiles extends AbstractApplication
         romZips.addAll(requiredRoms);
 
         Collections.sort(romZips);
+
+        String ROM_LIST_FILE = config().getProcessingMRADirectory() + MISSING_ROMS_FILENAME;
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(ROM_LIST_FILE));
         for (String rom : romZips)
