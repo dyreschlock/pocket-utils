@@ -15,6 +15,8 @@ public enum PocketCore
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
 
+    POKEMON_MINI("Nintendo_-_Pokemon_Mini", "pokemini", "min"),
+
     NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
 
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
