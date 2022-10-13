@@ -47,11 +47,13 @@ This will create Library Images for console/handheld roms based on the Box Art.
 
 This is a 4-step process, and requires some organization of rom files within console and handheld cores.
 
-First, **CreatePocketEntries** (Java Program) is run. This will look through each core directory (listed in PocketCore) and create database entries for each game found. It is looking for a specific organization, though. Roms should be sorted into genre folders within the core's common directory. And there should be no nested directories.  For example, in the NES core, you may have 'Action Platformer/Super Mario Bros. 1'. The database entry will use that folder name as the genre. CreatePocketEntries will ignore any folder that starts with and underscore (_).
+First, **CreatePocketEntries** (Java Program) is run. This will look through each core directory (listed in PocketCore) and create database entries for each game found. It is looking for a specific organization, though. Roms should be sorted into genre folders within the core's common directory. And there should be no nested directories.  For example, in the NES core, you may have 'Action Platformer/Super Mario Bros. 1'. The database entry will use that folder name as the genre. CreatePocketEntries will ignore any folder that starts with an underscore (_).
 
 CreatePocketEntries assumes that the boxart's filename will match the filename of the rom.
 
-Second, **CollectPocketThumbnails** (Java Program) is run. This will process any database entry that doesn't have a boxart image yet. First, if there's no box art image in the **boxart.storage.directory**, it will try to find that image at **boxart.source.url**, if it exists, it will copy the PNG into the storage directory.  If it fails, it fails.
+Second, **CollectPocketThumbnails** (Java Program) is run. This will process any database entry that doesn't have a boxart image yet. First, if there's no box art image in the **boxart.storage.directory**, it will try to find that image at **boxart.source.url**, if it exists, it will copy the PNG into the storage directory.
+
+It it fails, the image filename can be edited in the database to match something at **boxart.source.url**, or an image can be manually placed in **boxart.storage.directory** matching the desired filename.
 
 After that, if the box art exists in the **boxart.storage.directory**, it will convert that image into a suitable BMP file, and place that file in the **processing.library.directory**. These filenames are the HEX value of the CRC32 hash of the rom file. This is how the Pocket looks up entries in the library.
 
