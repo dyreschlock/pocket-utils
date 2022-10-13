@@ -1,9 +1,7 @@
 
 pocket.directory=
-pocket.assets.directory=
-pocket.platforms.directory=
-pocket.library.directory=
 
+# This is where command line programs are kept
 utility.directory=
 
 boxart.source.url=

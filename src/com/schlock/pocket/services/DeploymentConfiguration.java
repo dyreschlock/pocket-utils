@@ -12,8 +12,10 @@ public class DeploymentConfiguration
     private static final String BOXART_SOURCE_URL = "boxart.source.url";
     private static final String BOXART_STORAGE_DIRECTORY = "boxart.storage.directory";
 
-    private static final String POCKET_ASSETS_DIRECTORY = "pocket.assets.directory";
-    private static final String POCKET_LIBRARY_DIRECTORY = "pocket.library.directory";
+    private static final String POCKET_DIRECTORY = "pocket.directory";
+
+    private static final String ASSETS_FOLDER = "Assets/";
+    private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
@@ -59,12 +61,12 @@ public class DeploymentConfiguration
 
     public String getPocketAssetsDirectory()
     {
-        return getProperties().getProperty(POCKET_ASSETS_DIRECTORY);
+        return getProperties().getProperty(POCKET_DIRECTORY) + ASSETS_FOLDER;
     }
 
     public String getPocketLibraryDirectory()
     {
-        return getProperties().getProperty(POCKET_LIBRARY_DIRECTORY);
+        return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
     }
 
     public String getRomzipSourceUrl()

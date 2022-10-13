@@ -4,6 +4,7 @@
 
 source _load_properties.sh
 
+pocket_assets_directory=${pocket_directory}Assets/
 
 # The following is the rom folder that each individual core is sorted into.  For example, the rom zips for "asteroids" is sorted into the "atari" directory
 
