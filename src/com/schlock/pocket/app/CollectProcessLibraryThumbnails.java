@@ -7,6 +7,7 @@ import com.schlock.pocket.services.database.PocketGameDAO;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -160,11 +161,66 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
             {
                 librarySetupFile.getParentFile().mkdirs();
 
-                BufferedImage image = ImageIO.read(imageFile);
+                BufferedImage originalImage = ImageIO.read(imageFile);
 
-                ImageIO.write(image, "bmp", librarySetupFile);
+                int[] resized = getResizedWidthHeight(originalImage);
+
+                int newWidth = resized[0];
+                int newHeight = resized[1];
+
+                // The new Image must not contain an Alpha channel.
+                BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
+
+                Graphics2D gr = newImage.createGraphics();
+                gr.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+                gr.dispose();
+
+                boolean success = ImageIO.write(newImage, "bmp", librarySetupFile);
+                if(success)
+                {
+                    System.out.println("Converted file: " + imageFile.getName());
+                }
+                else
+                {
+                    System.out.println("Write failed for: " + imageFile.getName());
+                }
             }
         }
+    }
+
+    private static final int MAX_WIDTH = 240;
+    private static final int MAX_HEIGHT = 232;
+
+    private int[] getResizedWidthHeight(BufferedImage image)
+    {
+        int oldWidth = image.getWidth();
+        int oldHeight = image.getHeight();
+
+        int newWidth, newHeight;
+
+        if (oldWidth > oldHeight)
+        {
+            newWidth = MAX_WIDTH;
+            newHeight = resizeValue(oldWidth, newWidth, oldHeight);
+        }
+        else
+        {
+            newHeight = MAX_HEIGHT;
+            newWidth = resizeValue(oldHeight, newHeight, oldWidth);
+        }
+
+        return new int[]{ newWidth, newHeight };
+    }
+
+    private int resizeValue(int firstValueINT, int firstResizedINT, int secondValueINT)
+    {
+        double firstValue = firstValueINT;
+        double firstResized = firstResizedINT;
+        double secondValue = secondValueINT;
+
+        Double secondResized = firstResized / firstValue * secondValue;
+
+        return secondResized.intValue();
     }
 
     private String calculateCRC32(String filepath) throws Exception
