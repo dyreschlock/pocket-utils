@@ -168,11 +168,13 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
                 int newWidth = resized[0];
                 int newHeight = resized[1];
 
+                Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
                 // The new Image must not contain an Alpha channel.
                 BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
 
                 Graphics2D gr = newImage.createGraphics();
-                gr.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+                gr.drawImage(scaledImage, 0, 0, newWidth, newHeight, null);
                 gr.dispose();
 
                 boolean success = ImageIO.write(newImage, "bmp", librarySetupFile);
