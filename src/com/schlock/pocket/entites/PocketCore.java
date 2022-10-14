@@ -30,6 +30,9 @@ public enum PocketCore
 
     GAME_GEAR("Sega_-_Game_Gear", "gg", "gg"),
 
+    //Microsoft_-_MSX
+    //Microsoft_-_MSX2
+
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
 
@@ -41,7 +44,13 @@ public enum PocketCore
 //    ATARI_7800("Atari_-_7800", "a78", "a78"),
     ATARI_5200("Atari_-_5200", "a52", "a52"),
     ATARI_2600("Atari_-_2600", "a26", "a26"),
-    COLECOVISION("Coleco_-_ColecoVision", "coleco", "col");
+
+    VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
+
+    INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
+    COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
+
+    ARDUBOY("", "arduboy", "hex");
 
     String repoName;
     String coreCode;
