@@ -14,8 +14,14 @@ for plat in "${platforms[@]}"; do
 
     for file in ${image_directory}*.bmp(N); do
 
-      ${utility_directory}AnaloguePocketLibraryImageConverter $file --output-dir=${pocket_library_directory}${plat}
+      filename=$(basename "$file" ".bmp")
+      output_file=${pocket_library_directory}${plat}/${filename}.bin
 
+      if [ ! -f $output_file ]; then
+
+        ${utility_directory}AnaloguePocketLibraryImageConverter $file --output-dir=${pocket_library_directory}${plat}
+
+      fi
     done
   fi
 
