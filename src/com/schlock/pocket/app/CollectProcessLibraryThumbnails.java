@@ -190,39 +190,28 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         }
     }
 
-    private static final int MAX_WIDTH = 240;
-    private static final int MAX_HEIGHT = 232;
+    private static final double MAX_WIDTH = 240.0;
+    private static final double MAX_HEIGHT = 175.0;
 
     private int[] getResizedWidthHeight(BufferedImage image)
     {
-        int oldWidth = image.getWidth();
-        int oldHeight = image.getHeight();
+        double oldWidth = image.getWidth();
+        double oldHeight = image.getHeight();
 
-        int newWidth, newHeight;
+        double ratioWidthHeight = oldWidth / oldHeight;
+        double ratioHeightWidth = oldHeight / oldWidth;
 
-        if (oldWidth > oldHeight)
+        Double width_widthMax = MAX_WIDTH;
+        Double height_widthMax = MAX_WIDTH * ratioHeightWidth;
+
+        Double width_heightMax = MAX_HEIGHT * ratioWidthHeight;
+        Double height_heightMax = MAX_HEIGHT;
+
+        if (height_widthMax < MAX_HEIGHT)
         {
-            newWidth = MAX_WIDTH;
-            newHeight = resizeValue(oldWidth, newWidth, oldHeight);
+            return new int[] { width_widthMax.intValue(), height_widthMax.intValue() };
         }
-        else
-        {
-            newHeight = MAX_HEIGHT;
-            newWidth = resizeValue(oldHeight, newHeight, oldWidth);
-        }
-
-        return new int[]{ newWidth, newHeight };
-    }
-
-    private int resizeValue(int firstValueINT, int firstResizedINT, int secondValueINT)
-    {
-        double firstValue = firstValueINT;
-        double firstResized = firstResizedINT;
-        double secondValue = secondValueINT;
-
-        Double secondResized = firstResized / firstValue * secondValue;
-
-        return secondResized.intValue();
+        return new int[] { width_heightMax.intValue(), height_heightMax.intValue() };
     }
 
     private String calculateCRC32(String filepath) throws Exception
