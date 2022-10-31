@@ -50,6 +50,8 @@ public enum PocketCore
     INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
     COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
 
+    SUPERVISION("Watara_-_Supervision", "supervision", "sv"),
+
     ARDUBOY("", "arduboy", "hex");
 
     String repoName;

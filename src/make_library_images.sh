@@ -4,7 +4,7 @@ source _load_properties.sh
 
 pocket_library_directory=${pocket_directory}System/Library/Images/
 
-declare -a platforms=("a26" "a52" "coleco" "gb" "gba" "gbc" "genesis" "gg" "intv" "msx" "nes" "ng" "ngp" "ngpc" "pce" "scd" "sdvmu" "sg1000" "sms" "snes" "vb" "vectrex" "wsc")
+declare -a platforms=("a26" "a52" "arduboy" "coleco" "gb" "gba" "gbc" "genesis" "gg" "intv" "msx" "nes" "ng" "ngp" "ngpc" "pce" "scd" "sdvmu" "sg1000" "sms" "snes" "supervision" "vb" "vectrex" "wsc")
 
 for plat in "${platforms[@]}"; do
 

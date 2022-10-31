@@ -24,7 +24,7 @@ declare -a namco=("galaga" "digdug" "xevious" "rallyx" "pacman" "galaxian" "gapl
 
 declare -a nintendo=("donkeykong" "donkeykongjunior" "mariobros" "crazykong" "popeye")
 
-declare -a raizing=("bakraid" "garegga" "batrider") 
+declare -a raizing=("bakraid" "garegga" "batrider" "sstriker" "kingdmgp")
 
 declare -a sega=("jts16" "jts16b" "segasys1" "bankpanic" "pengo" "zaxxon")
 
@@ -34,7 +34,7 @@ declare -a tecmo=("tecmo" "bombjack" "phoenix" "pleiads" "solomonskey")
 
 declare -a taito=("spaceinvaders" "arkanoid")
 
-declare -a various=("tiamc1" "robotron" "bagman" "joust2" "berzerK" "dorodon" "crazyclimber" "ladybug" "burgertime" "burningrubber" "defender")
+declare -a various=("tiamc1" "robotron" "bagman" "joust2" "berzerK" "dorodon" "crazyclimber" "ladybug" "burgertime" "burningrubber" "defender" "snowbros2")
 
 declare -a jotego=("jt1942" "jt1943" "jtbiocom" "jtbtiger" "jtbubl" "jtcommando" "jtcomsc" "jtcontra" "jtcop" "jtdd" "jtdd2" "jtexed" "jtf1dream" "jtflane" "jtgng" "jtgunsmoke" "jthige" "jtkchamp" "jtkicker" "jtkunio" "jtlabrun" "jtmidres" "jtmikie" "jtmx5k" "jtninja" "jtoutrun" "jtpinpon" "jtrastan" "jtroadf" "jtroc" "jtrumble" "jtsarms" "jtsbask1" "jtsbaskt" "jtsectionz" "jtsf" "jtslyspy" "jttora" "jttrack" "jttrojan" "jtvigil" "jtvulgus" "jtyiear" "jtpang")
 
