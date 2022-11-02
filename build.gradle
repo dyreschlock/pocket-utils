@@ -15,7 +15,7 @@ dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
     implementation 'com.zaxxer:HikariCP:4.0.1'
 
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     implementation 'org.hibernate:hibernate-core:5.6.10.Final'
     implementation 'javax.persistence:javax.persistence-api:2.2'

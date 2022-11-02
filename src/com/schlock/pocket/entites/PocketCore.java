@@ -1,6 +1,6 @@
 package com.schlock.pocket.entites;
 
-import org.json.simple.JSONObject;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 
@@ -16,15 +16,19 @@ public class PocketCore
     private String namespace;
 
     @Column(name = "name")
+    @Expose
     private String name;
 
     @ManyToOne
+    @Expose
     private PocketCoreCategory category;
 
     @Column(name = "manufacturer")
+    @Expose
     private String manufacturer;
 
     @Column(name = "year")
+    @Expose
     private Integer year;
 
     public PocketCore()
@@ -98,34 +102,5 @@ public class PocketCore
     public void setYear(Integer year)
     {
         this.year = year;
-    }
-
-    private static final String PLATFORM = "platform";
-    private static final String CATEGORY = "category";
-    private static final String NAME = "name";
-    private static final String MANUFACTURER = "manufacturer";
-    private static final String YEAR = "year";
-
-    public static JSONObject createJSON(PocketCore core)
-    {
-        if (!core.isDataComplete())
-        {
-            return null;
-        }
-
-        String name = core.getName();
-        String category = core.getCategory().getName();
-        String manufacturer = core.getManufacturer();
-        Integer year = core.getYear();
-
-        JSONObject coreJSON = new JSONObject();
-        coreJSON.put(NAME, name);
-        coreJSON.put(CATEGORY, category);
-        coreJSON.put(MANUFACTURER, manufacturer);
-        coreJSON.put(YEAR, year);
-
-        JSONObject object = new JSONObject();
-        object.put(PLATFORM, coreJSON);
-        return object;
     }
 }

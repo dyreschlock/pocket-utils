@@ -1,14 +1,16 @@
 package com.schlock.pocket.app;
 
+import com.google.gson.*;
 import com.schlock.pocket.entites.PocketCore;
+import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketCoreDAO;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class OrganizePlatforms extends AbstractDatabaseApplication
@@ -68,15 +70,43 @@ public class OrganizePlatforms extends AbstractDatabaseApplication
 
         for(PocketCore core : cores)
         {
-//            System.out.println("Complete core: " + core.getName());
-
-            JSONObject json = PocketCore.createJSON(core);
-
             String filepath = config().getPocketPlatformsDirectory() + core.getNamespace() + JSON_FILE_EXT;
+            String json = generateJSONforCore(core);
 
             deleteOldFile(filepath);
-            writeToFile(filepath, json.toJSONString());
+            writeToFile(filepath, json);
         }
+    }
+
+    private static final String PLATFORM = "platform";
+
+    private String generateJSONforCore(PocketCore core)
+    {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PocketCoreCategory.class, new JsonSerializer<PocketCoreCategory>()
+                {
+                    @Override
+                    public JsonElement serialize(PocketCoreCategory src, Type typeOfSrc, JsonSerializationContext context)
+                    {
+                        //This will output "category": "some category" rather than the entire category object.
+                        String categoryName = src.getName();
+
+                        return new JsonPrimitive(categoryName);
+                    }
+                })
+                .excludeFieldsWithoutExposeAnnotation()
+                .setPrettyPrinting()
+                .create();
+
+        //JSON is generated automatically from @Expose tags on PocketCore class
+
+        //Pocket JSON requires that the core be wrapped in the "platform" tag
+        JsonObject base = new JsonObject();
+        JsonElement tree = gson.toJsonTree(core);
+
+        base.add(PLATFORM, tree);
+
+        return gson.toJson(base);
     }
 
     private void deleteOldFile(String filepath)
