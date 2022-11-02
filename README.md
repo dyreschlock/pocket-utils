@@ -41,13 +41,26 @@ This script will comb through the list of all cores looking for MRA files in the
 MRA files in the core's common directory must be manually moved into the core's MRA directory once successfully completed.
 
 
+## Organize Platforms
+
+This will create a list of cores in the database, and rewrite JSON in the Platforms directory.
+
+This is a 1-step process, but the process does two things. Run **OrganizePlatforms** to start.
+
+First, the program will comb through the Assets directory and create a PocketCore object for any folder that exists. The information for the core will not be filled in.
+
+Second, for any core in the database with a complete set of information (ie: name, category, manufacturer, year), the program will rewrite a JSON with that information.
+
+It is expected that after the program is run once, and all the cores have been entered in the database, the user can use a SQL management program to enter the information for each of the cores. Then, **OrganizePlatforms** can be run a second time to write that information into the Platforms directory.
+
+
 ## Creating Library Images
 
 This will create Library Images for console/handheld roms based on the Box Art.
 
 This is a 4-step process, and requires some organization of rom files within console and handheld cores.
 
-First, **CreatePocketEntries** (Java Program) is run. This will look through each core directory (listed in PocketCore) and create database entries for each game found. It is looking for a specific organization, though. Roms should be sorted into genre folders within the core's common directory. And there should be no nested directories.  For example, in the NES core, you may have 'Action Platformer/Super Mario Bros. 1'. The database entry will use that folder name as the genre. CreatePocketEntries will ignore any folder that starts with an underscore (_).
+First, **CreatePocketEntries** (Java Program) is run. This will look through each core directory (listed in PocketCoreInfo) and create database entries for each game found. It is looking for a specific organization, though. Roms should be sorted into genre folders within the core's common directory. And there should be no nested directories.  For example, in the NES core, you may have 'Action Platformer/Super Mario Bros. 1'. The database entry will use that folder name as the genre. CreatePocketEntries will ignore any folder that starts with an underscore (_).
 
 CreatePocketEntries assumes that the boxart's filename will match the filename of the rom.
 
