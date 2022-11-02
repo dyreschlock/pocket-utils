@@ -6,15 +6,14 @@ import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketCoreDAO;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class OrganizePlatforms extends AbstractDatabaseApplication
 {
+    private static final String OVERWRITE_PLATFORM_IMAGES_SCRIPT = "overwrite_platform_images.sh";
+
     protected OrganizePlatforms(String context)
     {
         super(context);
@@ -25,6 +24,8 @@ public class OrganizePlatforms extends AbstractDatabaseApplication
         createListOfCores();
 
         updatePlatforms();
+
+        executeScript(OVERWRITE_PLATFORM_IMAGES_SCRIPT);
     }
 
     private void createListOfCores()

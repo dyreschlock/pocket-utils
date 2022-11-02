@@ -2,7 +2,9 @@ package com.schlock.pocket.app;
 
 import com.schlock.pocket.services.DeploymentConfiguration;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 public abstract class AbstractApplication
 {
@@ -30,6 +32,34 @@ public abstract class AbstractApplication
             {
                 folder.mkdirs();
             }
+        }
+    }
+
+    protected void executeScript(String scriptName)
+    {
+        String shellFilepath = System.getProperty("user.dir") + "/src";
+        String shellCommand = String.format("zsh %s", scriptName);
+
+        try
+        {
+            Process p = Runtime.getRuntime().exec(shellCommand, null, new File(shellFilepath));
+            p.waitFor();
+
+            BufferedReader output = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while(output.ready())
+            {
+                System.out.println(output.readLine());
+            }
+
+            BufferedReader errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            while(errors.ready())
+            {
+                System.out.println(errors.readLine());
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }
