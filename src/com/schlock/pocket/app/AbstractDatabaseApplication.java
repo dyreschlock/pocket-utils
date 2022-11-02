@@ -34,6 +34,10 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
 
             process();
         }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         finally
         {
             teardownDatabase();
@@ -47,6 +51,8 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
 
     private void setupDatabase()
     {
+        System.setProperty("log4j.debug", "false");
+
         final String username = config().getHibernateProperty(HIBERNATE_USERNAME);
         final String password = config().getHibernateProperty(HIBERNATE_PASSWORD);
         final String url = config().getHibernateProperty(HIBERNATE_URL);

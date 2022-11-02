@@ -1,6 +1,6 @@
 package com.schlock.pocket.app;
 
-import com.schlock.pocket.entites.PocketCore;
+import com.schlock.pocket.entites.PocketCoreInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketGameDAO;
@@ -19,7 +19,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
     {
         try
         {
-            for(PocketCore core : PocketCore.values())
+            for(PocketCoreInfo core : PocketCoreInfo.values())
             {
                 processCore(core);
             }
@@ -30,7 +30,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         }
     }
 
-    private void processCore(PocketCore core)
+    private void processCore(PocketCoreInfo core)
     {
         String romLocation = getRomLocation(core);
 
@@ -53,7 +53,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         }
     }
 
-    private String getRomLocation(PocketCore core)
+    private String getRomLocation(PocketCoreInfo core)
     {
         String coreCode = core.getCoreCode();
         if (coreCode.contains("/"))
@@ -63,7 +63,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         return config().getPocketAssetsDirectory() + coreCode + "/" + COMMON_FOLDER;
     }
 
-    private void processFolder(File folder, PocketCore core)
+    private void processFolder(File folder, PocketCoreInfo core)
     {
         FileFilter filter = new FileFilter()
         {

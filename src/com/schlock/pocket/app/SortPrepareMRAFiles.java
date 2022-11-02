@@ -14,7 +14,7 @@ import java.util.*;
 
 public class SortPrepareMRAFiles extends AbstractApplication
 {
-    private static final String ROMZIP_NAMESPACE = "sega";
+    private static final String ROMZIP_NAMESPACE = "raizing";
 
     private static final String MRA_FOLDER = "mra";
 

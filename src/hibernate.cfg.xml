@@ -12,7 +12,7 @@
         <property name="hbm2ddl.auto">update</property>
         <!--
         -->
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
         <property name="hibernate.format_sql">true</property>
 
         <property name="hibernate.connection.CharSet">utf8</property>
@@ -25,6 +25,8 @@
         <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
 
         <mapping class="com.schlock.pocket.entites.PocketGame" />
+        <mapping class="com.schlock.pocket.entites.PocketCore" />
+        <mapping class="com.schlock.pocket.entites.PocketCoreCategory" />
 
     </session-factory>
 </hibernate-configuration>

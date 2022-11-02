@@ -28,7 +28,7 @@ public class PocketGame
 
     @Column(name = "core")
     @Enumerated(EnumType.STRING)
-    private PocketCore core;
+    private PocketCoreInfo core;
 
     @Column(name = "fileHash")
     private String fileHash;
@@ -100,12 +100,12 @@ public class PocketGame
         this.genre = genre;
     }
 
-    public PocketCore getCore()
+    public PocketCoreInfo getCore()
     {
         return core;
     }
 
-    public void setCore(PocketCore core)
+    public void setCore(PocketCoreInfo core)
     {
         this.core = core;
     }
@@ -130,7 +130,7 @@ public class PocketGame
         this.inLibrary = inLibrary;
     }
 
-    public static PocketGame createGame(File file, PocketCore core)
+    public static PocketGame createGame(File file, PocketCoreInfo core)
     {
         PocketGame game = new PocketGame();
 

@@ -16,6 +16,7 @@ public class DeploymentConfiguration
 
     private static final String ASSETS_FOLDER = "Assets/";
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
+    private static final String PLATFORMS_FOLDER = "Platforms/";
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
@@ -64,10 +65,17 @@ public class DeploymentConfiguration
         return getProperties().getProperty(POCKET_DIRECTORY) + ASSETS_FOLDER;
     }
 
+    public String getPocketPlatformsDirectory()
+    {
+        return getProperties().getProperty(POCKET_DIRECTORY) + PLATFORMS_FOLDER;
+    }
+
     public String getPocketLibraryDirectory()
     {
         return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
     }
+
+
 
     public String getRomzipSourceUrl()
     {

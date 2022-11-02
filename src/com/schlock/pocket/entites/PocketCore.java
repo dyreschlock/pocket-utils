@@ -1,86 +1,131 @@
 package com.schlock.pocket.entites;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.simple.JSONObject;
 
-public enum PocketCore
+import javax.persistence.*;
+
+@Entity
+@Table(name = "pocket_core")
+public class PocketCore
 {
-    SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
-    FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
-    NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
+    @Column(name = "namespace")
+    private String namespace;
 
-    GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "gba"),
-    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
-    GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
+    @Column(name = "name")
+    private String name;
 
-    POKEMON_MINI("Nintendo_-_Pokemon_Mini", "pokemini", "min"),
+    @ManyToOne
+    private PocketCoreCategory category;
 
-    NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
+    @Column(name = "manufacturer")
+    private String manufacturer;
 
-    NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
-    NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
+    @Column(name = "year")
+    private Integer year;
 
-    //SEGA_CD("Sega_-_Mega-CD_-_Sega_CD"
-
-    SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
-    SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
-    SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
-
-    GAME_GEAR("Sega_-_Game_Gear", "gg", "gg"),
-
-    //Microsoft_-_MSX
-    //Microsoft_-_MSX2
-
-    PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
-    PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
-
-    WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wsc", "wsc"),
-    WONDERSWAN("Bandai_-_WonderSwan", "wsc", "ws"),
-
-    ATARI_LYNX("Atari_-_Lynx", "lnx", "lnx"),
-
-//    ATARI_7800("Atari_-_7800", "a78", "a78"),
-    ATARI_5200("Atari_-_5200", "a52", "a52"),
-    ATARI_2600("Atari_-_2600", "a26", "a26"),
-
-    VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
-
-    INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
-    COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
-
-    SUPERVISION("Watara_-_Supervision", "supervision", "sv"),
-
-    ARDUBOY("", "arduboy", "hex");
-
-    String repoName;
-    String coreCode;
-    List<String> extensions = new ArrayList<>();
-
-    PocketCore(String repoName, String coreCode, String... fileExtensions)
+    public PocketCore()
     {
-        this.repoName = repoName;
-        this.coreCode = coreCode;
+    }
 
-        for(String ext : fileExtensions)
+    public boolean isDataComplete()
+    {
+        return namespace != null &&
+                name != null &&
+                category != null &&
+                manufacturer != null &&
+                year != null;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public String getNamespace()
+    {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace)
+    {
+        this.namespace = namespace;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public PocketCoreCategory getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(PocketCoreCategory category)
+    {
+        this.category = category;
+    }
+
+    public String getManufacturer()
+    {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer)
+    {
+        this.manufacturer = manufacturer;
+    }
+
+    public Integer getYear()
+    {
+        return year;
+    }
+
+    public void setYear(Integer year)
+    {
+        this.year = year;
+    }
+
+    private static final String PLATFORM = "platform";
+    private static final String CATEGORY = "category";
+    private static final String NAME = "name";
+    private static final String MANUFACTURER = "manufacturer";
+    private static final String YEAR = "year";
+
+    public static JSONObject createJSON(PocketCore core)
+    {
+        if (!core.isDataComplete())
         {
-            extensions.add(ext);
+            return null;
         }
-    }
 
-    public String getRepoName()
-    {
-        return repoName;
-    }
+        String name = core.getName();
+        String category = core.getCategory().getName();
+        String manufacturer = core.getManufacturer();
+        Integer year = core.getYear();
 
-    public String getCoreCode()
-    {
-        return coreCode;
-    }
+        JSONObject coreJSON = new JSONObject();
+        coreJSON.put(NAME, name);
+        coreJSON.put(CATEGORY, category);
+        coreJSON.put(MANUFACTURER, manufacturer);
+        coreJSON.put(YEAR, year);
 
-    public List<String> getFileExtensions()
-    {
-        return extensions;
+        JSONObject object = new JSONObject();
+        object.put(PLATFORM, coreJSON);
+        return object;
     }
 }

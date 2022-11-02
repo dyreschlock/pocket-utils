@@ -1,10 +1,9 @@
 package com.schlock.pocket.app;
 
-import com.schlock.pocket.entites.PocketCore;
+import com.schlock.pocket.entites.PocketCoreInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketGameDAO;
-import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -108,13 +107,13 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 
         String coreRepo = game.getCore().getRepoName();
 
-        if (PocketCore.GAMEBOY_COLOR.equals(game.getCore()))
+        if (PocketCoreInfo.GAMEBOY_COLOR.equals(game.getCore()))
         {
             final String GB_EXTENSION = ".gb";
 
             if (game.getGameFilename().endsWith(GB_EXTENSION))
             {
-                coreRepo = PocketCore.GAMEBOY.getRepoName();
+                coreRepo = PocketCoreInfo.GAMEBOY.getRepoName();
             }
         }
 
