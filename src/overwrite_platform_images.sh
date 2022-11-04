@@ -8,7 +8,7 @@ custom_platform_images_directory=${utility_directory}platform_images/
 custom_platform_images_completed_directory=${custom_platform_images_directory}_completed/
 
 # Create a BIN file for every PNG found in the custom platform images folder in the utility directory
-# BINs are put into the overwrite folder in the custom platform images folder
+# BINs are put in the custom platform images folder
 for file in ${custom_platform_images_directory}*.png; do
 
   filename=$(basename "$file" ".png")
@@ -23,7 +23,7 @@ for file in ${custom_platform_images_directory}*.png; do
 
 done
 
-# Copy every BIN file found in the overwrite directory into Pocket's platform images directory
+# Copy every BIN file found in the custom platform images folder into Pocket's platform images directory
 
 pocket_platforms_images_directory=${pocket_directory}Platforms/_images/
 
