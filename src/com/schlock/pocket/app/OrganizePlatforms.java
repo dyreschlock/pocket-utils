@@ -12,8 +12,6 @@ import java.util.List;
 
 public class OrganizePlatforms extends AbstractDatabaseApplication
 {
-    private static final String OVERWRITE_PLATFORM_IMAGES_SCRIPT = "overwrite_platform_images.sh";
-
     protected OrganizePlatforms(String context)
     {
         super(context);

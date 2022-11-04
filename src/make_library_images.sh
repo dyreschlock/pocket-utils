@@ -27,6 +27,6 @@ for plat in "${platforms[@]}"; do
 
 done
 
-echo "library update complete"
+#echo "library update complete"
 
 exit 0

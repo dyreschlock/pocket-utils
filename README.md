@@ -45,11 +45,15 @@ MRA files in the core's common directory must be manually moved into the core's 
 
 This will create a list of cores in the database, and rewrite JSON in the Platforms directory.
 
-This is a 1-step process, but the process does two things. Run **OrganizePlatforms** to start.
+This is a 1-step process, but the process does three things. Run **OrganizePlatforms** to start.
 
-First, the program will comb through the Assets directory and create a PocketCore object for any folder that exists. The information for the core will not be filled in.
+1. The program will comb through the Assets directory and create a PocketCore object for any folder that exists. The information for the core will not be filled in.
 
-Second, for any core in the database with a complete set of information (ie: name, category, manufacturer, year), the program will rewrite a JSON with that information.
+
+2. For any core in the database with a complete set of information (ie: name, category, manufacturer, year), the program will rewrite a JSON with that information.
+
+
+3. The program will run **overwrite_platform_images.sh** which will convert any platform image in the **platform_images** directory (which is in the utility.directory) to the BIN format, and then copy the BIN into the Platforms directory on the Pocket. Once converted and copied, files are moved into a **completed** directory so they won't be repeatedly converted.
 
 It is expected that after the program is run once, and all the cores have been entered in the database, the user can use a SQL management program to enter the information for each of the cores. Then, **OrganizePlatforms** can be run a second time to write that information into the Platforms directory.
 
@@ -58,21 +62,24 @@ It is expected that after the program is run once, and all the cores have been e
 
 This will create Library Images for console/handheld roms based on the Box Art.
 
-This is a 4-step process, and requires some organization of rom files within console and handheld cores.
+This is a 2-step process, and requires some organization of rom files within console and handheld cores.
 
 First, **CreatePocketEntries** (Java Program) is run. This will look through each core directory (listed in PocketCoreInfo) and create database entries for each game found. It is looking for a specific organization, though. Roms should be sorted into genre folders within the core's common directory. And there should be no nested directories.  For example, in the NES core, you may have 'Action Platformer/Super Mario Bros. 1'. The database entry will use that folder name as the genre. CreatePocketEntries will ignore any folder that starts with an underscore (_).
 
 CreatePocketEntries assumes that the boxart's filename will match the filename of the rom.
 
-Second, **CollectPocketThumbnails** (Java Program) is run. This will process any database entry that doesn't have a boxart image yet. First, if there's no box art image in the **boxart.storage.directory**, it will try to find that image at **boxart.source.url**, if it exists, it will copy the PNG into the storage directory.
+Second, **CollectPocketThumbnails** (Java Program) is run. This program will do 4 things in order to create a thumbnail for a game in the database.
 
-It it fails, the image filename can be edited in the database to match something at **boxart.source.url**, or an image can be manually placed in **boxart.storage.directory** matching the desired filename.
+1. This will process any database entry that doesn't have a boxart image yet. First, if there's no box art image in the **boxart.storage.directory**, it will try to find that image at **boxart.source.url**, if it exists, it will copy the PNG into the storage directory. It it fails, the image filename can be edited in the database to match something at **boxart.source.url**, or an image can be manually placed in **boxart.storage.directory** matching the desired filename.
 
-After that, if the box art exists in the **boxart.storage.directory**, it will convert that image into a suitable BMP file, and place that file in the **processing.library.directory**. These filenames are the HEX value of the CRC32 hash of the rom file. This is how the Pocket looks up entries in the library.
 
-Third, **make_library_images.sh** is run. This will look at every BMP in the **processing.library.directory**, convert them into BIN files compatible with the Pocket, and copy them into the Pocket library image folder (**pocket.library.directory**). This script uses DerTolleEmil's libary image converter tool, mentioned above. Make sure that is in the **utility.directory**.
+2. After that, if the box art exists in the **boxart.storage.directory**, it will convert that image into a suitable BMP file, and place that file in the **processing.library.directory**. These filenames are the HEX value of the CRC32 hash of the rom file. This is how the Pocket looks up entries in the library.
 
-Lastly, Fourth, **CollectPocketThumbnails** is run again to confirm that the BIN image exists in the library, and the database is updated.
+
+3. The program will run **make_library_images.sh**, which will look at every BMP in the **processing.library.directory**. If they haven't been converted, it will convert them into BIN files compatible with the Pocket, and copy them into the Pocket library image folder (**pocket.library.directory**). This script uses DerTolleEmil's libary image converter tool, mentioned above. Make sure that is in the **utility.directory**.
+
+
+4. The program will confirm that the BIN image exists in the library, and the database is updated.
 
 
 ## Creating Playlists for Library

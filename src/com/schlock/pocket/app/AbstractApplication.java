@@ -8,6 +8,10 @@ import java.io.InputStreamReader;
 
 public abstract class AbstractApplication
 {
+    protected static final String OVERWRITE_PLATFORM_IMAGES_SCRIPT = "overwrite_platform_images.sh";
+    protected static final String MAKE_ARCADE_ROMS_SCRIPT = "make_arcade_roms.sh";
+    protected static final String MAKE_LIBRARY_IMAGES = "make_library_images.sh";
+
     public static final String COMMON = "common";
     public static final String COMMON_FOLDER = COMMON + "/";
 

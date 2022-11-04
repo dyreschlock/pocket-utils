@@ -28,40 +28,61 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     void process()
     {
-        List<PocketGame> games = pocketGameDAO().getByLibraryThumbnailNotYetCreated();
-        for(PocketGame game : games)
+        findAndDownloadMissingThumbnails();
+
+        processUnconvertedImagesToBMP();
+
+        executeScript(MAKE_LIBRARY_IMAGES);
+
+        verifyConvertedLibraryImages();
+    }
+
+    private void findAndDownloadMissingThumbnails()
+    {
+        List<PocketGame> missingThumbnails = pocketGameDAO().getByThumbnailNotCopied();
+        for(PocketGame game : missingThumbnails)
         {
             try
             {
-                if (!game.isImageCopied())
-                {
-                    processGame(game);
-                }
+                findAndDownloadImage(game);
             }
             catch(Exception e)
             {
-                e.printStackTrace();
-            }
-
-            if (game.isImageCopied())
-            {
-                try
-                {
-                    boolean exists = verifyLibraryEntry(game);
-                    if (!exists)
-                    {
-                        prepareLibraryThumbnail(game);
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                System.err.println("Could not find thumbnail for " + game.getGameName());
             }
         }
     }
 
-    private void processGame(PocketGame game) throws Exception
+    private void processUnconvertedImagesToBMP()
+    {
+        List<PocketGame> thumbnailNotInLibrary = pocketGameDAO().getByThumbnailCopiedNotInLibrary();
+        for(PocketGame game : thumbnailNotInLibrary)
+        {
+            try
+            {
+                prepareLibraryThumbnail(game);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void verifyConvertedLibraryImages()
+    {
+        List<PocketGame> thumbnailsNotVerified = pocketGameDAO().getByThumbnailCopiedNotInLibrary();
+        for(PocketGame game : thumbnailsNotVerified)
+        {
+            boolean exists = verifyLibraryEntry(game);
+            if (exists)
+            {
+                System.out.println("Library Image Complete: " + game.getGameName());
+            }
+        }
+    }
+
+    private void findAndDownloadImage(PocketGame game) throws Exception
     {
         String OUTPUT_FOLDER = config().getBoxartStorageDirectory() + game.getCore().getCoreCode();
         String OUTPUT_FILE = OUTPUT_FOLDER + "/" + game.getImageFilename();
@@ -71,6 +92,8 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             game.setImageCopied(true);
             getSession().save(game);
+
+            System.out.println("Thumbnail exists for: " + game.getGameName());
         }
         else
         {
@@ -97,6 +120,8 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
             {
                 game.setImageCopied(true);
                 getSession().save(game);
+
+                System.out.println("Downloaded thumbnail for: " + game.getGameName());
             }
         }
     }
@@ -120,7 +145,6 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
         String URL_LOCATION = String.format(config().getBoxartSourceUrl(), coreRepo) + imageFilename;
         return URL_LOCATION;
     }
-
 
     private boolean verifyLibraryEntry(PocketGame game)
     {
