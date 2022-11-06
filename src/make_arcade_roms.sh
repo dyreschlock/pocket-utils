@@ -36,7 +36,7 @@ declare -a taito=("spaceinvaders" "arkanoid")
 
 declare -a various=("tiamc1" "robotron" "bagman" "joust2" "berzerK" "dorodon" "crazyclimber" "ladybug" "burgertime" "burningrubber" "defender" "snowbros2")
 
-declare -a jotego=("jt1942" "jt1943" "jtbiocom" "jtbtiger" "jtbubl" "jtcommando" "jtcomsc" "jtcontra" "jtcop" "jtdd" "jtdd2" "jtexed" "jtf1dream" "jtflane" "jtgng" "jtgunsmoke" "jthige" "jtkchamp" "jtkicker" "jtkunio" "jtlabrun" "jtmidres" "jtmikie" "jtmx5k" "jtninja" "jtoutrun" "jtpinpon" "jtrastan" "jtroadf" "jtroc" "jtrumble" "jtsarms" "jtsbask1" "jtsbaskt" "jtsectionz" "jtsf" "jtslyspy" "jttora" "jttrack" "jttrojan" "jtvigil" "jtvulgus" "jtyiear" "jtpang")
+declare -a jotego=("jt1942" "jt1943" "jtbiocom" "jtbtiger" "jtbubl" "jtcommando" "jtcomsc" "jtcontra" "jtcop" "jtdd" "jtdd2" "jtexed" "jtf1dream" "jtflane" "jtgng" "jtgunsmoke" "jthige" "jtkchamp" "jtkicker" "jtkunio" "jtlabrun" "jtmidres" "jtmikie" "jtmx5k" "jtninja" "jtoutrun" "jtpinpon" "jtrastan" "jtroadf" "jtroc" "jtrumble" "jtsarms" "jtsbask1" "jtsbaskt" "jtsectionz" "jtsf" "jtshanon" "jtslyspy" "jttora" "jttrack" "jttrojan" "jtvigil" "jtvulgus" "jtyiear" "jtpang")
 
 
 declare -a coresets=(atari irem cave cps konami midway namco nintendo raizing sega tecmo taito various jotego)

@@ -15,7 +15,7 @@ public enum PocketCoreInfo
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
 
-    POKEMON_MINI("Nintendo_-_Pokemon_Mini", "pokemini", "min"),
+    POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
 
     NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
 
@@ -38,6 +38,8 @@ public enum PocketCoreInfo
 
     WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wsc", "wsc"),
     WONDERSWAN("Bandai_-_WonderSwan", "wsc", "ws"),
+
+    TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
 
     ATARI_LYNX("Atari_-_Lynx", "lnx", "lnx"),
 
