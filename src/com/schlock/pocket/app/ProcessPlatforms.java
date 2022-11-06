@@ -4,15 +4,14 @@ import com.google.gson.*;
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.services.DeploymentConfiguration;
-import com.schlock.pocket.services.database.PocketCoreDAO;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class OrganizePlatforms extends AbstractDatabaseApplication
+public class ProcessPlatforms extends AbstractDatabaseApplication
 {
-    protected OrganizePlatforms(String context)
+    protected ProcessPlatforms(String context)
     {
         super(context);
     }
@@ -100,6 +99,6 @@ public class OrganizePlatforms extends AbstractDatabaseApplication
 
     public static void main(String args[]) throws Exception
     {
-        new OrganizePlatforms(DeploymentConfiguration.LOCAL).run();
+        new ProcessPlatforms(DeploymentConfiguration.LOCAL).run();
     }
 }
