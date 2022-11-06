@@ -19,9 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.CRC32;
 
-public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
+public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 {
-    protected CollectProcessLibraryThumbnails(String context)
+    protected ProcessLibraryThumbnails(String context)
     {
         super(context);
     }
@@ -298,6 +298,6 @@ public class CollectProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     public static void main(String[] args)
     {
-        new CollectProcessLibraryThumbnails(DeploymentConfiguration.LOCAL).run();
+        new ProcessLibraryThumbnails(DeploymentConfiguration.LOCAL).run();
     }
 }
