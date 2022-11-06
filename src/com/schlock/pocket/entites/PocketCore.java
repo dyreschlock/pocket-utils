@@ -27,6 +27,9 @@ public class PocketCore
     @Expose
     private String manufacturer;
 
+    @Column(name = "rom_zips")
+    private String romZipFolder;
+
     @Column(name = "year")
     @Expose
     private Integer year;
@@ -92,6 +95,16 @@ public class PocketCore
     public void setManufacturer(String manufacturer)
     {
         this.manufacturer = manufacturer;
+    }
+
+    public String getRomZipFolder()
+    {
+        return romZipFolder;
+    }
+
+    public void setRomZipFolder(String romZipFolder)
+    {
+        this.romZipFolder = romZipFolder;
     }
 
     public Integer getYear()

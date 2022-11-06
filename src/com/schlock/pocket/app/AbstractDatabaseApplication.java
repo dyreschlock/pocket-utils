@@ -1,6 +1,7 @@
 package com.schlock.pocket.app;
 
 import com.schlock.pocket.services.DeploymentConfiguration;
+import com.schlock.pocket.services.database.PocketCoreDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -42,6 +43,11 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
         {
             teardownDatabase();
         }
+    }
+
+    protected PocketCoreDAO pocketCoreDAO()
+    {
+        return new PocketCoreDAO(session);
     }
 
     protected Session getSession()

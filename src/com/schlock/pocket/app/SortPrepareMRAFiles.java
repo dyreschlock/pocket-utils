@@ -14,7 +14,7 @@ import java.util.*;
 
 public class SortPrepareMRAFiles extends AbstractApplication
 {
-    private static final String ROMZIP_NAMESPACE = "raizing";
+    private static final String ROMZIP_NAMESPACE = "jotego";
 
     private static final String MRA_FOLDER = "mra";
 
@@ -41,9 +41,14 @@ public class SortPrepareMRAFiles extends AbstractApplication
     public void run() throws Exception
     {
         String NEW_MRA_DIRECTORY = config().getProcessingMRADirectory();
+
         moveMRAfiles(NEW_MRA_DIRECTORY);
+
         downloadRomZips();
+
         writeFiles();
+
+
     }
 
     private void moveMRAfiles(String filepath) throws Exception

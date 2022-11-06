@@ -19,46 +19,9 @@ public class OrganizePlatforms extends AbstractDatabaseApplication
 
     void process()
     {
-        createListOfCores();
-
         updatePlatforms();
 
         executeScript(OVERWRITE_PLATFORM_IMAGES_SCRIPT);
-    }
-
-    private void createListOfCores()
-    {
-        File assetDirectory = new File(config().getPocketAssetsDirectory());
-
-        FileFilter filter = new FileFilter()
-        {
-            public boolean accept(File file)
-            {
-                boolean isDirectory = file.isDirectory();
-
-                return isDirectory;
-            }
-        };
-
-        for(File directory : assetDirectory.listFiles(filter))
-        {
-            String namespace = directory.getName();
-            createIfNew(namespace);
-        }
-    }
-
-    private void createIfNew(String namespace)
-    {
-        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
-        if (core == null)
-        {
-            core = new PocketCore();
-            core.setNamespace(namespace);
-
-            session.save(core);
-
-            System.out.println("New core " + namespace + " created in database.");
-        }
     }
 
     private static final String JSON_FILE_EXT = ".json";
@@ -133,11 +96,6 @@ public class OrganizePlatforms extends AbstractDatabaseApplication
         {
             throw new RuntimeException(e);
         }
-    }
-
-    private PocketCoreDAO pocketCoreDAO()
-    {
-        return new PocketCoreDAO(session);
     }
 
     public static void main(String args[]) throws Exception

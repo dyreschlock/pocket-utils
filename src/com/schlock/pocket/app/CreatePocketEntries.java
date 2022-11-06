@@ -1,5 +1,6 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
@@ -17,11 +18,52 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
     void process()
     {
+        searchForNewCores();
+        searchForNewGames();
+    }
+
+    private void searchForNewCores()
+    {
+        File assetDirectory = new File(config().getPocketAssetsDirectory());
+
+        FileFilter filter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                boolean isDirectory = file.isDirectory();
+
+                return isDirectory;
+            }
+        };
+
+        for(File directory : assetDirectory.listFiles(filter))
+        {
+            String namespace = directory.getName();
+            createCoreObjectIfDoesntExist(namespace);
+        }
+    }
+
+    private void createCoreObjectIfDoesntExist(String namespace)
+    {
+        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
+        if (core == null)
+        {
+            core = new PocketCore();
+            core.setNamespace(namespace);
+
+            session.save(core);
+
+            System.out.println("New core " + namespace + " created in database.");
+        }
+    }
+
+    private void searchForNewGames()
+    {
         try
         {
             for(PocketCoreInfo core : PocketCoreInfo.values())
             {
-                processCore(core);
+                searchForNewGames(core);
             }
         }
         catch(Exception e)
@@ -30,7 +72,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         }
     }
 
-    private void processCore(PocketCoreInfo core)
+    private void searchForNewGames(PocketCoreInfo core)
     {
         String romLocation = getRomLocation(core);
 
