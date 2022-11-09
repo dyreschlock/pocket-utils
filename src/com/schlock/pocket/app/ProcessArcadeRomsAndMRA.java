@@ -12,7 +12,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
-public class SortPrepareMRAFiles extends AbstractApplication
+public class ProcessArcadeRomsAndMRA extends AbstractApplication
 {
     private static final String ROMZIP_NAMESPACE = "jotego";
 
@@ -33,7 +33,7 @@ public class SortPrepareMRAFiles extends AbstractApplication
     private Set<String> namespaces = new HashSet<>();
     private Set<String> requiredRoms = new HashSet<>();
 
-    protected SortPrepareMRAFiles(String context)
+    protected ProcessArcadeRomsAndMRA(String context)
     {
         super(context);
     }
@@ -265,6 +265,6 @@ public class SortPrepareMRAFiles extends AbstractApplication
 
     public static void main(String[] args) throws Exception
     {
-        new SortPrepareMRAFiles(DeploymentConfiguration.LOCAL).run();
+        new ProcessArcadeRomsAndMRA(DeploymentConfiguration.LOCAL).run();
     }
 }
