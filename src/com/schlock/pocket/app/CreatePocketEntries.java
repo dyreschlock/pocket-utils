@@ -53,7 +53,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
             session.save(core);
 
-            System.out.println("New core " + namespace + " created in database.");
+            System.out.println("New core created in database: " + namespace);
         }
     }
 
@@ -137,6 +137,8 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                 game = PocketGame.createGame(file, core);
 
                 getSession().save(game);
+
+                System.out.println("New game created in database: " + game.getGameName());
             }
         }
     }
