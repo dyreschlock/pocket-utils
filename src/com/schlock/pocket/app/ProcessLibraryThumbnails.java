@@ -32,8 +32,6 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
         processUnconvertedImagesToBMP();
 
-        executeScript(MAKE_LIBRARY_IMAGES);
-
         verifyConvertedLibraryImages();
     }
 
@@ -60,7 +58,11 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         {
             try
             {
-                prepareLibraryThumbnail(game);
+                boolean bmpConverted = convertBoxartPNGtoBMP(game);
+                if (bmpConverted)
+                {
+                    convertBoxartBMPtoBIN(game);
+                }
             }
             catch (Exception e)
             {
@@ -165,12 +167,12 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
     }
 
 
-    private void prepareLibraryThumbnail(PocketGame game) throws Exception
+    private boolean convertBoxartPNGtoBMP(PocketGame game) throws Exception
     {
         String IMAGE_FILE = config().getBoxartStorageDirectory() + game.getCore().getCoreCode() + "/" + game.getImageFilename();
 
-        File imageFile = new File(IMAGE_FILE);
-        if (imageFile.exists())
+        File imageFilePNG = new File(IMAGE_FILE);
+        if (imageFilePNG.exists())
         {
             String ROM_FILE = getRomFileLocation(game);
 
@@ -178,13 +180,17 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
             game.setFileHash(romHash);
             getSession().save(game);
 
-            String LIBRARY_SETUP_FILE = getLibrarySetupFileLocation(game);
-            File librarySetupFile = new File(LIBRARY_SETUP_FILE);
-            if (!librarySetupFile.exists())
+            String LIBRARY_SETUP_FILE = getBoxartThumbnailBMPFilepath(game);
+            File imageFileConvertedBMP = new File(LIBRARY_SETUP_FILE);
+            if (imageFileConvertedBMP.exists())
             {
-                librarySetupFile.getParentFile().mkdirs();
+                return true;
+            }
+            else
+            {
+                imageFileConvertedBMP.getParentFile().mkdirs();
 
-                BufferedImage originalImage = ImageIO.read(imageFile);
+                BufferedImage originalImage = ImageIO.read(imageFilePNG);
 
                 int[] resized = getResizedWidthHeight(originalImage);
 
@@ -194,23 +200,25 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
                 Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 
                 // The new Image must not contain an Alpha channel.
-                BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
+                BufferedImage convertedBMP = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
 
-                Graphics2D gr = newImage.createGraphics();
+                Graphics2D gr = convertedBMP.createGraphics();
                 gr.drawImage(scaledImage, 0, 0, newWidth, newHeight, null);
                 gr.dispose();
 
-                boolean success = ImageIO.write(newImage, "bmp", librarySetupFile);
+                boolean success = ImageIO.write(convertedBMP, "bmp", imageFileConvertedBMP);
                 if(success)
                 {
-                    System.out.println("Converted file: " + imageFile.getName());
+                    System.out.println("Converted file: " + imageFilePNG.getName());
+                    return true;
                 }
                 else
                 {
-                    System.out.println("Write failed for: " + imageFile.getName());
+                    System.out.println("Write failed for: " + imageFilePNG.getName());
                 }
             }
         }
+        return false;
     }
 
     private static final double MAX_WIDTH = 240.0;
@@ -253,6 +261,19 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
     }
 
 
+    private static final String IMAGE_CONVERTER_PROGRAM = "AnaloguePocketLibraryImageConverter";
+
+    private void convertBoxartBMPtoBIN(PocketGame game)
+    {
+        String programExec = config().getPocketUtilityDirectory() + IMAGE_CONVERTER_PROGRAM;
+        String file = getBoxartThumbnailBMPFilepath(game);
+        String outputDir = "--output-dir=" + config().getPocketLibraryDirectory() + game.getCore().getCoreCode() + "/";
+
+        String shellCommand = programExec + " " + file + " " + outputDir;
+
+        executeShellCommand(shellCommand);
+    }
+
 
 
     private String getRomFileLocation(PocketGame game)
@@ -269,7 +290,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         return ROM_FILE;
     }
 
-    private String getLibrarySetupFileLocation(PocketGame game)
+    private String getBoxartThumbnailBMPFilepath(PocketGame game)
     {
         String coreCode = game.getCore().getCoreCode();
         if (coreCode.contains("/"))

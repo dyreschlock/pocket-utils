@@ -14,8 +14,7 @@ romzip.storage.directory=
 # This is where MRA files go to be processed by "SortPrepareMRAFiles"
 processing.mra.directory=
 
-# This is where image files are placed after being converted by "CollectProcessLibraryThumbnails"
-# This is also where "make_library_images.sh" looks to convert these files into bin for the Pocket to read.
+# This is where image files are placed after being converted from PNG to BMP with corrected filenames
 processing.library.directory=
 
 hibernate.connection.url.local=

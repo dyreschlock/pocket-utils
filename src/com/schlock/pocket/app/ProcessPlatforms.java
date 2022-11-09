@@ -20,7 +20,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
     {
         updatePlatforms();
 
-        executeScript(OVERWRITE_PLATFORM_IMAGES_SCRIPT);
+        executeShellScript(OVERWRITE_PLATFORM_IMAGES_SCRIPT);
     }
 
     private static final String JSON_FILE_EXT = ".json";

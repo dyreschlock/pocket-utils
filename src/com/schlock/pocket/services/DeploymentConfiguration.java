@@ -25,6 +25,8 @@ public class DeploymentConfiguration
     private static final String PROCESSING_MRA_DIRECTORY = "processing.mra.directory";
     private static final String PROCESSING_LIBRARY_DIRECTORY = "processing.library.directory";
 
+    private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
+
     public static final String LOCAL = "local";
     public static final String TEST = "test";
 
@@ -48,6 +50,11 @@ public class DeploymentConfiguration
     private void setContext(String context)
     {
         this.context = context;
+    }
+
+    public String getPocketUtilityDirectory()
+    {
+        return getProperties().getProperty(POCKET_UTILITY_DIRECTORY);
     }
 
     public String getBoxartSourceUrl()
