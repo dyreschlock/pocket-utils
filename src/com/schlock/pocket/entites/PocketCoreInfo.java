@@ -30,27 +30,29 @@ public enum PocketCoreInfo
 
     GAME_GEAR("Sega_-_Game_Gear", "gg", "gg"),
 
-    //Microsoft_-_MSX
-    //Microsoft_-_MSX2
-
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
 
     WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wsc", "wsc"),
     WONDERSWAN("Bandai_-_WonderSwan", "wsc", "ws"),
 
-    TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
-
     ATARI_LYNX("Atari_-_Lynx", "lnx", "lnx"),
 
-//    ATARI_7800("Atari_-_7800", "a78", "a78"),
+    ATARI_7800("Atari_-_7800", "a78", "a78"),
     ATARI_5200("Atari_-_5200", "a52", "a52"),
     ATARI_2600("Atari_-_2600", "a26", "a26"),
 
-    VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
+    TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
 
     INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
     COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
+
+    VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
+
+    //Microsoft_-_MSX
+    //Microsoft_-_MSX2
+
+    COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
 
     SUPERVISION("Watara_-_Supervision", "supervision", "sv"),
 
