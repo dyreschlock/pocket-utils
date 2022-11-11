@@ -5,17 +5,9 @@ pocket.directory=
 utility.directory=
 
 boxart.source.url=
-boxart.storage.directory=
 
 romzip.source.url=
 romzip.hbsource.url=
-romzip.storage.directory=
-
-# This is where MRA files go to be processed by "SortPrepareMRAFiles"
-processing.mra.directory=
-
-# This is where image files are placed after being converted from PNG to BMP with corrected filenames
-processing.library.directory=
 
 hibernate.connection.url.local=
 hibernate.connection.username.local=

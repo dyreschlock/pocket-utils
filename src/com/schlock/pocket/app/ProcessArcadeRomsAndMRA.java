@@ -30,7 +30,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     void process()
     {
-        String MRA_PROCESSING_DIRECTORY = config().getProcessingMRADirectory();
+        String MRA_PROCESSING_DIRECTORY = config().getMRAToBeProcessedDirectory();
 
         FileFilter acceptMRAfiles = new FileFilter()
         {
@@ -185,6 +185,11 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
     private boolean downloadRomZip(String romZip, PocketCore core)
     {
         String romDirectory = core.getRomZipFolder();
+        if (romDirectory == null || romDirectory.isEmpty())
+        {
+            System.out.println("Rom Zip directory not set on core: " + core.getNamespace());
+            return false;
+        }
 
         String URL_LOCATION = config().getRomzipSourceUrl() + romZip;
         String OUTPUT_FILE = config().getRomzipStorageDirectory() + romDirectory + "/" + romZip;

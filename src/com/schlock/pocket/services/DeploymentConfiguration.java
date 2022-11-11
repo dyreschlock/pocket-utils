@@ -9,10 +9,12 @@ import java.util.Properties;
 
 public class DeploymentConfiguration
 {
-    private static final String BOXART_SOURCE_URL = "boxart.source.url";
-    private static final String BOXART_STORAGE_DIRECTORY = "boxart.storage.directory";
-
     private static final String POCKET_DIRECTORY = "pocket.directory";
+    private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
+
+    private static final String BOXART_SOURCE_URL = "boxart.source.url";
+    private static final String BOXART_STORAGE_FOLDER = "boxart/";
+    private static final String BOXART_CONVERTED_FOLDER = "boxart_converted/";
 
     private static final String ASSETS_FOLDER = "Assets/";
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
@@ -20,12 +22,10 @@ public class DeploymentConfiguration
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
-    private static final String ROMZIP_STORAGE_DIRECTORY = "romzip.storage.directory";
+    private static final String ROMZIP_STORAGE_FOLDER = "arcade_roms/";
 
-    private static final String PROCESSING_MRA_DIRECTORY = "processing.mra.directory";
-    private static final String PROCESSING_LIBRARY_DIRECTORY = "processing.library.directory";
+    private static final String MRA_TODO_FOLDER = "mra_to_process/";
 
-    private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
 
     public static final String LOCAL = "local";
     public static final String TEST = "test";
@@ -64,7 +64,7 @@ public class DeploymentConfiguration
 
     public String getBoxartStorageDirectory()
     {
-        return getProperties().getProperty(BOXART_STORAGE_DIRECTORY);
+        return getPocketUtilityDirectory() + BOXART_STORAGE_FOLDER;
     }
 
     public String getPocketAssetsDirectory()
@@ -98,17 +98,17 @@ public class DeploymentConfiguration
 
     public String getRomzipStorageDirectory()
     {
-        return getProperties().getProperty(ROMZIP_STORAGE_DIRECTORY);
+        return getPocketUtilityDirectory() + ROMZIP_STORAGE_FOLDER;
     }
 
-    public String getProcessingMRADirectory()
+    public String getMRAToBeProcessedDirectory()
     {
-        return getProperties().getProperty(PROCESSING_MRA_DIRECTORY);
+        return getPocketUtilityDirectory() + MRA_TODO_FOLDER;
     }
 
     public String getProcessingLibraryDirectory()
     {
-        return getProperties().getProperty(PROCESSING_LIBRARY_DIRECTORY);
+        return getPocketUtilityDirectory() + BOXART_CONVERTED_FOLDER;
     }
 
     private Properties getProperties()
