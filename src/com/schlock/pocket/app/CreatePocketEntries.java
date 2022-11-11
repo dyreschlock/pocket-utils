@@ -74,24 +74,31 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
     private void searchForNewGames(PocketCoreInfo core)
     {
-        String romLocation = getRomLocation(core);
-
-        FileFilter filter = new FileFilter()
+        if (PocketCoreInfo.ARCADE.equals(core))
         {
-            @Override
-            public boolean accept(File file)
+
+        }
+        else
+        {
+            String romLocation = getRomLocation(core);
+
+            FileFilter filter = new FileFilter()
             {
-                boolean directory = file.isDirectory();
-                boolean notIgnore = !file.getName().startsWith("_");
+                @Override
+                public boolean accept(File file)
+                {
+                    boolean directory = file.isDirectory();
+                    boolean notIgnore = !file.getName().startsWith("_");
 
-                return directory && notIgnore;
+                    return directory && notIgnore;
+                }
+            };
+
+            File coreDirectory = new File(romLocation);
+            for(File file : coreDirectory.listFiles(filter))
+            {
+                processFolder(file, core);
             }
-        };
-
-        File coreDirectory = new File(romLocation);
-        for(File file : coreDirectory.listFiles(filter))
-        {
-            processFolder(file, core);
         }
     }
 
