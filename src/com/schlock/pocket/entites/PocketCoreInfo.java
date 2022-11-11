@@ -5,6 +5,7 @@ import java.util.List;
 
 public enum PocketCoreInfo
 {
+    //Nintendo
     SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
     FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
@@ -17,59 +18,91 @@ public enum PocketCoreInfo
 
     POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
 
+
+    //SNK
     NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
 
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
 
-    //SEGA_CD("Sega_-_Mega-CD_-_Sega_CD"
 
+    //Sega
+    //SEGA_CD("Sega_-_Mega-CD_-_Sega_CD"
     SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
 
     GAME_GEAR("Sega_-_Game_Gear", "gg", "gg"),
 
+
+    //NEC
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
 
+
+    //Bandai
     WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wsc", "wsc"),
     WONDERSWAN("Bandai_-_WonderSwan", "wsc", "ws"),
 
+
+    //Atari
     ATARI_LYNX("Atari_-_Lynx", "lnx", "lnx"),
 
-    ATARI_7800("Atari_-_7800", "a78", "a78"),
-    ATARI_5200("Atari_-_5200", "a52", "a52"),
-    ATARI_2600("Atari_-_2600", "a26", "a26"),
+    ATARI_7800("Atari_-_7800", "7800", "a78"),
+    ATARI_5200("Atari_-_5200", "5200", "a52"),
+    ATARI_2600("Atari_-_2600", "2600", "a26"),
 
-    TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
 
+    //Random Old Consoles
     INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
     COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
 
     VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
 
-    //Microsoft_-_MSX
-    //Microsoft_-_MSX2
+    ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
+    CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
+    ARCADIA("Emerson_-_Arcadia_2001", "arcadia", "bin"),
+    STUDIO2("RCA_-_Studio_II", "studio2", "st2"),
+    CREATIVISION("VTech_-_CreatiVision", "creativision", "rom"),
+    ADVENTURE_VISION("Entex_-_Adventure_Vision", "avision", "bin"),
+    
 
-    COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
+    //Random Handhelds
+    ARDUBOY("", "arduboy", "hex"),
+
+    TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
 
     SUPERVISION("Watara_-_Supervision", "supervision", "sv"),
 
-    ARDUBOY("", "arduboy", "hex");
+
+    //Computers
+    COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
+
+    //Microsoft_-_MSX2
+    //Microsoft_-_MSX,
+
+    ARCADE("MAME");
 
     String repoName;
     String coreCode;
     List<String> extensions = new ArrayList<>();
+
+    PocketCoreInfo(String repoName)
+    {
+        this(repoName, null, null);
+    }
 
     PocketCoreInfo(String repoName, String coreCode, String... fileExtensions)
     {
         this.repoName = repoName;
         this.coreCode = coreCode;
 
-        for(String ext : fileExtensions)
+        if (fileExtensions != null)
         {
-            extensions.add(ext);
+            for(String ext : fileExtensions)
+            {
+                extensions.add(ext);
+            }
         }
     }
 
