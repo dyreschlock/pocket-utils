@@ -269,9 +269,12 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         String file = getBoxartThumbnailBMPFilepath(game);
         String outputDir = "--output-dir=" + config().getPocketLibraryDirectory() + game.getCore().getCoreCode() + "/";
 
-        String shellCommand = programExec + " " + file + " " + outputDir;
+        String[] commandString = new String[3];
+        commandString[0] = programExec;
+        commandString[1] = file;
+        commandString[2] = outputDir;
 
-        executeShellCommand(shellCommand);
+        executeShellCommand(commandString);
     }
 
 

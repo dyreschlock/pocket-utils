@@ -5,11 +5,12 @@ import com.schlock.pocket.services.DeploymentConfiguration;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractApplication
 {
     protected static final String OVERWRITE_PLATFORM_IMAGES_SCRIPT = "overwrite_platform_images.sh";
-    protected static final String MAKE_ARCADE_ROMS_SCRIPT = "make_arcade_roms.sh";
 
     public static final String COMMON = "common";
     public static final String COMMON_FOLDER = COMMON + "/";
@@ -40,33 +41,45 @@ public abstract class AbstractApplication
 
     protected void executeShellScript(String scriptName)
     {
-        String shellCommand = String.format("zsh %s", scriptName);
-        executeShellCommand(shellCommand);
+        String[] commands = new String[2];
+        commands[0] = "zsh";
+        commands[1] = scriptName;
+
+        executeShellCommand(commands);
     }
 
-    protected void executeShellCommand(String shellCommand)
+    protected List<String> executeShellCommand(String[] commandAndArgs)
     {
+        List<String> outputContents = new ArrayList<>();
+
         String shellFilepath = System.getProperty("user.dir") + "/src";
         try
         {
-            Process p = Runtime.getRuntime().exec(shellCommand, null, new File(shellFilepath));
+            Process p = Runtime.getRuntime().exec(commandAndArgs, null, new File(shellFilepath));
             p.waitFor();
 
             BufferedReader output = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while(output.ready())
             {
-                System.out.println(output.readLine());
+                String line = output.readLine();
+
+                outputContents.add(line);
+                System.out.println(line);
             }
 
             BufferedReader errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             while(errors.ready())
             {
-                System.out.println(errors.readLine());
+                String line = errors.readLine();
+
+                outputContents.add(line);
+                System.out.println(line);
             }
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
+        return outputContents;
     }
 }

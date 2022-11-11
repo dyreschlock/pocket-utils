@@ -1,6 +1,8 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.services.DeploymentConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -12,48 +14,23 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
-public class ProcessArcadeRomsAndMRA extends AbstractApplication
+public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 {
-    private static final String ROMZIP_NAMESPACE = "jotego";
-
-    private static final String MRA_FOLDER = "mra";
+    private static final String MRA_FOLDER_NAME = "mra";
 
     private static final String MRA_FILE_EXT = ".mra";
     private static final String ROM_FILE_EXT = ".rom";
 
     private static final String HBMAME = "hbmame";
 
-    private static final String MRA_LINE = "./volumes/pocket/mra -z /volumes/pocket/_roms/"+ROMZIP_NAMESPACE+" -O /volumes/pocket/Assets/%s/common /volumes/pocket/Assets/%s/*.mra";
-    private static final String ECHO_LINE = "echo \"%s complete\"\n";
-
-    private static final String CREATION_SCRIPT_FILENAME = "make_new_roms.sh";
-    private static final String MISSING_ROMS_FILENAME = "missing_new_roms.txt";
-
-
-    private Set<String> namespaces = new HashSet<>();
-    private Set<String> requiredRoms = new HashSet<>();
-
     protected ProcessArcadeRomsAndMRA(String context)
     {
         super(context);
     }
 
-    public void run() throws Exception
+    void process()
     {
-        String NEW_MRA_DIRECTORY = config().getProcessingMRADirectory();
-
-        moveMRAfiles(NEW_MRA_DIRECTORY);
-
-        downloadRomZips();
-
-        writeFiles();
-
-
-    }
-
-    private void moveMRAfiles(String filepath) throws Exception
-    {
-        File mraFolder = new File(filepath);
+        String MRA_PROCESSING_DIRECTORY = config().getProcessingMRADirectory();
 
         FileFilter acceptMRAfiles = new FileFilter()
         {
@@ -66,47 +43,60 @@ public class ProcessArcadeRomsAndMRA extends AbstractApplication
             }
         };
 
-        for (File mraFile : mraFolder.listFiles(acceptMRAfiles))
+        File[] mraFilesToProcess = new File(MRA_PROCESSING_DIRECTORY).listFiles(acceptMRAfiles);
+
+        if (mraFilesToProcess.length == 0)
         {
-            MRAInfo mraInfo = extractInformation(mraFile);
-
-            this.namespaces.add(mraInfo.namespace);
-            this.requiredRoms.addAll(mraInfo.romZips);
-
-            String NAMESPACE_LOCATION = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
-
-            String COMMON_LOCATION = NAMESPACE_LOCATION + COMMON;
-            String MRA_LOCATION = NAMESPACE_LOCATION + MRA_FOLDER;
-
-            createDirectories(COMMON_LOCATION, MRA_LOCATION);
-
-            String moveLocation = NAMESPACE_LOCATION + mraFile.getName();
-
-            String generatedRom = COMMON_LOCATION + "/" + mraInfo.generateRom;
-            if (new File(generatedRom).exists())
+            System.out.println("No MRA files to process.");
+        }
+        else
+        {
+            for (File mraFile : mraFilesToProcess)
             {
-                moveLocation = MRA_LOCATION + "/" + mraFile.getName();
-            }
-
-            File newFile = new File(moveLocation);
-            if (!newFile.exists())
-            {
-                mraFile.renameTo(newFile);
-                System.out.println(mraFile.getName() + " has been moved.");
+                processMRAFile(mraFile);
             }
         }
+    }
 
-        FileFilter isDirectory = new FileFilter()
+    private void processMRAFile(File mraFile)
+    {
+        try
         {
-            public boolean accept(File pathname)
+            boolean success;
+            //iterate over every MRA in the processing directory
+            // -- check if arcade rom exists.  If so, move MRA to core's MRA directory
+            // -- If not, download rom zips or check for existance
+            // -- if exists, generate arcade rom
+            // -- if success, move MRA to core's MRA directory
+            // -- if anything fails, leave MRA in processing directory, and output message
+
+            MRAInfo mraInfo = extractInformation(mraFile);
+            if (doesArcadeRomExist(mraInfo))
             {
-                return pathname.isDirectory();
+                success = true;
             }
-        };
+            else
+            {
+                PocketCore core = getPocketCoreFromMRAInfo(mraInfo);
+                success = downloadRomZips(mraInfo, core);
+                if (success)
+                {
+                    success = generateArcadeRoms(mraFile, core);
+                    if (!success)
+                    {
+                        clearArcadeRomFile(mraInfo);
+                    }
+                }
+            }
 
-        for (File folder : mraFolder.listFiles(isDirectory))
+            if (success)
+            {
+                moveMRAFile(mraFile, mraInfo);
+            }
+        }
+        catch (Exception e)
         {
-            moveMRAfiles(folder.getAbsolutePath());
+            e.printStackTrace();
         }
     }
 
@@ -152,29 +142,52 @@ public class ProcessArcadeRomsAndMRA extends AbstractApplication
                 }
             }
         }
-
         return info;
     }
 
-    private void downloadRomZips()
+    private boolean doesArcadeRomExist(MRAInfo mraInfo)
     {
-        Set<String> romZips = new HashSet();
-        romZips.addAll(requiredRoms);
-
-        for (String romZip : romZips)
-        {
-            boolean success = downloadRomZip(romZip);
-            if (success)
-            {
-                requiredRoms.remove(romZip);
-            }
-        }
+        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
+        String romFilepath = coreFolder + COMMON_FOLDER + mraInfo.generateRom;
+        return new File(romFilepath).exists();
     }
 
-    private boolean downloadRomZip(String romZip)
+    private PocketCore getPocketCoreFromMRAInfo(MRAInfo mraInfo)
     {
+        String namespace = mraInfo.namespace;
+        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
+        if (core == null)
+        {
+            core = new PocketCore();
+            core.setNamespace(namespace);
+
+            session.save(core);
+
+            System.out.println("New core created in database: " + namespace);
+        }
+        return core;
+    }
+
+    private boolean downloadRomZips(MRAInfo mraInfo, PocketCore core)
+    {
+        boolean overallSuccess = true;
+        for(String romZip : mraInfo.romZips)
+        {
+            boolean success = downloadRomZip(romZip, core);
+            if (!success)
+            {
+                overallSuccess = false;
+            }
+        }
+        return overallSuccess;
+    }
+
+    private boolean downloadRomZip(String romZip, PocketCore core)
+    {
+        String romDirectory = core.getRomZipFolder();
+
         String URL_LOCATION = config().getRomzipSourceUrl() + romZip;
-        String OUTPUT_FILE = config().getRomzipStorageDirectory() + ROMZIP_NAMESPACE + "/" + romZip;
+        String OUTPUT_FILE = config().getRomzipStorageDirectory() + romDirectory + "/" + romZip;
 
         if (romZip.startsWith(HBMAME))
         {
@@ -205,7 +218,8 @@ public class ProcessArcadeRomsAndMRA extends AbstractApplication
 
                 fos.close();
                 rbc.close();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 System.out.println("Problem downloading rom: " + romZip);
                 return false;
@@ -214,54 +228,88 @@ public class ProcessArcadeRomsAndMRA extends AbstractApplication
         return true;
     }
 
-    private void writeFiles() throws Exception
+    private static final String MRA_ARCADE_ROM_GENERATION_PROGRAM_NAME = "./mra";
+
+    private boolean generateArcadeRoms(File mraFile, PocketCore core)
     {
-        writeScript();
-        writeRequiredRoms();
+        String romDirectoryName = core.getRomZipFolder();
+
+        String coreCommonDirectory = config().getPocketAssetsDirectory() + core.getNamespace() + "/" + COMMON;
+        createDirectories(coreCommonDirectory);
+
+        String programExec = config().getPocketUtilityDirectory() + MRA_ARCADE_ROM_GENERATION_PROGRAM_NAME;
+        String setRomZipLocation = "-z";
+        String romzipsLocation = config().getRomzipStorageDirectory() + romDirectoryName;
+        String setOutputLocation = "-O";
+        String outputLocation = coreCommonDirectory + "/";
+        String mraFileLocation = mraFile.getAbsolutePath();
+
+        String[] commandString = new String[6];
+        commandString[0] = programExec;
+        commandString[1] = setRomZipLocation;
+        commandString[2] = romzipsLocation;
+        commandString[3] = setOutputLocation;
+        commandString[4] = outputLocation;
+        commandString[5] = mraFileLocation;
+
+        List<String> output = executeShellCommand(commandString);
+        if (doesOutputContainErrors(output))
+        {
+            System.out.println("Problem Generating ROM for: " + mraFile.getName());
+            return false;
+        }
+        System.out.println("Arcade ROM Generated for: " + mraFile.getName());
+        return true;
     }
 
-    private void writeScript() throws Exception
+    private boolean doesOutputContainErrors(List<String> output)
     {
-        String SCRIPT_LOCATION = config().getProcessingMRADirectory() + CREATION_SCRIPT_FILENAME;
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(SCRIPT_LOCATION));
-        for (String namespace : namespaces)
+        final String ERROR_SYNTAX = "error:";
+        for(String line : output)
         {
-            String scriptLine = String.format(MRA_LINE, namespace, namespace);
-            writer.write(scriptLine);
-            writer.newLine();
-
-            String echoLine = String.format(ECHO_LINE, namespace);
-            writer.write(echoLine);
-            writer.newLine();
-
-            writer.newLine();
+            if (line.startsWith(ERROR_SYNTAX))
+            {
+                return true;
+            }
         }
-        writer.close();
+        return false;
     }
 
-    private void writeRequiredRoms() throws Exception
+    private void clearArcadeRomFile(MRAInfo mraInfo)
     {
-        if (requiredRoms.isEmpty())
-        {
-            return;
-        }
+        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
+        String romFilepath = coreFolder + COMMON_FOLDER + mraInfo.generateRom;
 
-        List<String> romZips = new ArrayList<>();
-        romZips.addAll(requiredRoms);
-
-        Collections.sort(romZips);
-
-        String ROM_LIST_FILE = config().getProcessingMRADirectory() + MISSING_ROMS_FILENAME;
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(ROM_LIST_FILE));
-        for (String rom : romZips)
-        {
-            writer.write(rom);
-            writer.newLine();
-        }
-        writer.close();
+        new File(romFilepath).delete();
     }
+
+    private void moveMRAFile(File mraFile, MRAInfo mraInfo)
+    {
+        String mraFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/" + MRA_FOLDER_NAME;
+        createDirectories(mraFolder);
+
+        String moveLocation = mraFolder + "/" + mraFile.getName();
+
+        File newFile = new File(moveLocation);
+        if (newFile.exists())
+        {
+            System.out.println("MRA file already exists at location: " + moveLocation);
+        }
+        else
+        {
+            try
+            {
+                FileUtils.moveFile(mraFile, newFile);
+                System.out.println("MRA file has been moved: " + mraFile.getName());
+            }
+            catch (Exception e)
+            {
+                System.out.println("Problem moving MRA file: " + mraFile.getName());
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static void main(String[] args) throws Exception
     {

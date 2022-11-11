@@ -31,7 +31,6 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
             public boolean accept(File file)
             {
                 boolean isDirectory = file.isDirectory();
-
                 return isDirectory;
             }
         };

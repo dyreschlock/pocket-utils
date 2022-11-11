@@ -53,21 +53,21 @@ public enum PocketCoreInfo
     ATARI_2600("Atari_-_2600", "2600", "a26"),
 
 
-    //Random Old Consoles
+    //Other Consoles
     INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
     COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
+    ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
+    CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
 
     VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
 
-    ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
-    CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
     ARCADIA("Emerson_-_Arcadia_2001", "arcadia", "bin"),
     STUDIO2("RCA_-_Studio_II", "studio2", "st2"),
     CREATIVISION("VTech_-_CreatiVision", "creativision", "rom"),
     ADVENTURE_VISION("Entex_-_Adventure_Vision", "avision", "bin"),
-    
 
-    //Random Handhelds
+
+    //Other Handhelds
     ARDUBOY("", "arduboy", "hex"),
 
     TIGER_GAME_COM("Tiger_-_Game.com", "gamecom", "bin"),
