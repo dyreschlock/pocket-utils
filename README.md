@@ -6,6 +6,20 @@ These are various programs and scripts I've made to manage alterations and enhan
 
 Each Java program and script uses locations from the **config.properties** file. Simple copy **config.propeties.sample**, rename it, and add in the correct locations on your system.
 
+## Folder Configuration
+
+The configuration file (**config.properties**) asks for a **utility.directory**.  This is a working and storage directory for each of the Java programs. It requires the following sub-directories.
+
+```
+{utility.directory}
+|- _image_processor
+|- arcade_roms
+|- boxart
+|- boxart_converted
+|- mra_to_process
+|- platform_images
+```
+
 ## Command Line Programs
 
 The shell scripts make use of various command line programs created by other folks. Each one of these should be placed in the **utility.directory** set in the config file. These programs are...
@@ -20,43 +34,46 @@ The shell scripts make use of various command line programs created by other fol
 
 ## Updating Cores
 
-The shell script **update_cores.sh** will run mattpanella's pocket_updater, located in the **utility.directory** and using the **pocket.directory** as its base. After the script is run, it will copy the contents of the overwrite directory (which is in the **utility.directory**) to the pocket directory.  Currently, these overwrites are for the Platforms directory only.
+The shell script **update_cores.sh** will run mattpanella's pocket_updater. It doesn't do much else. Currently it's setup to run on the **pocket.directory** set in the configuration file, and it will preserve the Platforms directory.
+
+## Create Pocket Entries
+
+All Java program depends on this being run first.
+
+Create Pocket Entries will create database objects for Cores and sorted Game roms. 
+
+- This will create a Core object for every folder in the Assets directory of the Pocket. 
+
+
+- This will create a Game object by iterating over all cores listed in PocketCoreInfo.java. For each rom sorted into a folder in the core's common directory, the Game will be created in the database.
+
+
+Any missing data is expected to be completed by using a SQL viewing application.
+
 
 ## Making Arcade ROMs
 
-This will create Arcade ROM files for arcade cores.
+To make arcade ROMs, run the program `ProcessArcadeRomsAndMRA`
 
-This is a 2-step process.
+First, place all of your MRA files in the `{utility.directory}/mra_to_process` directory, and then run the program.
 
-First, **SortPrepareMRAFiles** (Java program) will look at any MRA files in the processing directory (**processing.mra.directory**). It will read these files looking at the **rbf** and **rom** tags to determine the core folder, and which rom zips are required to make the rom. For each rom zip that is required, it will look in the **romzip.storage.directory** to see if the rom zip is there.  If not, it will attempt to download the rom zip from **romzip.source.url** (or from **romzip.hbsource.url** for hbmame zips). 
+It will require that all core folders for the MRA be in the database with the romZips field filled in. It will create the Core object if it doesn't exist, but will not continue if this field is empty. So, if any new Core objects were made, simply fill in the romZips directory field, and rerun the program.
 
-Whether it succeeds or fails, it will copy the MRA files into the base folder of the core directory. After it completes, it will make a list of all the rom zips it could not download, and also make a list of all the cores that have new MRA files to process. Also, if an Arcade rom already exists in the core's common directory, it will copy the MRA files into the core's MRA directory.
+Next, it will use this romZips directory to search for ROM zips. If ROM zips are in the directory, it will continue, but if not, it will attempt to download the required ROM zips for the URLs set in the **config.properties** file.  Once the ROM zips have been successfully download and exist in the ROM zips directory, it will continue.
 
-Second, after all the rom zips have been downloaded into the rom storage directory, and MRA files exist in the cores root directory, **make_arcade_rom.sh** should be run. This uses nullobject's **mra-tools-c** (found at nullobject/mra-tools-c).
+Next, using the ROM zips, this will call nullobject's mra tool to generate the arcade rom.  The arcade rom will be put into the core's common directory.
 
+If everything is successful, and the arcade rom exists in the core's common directory, this will move the MRA file into the core's MRA directory.
 
-
-This script will comb through the list of all cores looking for MRA files in the root directory. For each one it finds, it will create an Arcade rom from the rom zips in the storage directory. It will place the created rom files into the core's common directory.
-
-MRA files in the core's common directory must be manually moved into the core's MRA directory once successfully completed.
 
 
 ## Organize Platforms
 
-This will create a list of cores in the database, and rewrite JSON in the Platforms directory.
+To organize platform information and images, run the program `ProcessPlatforms`
 
-This is a 1-step process, but the process does three things. Run **OrganizePlatforms** to start.
+This will go through every Core object in the data. If all the information has been filled out in the database, it will rewrite that core's JSON in the Platforms directory.
 
-1. The program will comb through the Assets directory and create a PocketCore object for any folder that exists. The information for the core will not be filled in.
-
-
-2. For any core in the database with a complete set of information (ie: name, category, manufacturer, year), the program will rewrite a JSON with that information.
-
-
-3. The program will run **overwrite_platform_images.sh** which will convert any platform image in the **platform_images** directory (which is in the utility.directory) to the BIN format, and then copy the BIN into the Platforms directory on the Pocket. Once converted and copied, files are moved into a **completed** directory so they won't be repeatedly converted.
-
-It is expected that after the program is run once, and all the cores have been entered in the database, the user can use a SQL management program to enter the information for each of the cores. Then, **OrganizePlatforms** can be run a second time to write that information into the Platforms directory.
-
+Additionally, this will run a script that will convert any platform image in `{utility.directory}/platform_images` to BIN format, and then copy the BIN into the Platforms directory on the Pocket. Once converted and copied, files are moved into a `platform_images/completed`directory so they won't be repeatedly converted.
 
 ## Creating Library Images
 
