@@ -1,9 +1,10 @@
 package com.schlock.pocket.entites;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public enum PocketCoreInfo
+public enum PlatformInfo
 {
     //Nintendo
     SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
@@ -20,7 +21,7 @@ public enum PocketCoreInfo
 
 
     //SNK
-    NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
+    NEO_GEO("SNK_-_Neo_Geo", "ng", "json"),
 
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
@@ -81,18 +82,13 @@ public enum PocketCoreInfo
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
 
-    ARCADE("MAME");
+    ARCADE("MAME", "arcade", "json");
 
     String repoName;
     String coreCode;
     List<String> extensions = new ArrayList<>();
 
-    PocketCoreInfo(String repoName)
-    {
-        this(repoName, null, null);
-    }
-
-    PocketCoreInfo(String repoName, String coreCode, String... fileExtensions)
+    PlatformInfo(String repoName, String coreCode, String... fileExtensions)
     {
         this.repoName = repoName;
         this.coreCode = coreCode;
@@ -119,5 +115,23 @@ public enum PocketCoreInfo
     public List<String> getFileExtensions()
     {
         return extensions;
+    }
+
+    public static List<PlatformInfo> getByCoreCode(PocketCore core)
+    {
+        if (core.isArcadeCore())
+        {
+            return Arrays.asList(ARCADE);
+        }
+
+        List<PlatformInfo> platforms = new ArrayList<>();
+        for(PlatformInfo platform : values())
+        {
+            if (core.getNamespace().equals(platform.coreCode))
+            {
+                platforms.add(platform);
+            }
+        }
+        return platforms;
     }
 }

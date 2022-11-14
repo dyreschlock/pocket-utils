@@ -2,6 +2,7 @@ package com.schlock.pocket.app;
 
 import com.schlock.pocket.services.DeploymentConfiguration;
 import com.schlock.pocket.services.database.PocketCoreDAO;
+import com.schlock.pocket.services.database.PocketGameDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -17,8 +18,8 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
     public final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
     public final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
 
-    protected SessionFactory sessionFactory;
-    protected Session session;
+    private SessionFactory sessionFactory;
+    private Session session;
 
     protected AbstractDatabaseApplication(String context)
     {
@@ -45,14 +46,19 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
         }
     }
 
+    protected PocketGameDAO pocketGameDAO()
+    {
+        return new PocketGameDAO(session);
+    }
+
     protected PocketCoreDAO pocketCoreDAO()
     {
         return new PocketCoreDAO(session);
     }
 
-    protected Session getSession()
+    protected void save(Object object)
     {
-        return session;
+        session.save(object);
     }
 
     private void setupDatabase()

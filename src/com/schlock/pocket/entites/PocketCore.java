@@ -30,6 +30,9 @@ public class PocketCore
     @Column(name = "rom_zips")
     private String romZipFolder;
 
+    @Column(name = "executionDir")
+    private String executionDirectory;
+
     @Column(name = "year")
     @Expose
     private Integer year;
@@ -45,6 +48,16 @@ public class PocketCore
                 category != null &&
                 manufacturer != null &&
                 year != null;
+    }
+
+    public boolean isArcadeCore()
+    {
+        return romZipFolder != null;
+    }
+
+    public boolean isRomsSorted()
+    {
+        return !isArcadeCore();
     }
 
     public Long getId()
@@ -105,6 +118,16 @@ public class PocketCore
     public void setRomZipFolder(String romZipFolder)
     {
         this.romZipFolder = romZipFolder;
+    }
+
+    public String getExecutionDirectory()
+    {
+        return executionDirectory;
+    }
+
+    public void setExecutionDirectory(String executionDirectory)
+    {
+        this.executionDirectory = executionDirectory;
     }
 
     public Integer getYear()

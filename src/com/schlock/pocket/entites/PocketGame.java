@@ -26,9 +26,14 @@ public class PocketGame
     @Column(name = "genre")
     private String genre;
 
-    @Column(name = "core")
+    @ManyToOne
+    @JoinColumn(name = "core_id",
+            foreignKey = @ForeignKey(name = "CORE_ID_FK"))
+    private PocketCore core;
+
+    @Column(name = "platform")
     @Enumerated(EnumType.STRING)
-    private PocketCoreInfo core;
+    private PlatformInfo platform;
 
     @Column(name = "fileHash")
     private String fileHash;
@@ -100,14 +105,24 @@ public class PocketGame
         this.genre = genre;
     }
 
-    public PocketCoreInfo getCore()
+    public PocketCore getCore()
     {
         return core;
     }
 
-    public void setCore(PocketCoreInfo core)
+    public void setCore(PocketCore core)
     {
         this.core = core;
+    }
+
+    public PlatformInfo getPlatform()
+    {
+        return platform;
+    }
+
+    public void setPlatform(PlatformInfo platform)
+    {
+        this.platform = platform;
     }
 
     public String getFileHash()
@@ -130,7 +145,7 @@ public class PocketGame
         this.inLibrary = inLibrary;
     }
 
-    public static PocketGame createGame(File file, PocketCoreInfo core)
+    public static PocketGame createGame(File file, PocketCore core, PlatformInfo platform)
     {
         PocketGame game = new PocketGame();
 
@@ -139,8 +154,13 @@ public class PocketGame
         game.imageFilename = game.gameName + ".png";
         game.imageCopied = false;
 
-        game.genre = file.getParentFile().getName();
+        if (core.isRomsSorted())
+        {
+            game.genre = file.getParentFile().getName();
+        }
+
         game.core = core;
+        game.platform = platform;
 
         game.inLibrary = false;
 

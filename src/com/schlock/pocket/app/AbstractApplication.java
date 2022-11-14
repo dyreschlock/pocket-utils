@@ -1,5 +1,6 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.BufferedReader;
@@ -25,6 +26,16 @@ public abstract class AbstractApplication
     protected DeploymentConfiguration config()
     {
         return config;
+    }
+
+    protected String getRomLocationAbsolutePath(PocketCore core)
+    {
+        String coreDirectory = config().getPocketAssetsDirectory() + core.getNamespace() + "/";
+        if (core.getExecutionDirectory() != null)
+        {
+            return coreDirectory + core.getExecutionDirectory() + "/";
+        }
+        return coreDirectory + COMMON_FOLDER;
     }
 
     protected void createDirectories(String... locations)

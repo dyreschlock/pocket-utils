@@ -1,9 +1,8 @@
 package com.schlock.pocket.app;
 
-import com.schlock.pocket.entites.PocketCoreInfo;
+import com.schlock.pocket.entites.PlatformInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
-import com.schlock.pocket.services.database.PocketGameDAO;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,30 +85,24 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private void findAndDownloadImage(PocketGame game) throws Exception
     {
-        String OUTPUT_FOLDER = config().getBoxartStorageDirectory() + game.getCore().getCoreCode();
-        String OUTPUT_FILE = OUTPUT_FOLDER + "/" + game.getImageFilename();
-
-        File imageFile = new File(OUTPUT_FILE);
+        String pngFilepath = getThumbnailPNGFilepath(game);
+        File imageFile = new File(pngFilepath);
         if (imageFile.exists())
         {
             game.setImageCopied(true);
-            getSession().save(game);
+            save(game);
 
             System.out.println("Thumbnail exists for: " + game.getGameName());
         }
         else
         {
-            File folder = new File(OUTPUT_FOLDER);
-            if (!folder.exists())
-            {
-                folder.mkdirs();
-            }
+            createDirectories(imageFile.getParentFile().getAbsolutePath());
 
             String URL_LOCATION = getUrlLocation(game);
 
             final URL url = new URL(URL_LOCATION);
             ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-            FileOutputStream fos = new FileOutputStream(OUTPUT_FILE);
+            FileOutputStream fos = new FileOutputStream(pngFilepath);
 
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
@@ -117,11 +110,10 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
             rbc.close();
 
 
-            imageFile = new File(OUTPUT_FILE);
             if (imageFile.exists())
             {
                 game.setImageCopied(true);
-                getSession().save(game);
+                save(game);
 
                 System.out.println("Downloaded thumbnail for: " + game.getGameName());
             }
@@ -132,15 +124,15 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
     {
         String imageFilename = URLEncoder.encode(game.getImageFilename(), StandardCharsets.UTF_8.toString()).replace("+", "%20");
 
-        String coreRepo = game.getCore().getRepoName();
+        String coreRepo = game.getPlatform().getRepoName();
 
-        if (PocketCoreInfo.GAMEBOY_COLOR.equals(game.getCore()))
+        if (PlatformInfo.GAMEBOY_COLOR.equals(game.getPlatform()))
         {
             final String GB_EXTENSION = ".gb";
 
             if (game.getGameFilename().endsWith(GB_EXTENSION))
             {
-                coreRepo = PocketCoreInfo.GAMEBOY.getRepoName();
+                coreRepo = PlatformInfo.GAMEBOY.getRepoName();
             }
         }
 
@@ -153,12 +145,11 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         String romHash = game.getFileHash();
         if (romHash != null && !romHash.isEmpty())
         {
-            String LIBRARY_FILE = getLibraryFileLocation(game);
+            String LIBRARY_FILE = getThumbnailBINFilepath(game);
             if (new File(LIBRARY_FILE).exists())
             {
                 game.setInLibrary(true);
-
-                getSession().save(game);
+                save(game);
 
                 return true;
             }
@@ -169,18 +160,18 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private boolean convertBoxartPNGtoBMP(PocketGame game) throws Exception
     {
-        String IMAGE_FILE = config().getBoxartStorageDirectory() + game.getCore().getCoreCode() + "/" + game.getImageFilename();
+        String pngFilepath = getThumbnailPNGFilepath(game);
 
-        File imageFilePNG = new File(IMAGE_FILE);
+        File imageFilePNG = new File(pngFilepath);
         if (imageFilePNG.exists())
         {
-            String ROM_FILE = getRomFileLocation(game);
+            String ROM_FILE = getRomFileAbsolutePath(game);
 
             String romHash = calculateCRC32(ROM_FILE);
             game.setFileHash(romHash);
-            getSession().save(game);
+            save(game);
 
-            String LIBRARY_SETUP_FILE = getBoxartThumbnailBMPFilepath(game);
+            String LIBRARY_SETUP_FILE = getThumbnailBMPFilepath(game);
             File imageFileConvertedBMP = new File(LIBRARY_SETUP_FILE);
             if (imageFileConvertedBMP.exists())
             {
@@ -188,7 +179,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
             }
             else
             {
-                imageFileConvertedBMP.getParentFile().mkdirs();
+                createDirectories(imageFileConvertedBMP.getParentFile().getAbsolutePath());
 
                 BufferedImage originalImage = ImageIO.read(imageFilePNG);
 
@@ -265,9 +256,14 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private void convertBoxartBMPtoBIN(PocketGame game)
     {
+        String thumbnailFilepath = getThumbnailBINFilepath(game);
+
+        String outputFilepath = new File(thumbnailFilepath).getParentFile().getAbsolutePath();
+        createDirectories(outputFilepath);
+
         String programExec = config().getPocketUtilityDirectory() + IMAGE_CONVERTER_PROGRAM;
-        String file = getBoxartThumbnailBMPFilepath(game);
-        String outputDir = "--output-dir=" + config().getPocketLibraryDirectory() + game.getCore().getCoreCode() + "/";
+        String file = getThumbnailBMPFilepath(game);
+        String outputDir = "--output-dir=" + outputFilepath + "/";
 
         String[] commandString = new String[3];
         commandString[0] = programExec;
@@ -279,46 +275,34 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
 
 
-    private String getRomFileLocation(PocketGame game)
+    private String getRomFileAbsolutePath(PocketGame game)
     {
-        String coreCode = game.getCore().getCoreCode();
-
-        String ROM_FILE = config().getPocketAssetsDirectory() + coreCode + "/";
-        if (!coreCode.contains("/"))
+        String romFilepath = getRomLocationAbsolutePath(game.getCore());
+        if (game.getCore().isRomsSorted())
         {
-            ROM_FILE += COMMON_FOLDER;
+            romFilepath += game.getGenre() + "/";
         }
-        ROM_FILE += game.getGenre() + "/" + game.getGameFilename();
-
-        return ROM_FILE;
+        return romFilepath + game.getGameFilename();
     }
 
-    private String getBoxartThumbnailBMPFilepath(PocketGame game)
+    private String getThumbnailPNGFilepath(PocketGame game)
     {
-        String coreCode = game.getCore().getCoreCode();
-        if (coreCode.contains("/"))
-        {
-            coreCode = coreCode.substring(0, coreCode.indexOf("/"));
-        }
+        String coreCode = game.getPlatform().getCoreCode();
+        return config().getBoxartStorageDirectory() + coreCode + "/" + game.getImageFilename();
+    }
+
+    private String getThumbnailBMPFilepath(PocketGame game)
+    {
+        String coreCode = game.getPlatform().getCoreCode();
         return config().getProcessingLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
     }
 
-    private String getLibraryFileLocation(PocketGame game)
+    private String getThumbnailBINFilepath(PocketGame game)
     {
-        String coreCode = game.getCore().getCoreCode();
-        if (coreCode.contains("/"))
-        {
-            coreCode = coreCode.substring(0, coreCode.indexOf("/"));
-        }
+        String coreCode = game.getCore().getNamespace();
         return config().getPocketLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bin";
     }
 
-
-
-    private PocketGameDAO pocketGameDAO()
-    {
-        return new PocketGameDAO(session);
-    }
 
     public static void main(String[] args)
     {

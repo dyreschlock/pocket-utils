@@ -161,7 +161,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
             core = new PocketCore();
             core.setNamespace(namespace);
 
-            session.save(core);
+            save(core);
 
             System.out.println("New core created in database: " + namespace);
         }

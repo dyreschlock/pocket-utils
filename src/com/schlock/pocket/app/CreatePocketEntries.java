@@ -1,13 +1,13 @@
 package com.schlock.pocket.app;
 
 import com.schlock.pocket.entites.PocketCore;
-import com.schlock.pocket.entites.PocketCoreInfo;
+import com.schlock.pocket.entites.PlatformInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
-import com.schlock.pocket.services.database.PocketGameDAO;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.List;
 
 public class CreatePocketEntries extends AbstractDatabaseApplication
 {
@@ -50,7 +50,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
             core = new PocketCore();
             core.setNamespace(namespace);
 
-            session.save(core);
+            save(core);
 
             System.out.println("New core created in database: " + namespace);
         }
@@ -60,7 +60,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
     {
         try
         {
-            for(PocketCoreInfo core : PocketCoreInfo.values())
+            for(PocketCore core : pocketCoreDAO().getAllWithCompleteInformation())
             {
                 searchForNewGames(core);
             }
@@ -71,16 +71,13 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         }
     }
 
-    private void searchForNewGames(PocketCoreInfo core)
+    private void searchForNewGames(PocketCore core)
     {
-        if (PocketCoreInfo.ARCADE.equals(core))
-        {
+        String romLocation = getRomLocationAbsolutePath(core);
+        File coreRomsDirectory = new File(romLocation);
 
-        }
-        else
+        if (core.isRomsSorted())
         {
-            String romLocation = getRomLocation(core);
-
             FileFilter filter = new FileFilter()
             {
                 @Override
@@ -93,43 +90,45 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                 }
             };
 
-            File coreDirectory = new File(romLocation);
-            for(File file : coreDirectory.listFiles(filter))
+            for(File folder : coreRomsDirectory.listFiles(filter))
             {
-                processFolder(file, core);
+                processFolder(folder, core);
             }
         }
-    }
-
-    private String getRomLocation(PocketCoreInfo core)
-    {
-        String coreCode = core.getCoreCode();
-        if (coreCode.contains("/"))
+        else
         {
-            return config().getPocketAssetsDirectory() + coreCode + "/";
+            processFolder(coreRomsDirectory, core);
         }
-        return config().getPocketAssetsDirectory() + coreCode + "/" + COMMON_FOLDER;
     }
 
-    private void processFolder(File folder, PocketCoreInfo core)
+    private void processFolder(File folder, PocketCore core)
+    {
+        List<PlatformInfo> platforms = PlatformInfo.getByCoreCode(core);
+        for(PlatformInfo platform : platforms)
+        {
+            processFolder(folder, core, platform);
+        }
+    }
+
+    private void processFolder(File folder, PocketCore core, PlatformInfo platform)
     {
         FileFilter filter = new FileFilter()
         {
             public boolean accept(File file)
             {
-                boolean acceptibleFile = false;
-                for(String EXT : core.getFileExtensions())
+                boolean acceptableFile = false;
+                for(String EXT : platform.getFileExtensions())
                 {
                     if (file.getName().endsWith(EXT))
                     {
-                        acceptibleFile = true;
+                        acceptableFile = true;
                     }
                 }
 
                 boolean notDirectory = !file.isDirectory();
                 boolean notDotFile = !file.getName().startsWith(".");
 
-                return notDirectory && acceptibleFile && notDotFile;
+                return notDirectory && acceptableFile && notDotFile;
             }
         };
 
@@ -140,18 +139,12 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
             PocketGame game = pocketGameDAO().getByFilename(filename);
             if (game == null)
             {
-                game = PocketGame.createGame(file, core);
-
-                getSession().save(game);
+                game = PocketGame.createGame(file, core, platform);
+                save(game);
 
                 System.out.println("New game created in database: " + game.getGameName());
             }
         }
-    }
-
-    private PocketGameDAO pocketGameDAO()
-    {
-        return new PocketGameDAO(session);
     }
 
     public static void main(String[] args)
