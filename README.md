@@ -56,7 +56,7 @@ All Java programs depends on this being run first.
 - This will create a Core object for every folder in the Assets directory of the Pocket. 
 
 
-- This will create a Game object by iterating over all cores listed in PocketCoreInfo.java. For each rom sorted into a folder in the core's common directory, the Game will be created in the database. This assumes that the folder the ROM has been sorted is its genre.
+- This will create a Game object by iterating over all cores in the database. For each core, if the `executionDir` has been set, it will look in that folder for roms. If the `executionDir` has not been set, it will look in the core's `common` directory. If `rom_zips` has been set on the core, it will assume that ROMs are not sorted and desired Games are in the execution directory root. Otherwise, if `rom_zips` is not set, it will assume that ROMs are sorted into genre folders. 
 
 
 Any missing data is expected to be manually completed by using a SQL viewing application.
