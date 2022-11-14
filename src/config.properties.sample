@@ -1,10 +1,10 @@
 
 pocket.directory=
 
-# This is where command line programs are kept
+# This is the local working directory. Check the README for more information
 utility.directory=
 
-boxart.source.url=
+boxart.source.url=https://raw.githubusercontent.com/libretro-thumbnails/%s/master/Named_Boxarts/
 
 romzip.source.url=
 romzip.hbsource.url=
