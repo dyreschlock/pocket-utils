@@ -56,7 +56,7 @@ public enum PlatformInfo
 
     //Other Consoles
     INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
-    COLECOVISION("Coleco_-_ColecoVision", "coleco", "col"),
+    COLECOVISION("Coleco_-_ColecoVision", "coleco", "col", "bin", "rom"),
     ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
     CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
 
@@ -78,6 +78,7 @@ public enum PlatformInfo
 
     //Computers
     COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
+    COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
