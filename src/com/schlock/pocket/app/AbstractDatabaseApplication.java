@@ -1,6 +1,7 @@
 package com.schlock.pocket.app;
 
 import com.schlock.pocket.services.DeploymentConfiguration;
+import com.schlock.pocket.services.database.PocketCoreCategoryDAO;
 import com.schlock.pocket.services.database.PocketCoreDAO;
 import com.schlock.pocket.services.database.PocketGameDAO;
 import org.hibernate.Session;
@@ -54,6 +55,11 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
     protected PocketCoreDAO pocketCoreDAO()
     {
         return new PocketCoreDAO(session);
+    }
+
+    protected PocketCoreCategoryDAO pocketCoreCategoryDAO()
+    {
+        return new PocketCoreCategoryDAO(session);
     }
 
     protected void save(Object object)
