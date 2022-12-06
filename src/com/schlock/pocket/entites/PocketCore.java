@@ -37,6 +37,9 @@ public class PocketCore
     @Expose
     private Integer year;
 
+    @Column(name = "copy")
+    private boolean copy;
+
     public PocketCore()
     {
     }
@@ -138,5 +141,15 @@ public class PocketCore
     public void setYear(Integer year)
     {
         this.year = year;
+    }
+
+    public boolean isCopy()
+    {
+        return copy;
+    }
+
+    public void setCopy(boolean copy)
+    {
+        this.copy = copy;
     }
 }

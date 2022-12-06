@@ -27,7 +27,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 
     private void updatePlatforms()
     {
-        List<PocketCore> cores = pocketCoreDAO().getAllWithCompleteInformation();
+        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
 
         for(PocketCore core : cores)
         {
@@ -39,7 +39,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         }
     }
 
-    private static final String PLATFORM = "platform";
+    public static final String PLATFORM = "platform";
 
     private String generateJSONforCore(PocketCore core)
     {

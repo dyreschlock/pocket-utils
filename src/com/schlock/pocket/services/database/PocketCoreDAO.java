@@ -33,11 +33,12 @@ public class PocketCoreDAO
         return cores.get(0);
     }
 
-    public List<PocketCore> getAllWithCompleteInformation()
+    public List<PocketCore> getAllToCopyWithCompleteInformation()
     {
         String text = " select c " +
                 " from PocketCore c " +
-                " where c.name is not null " +
+                " where c.copy is true " +
+                " and c.name is not null " +
                 " and c.namespace is not null " +
                 " and c.category is not null " +
                 " and c.manufacturer is not null " +

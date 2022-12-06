@@ -60,7 +60,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
     {
         try
         {
-            for(PocketCore core : pocketCoreDAO().getAllWithCompleteInformation())
+            for(PocketCore core : pocketCoreDAO().getAllToCopyWithCompleteInformation())
             {
                 searchForNewGames(core);
             }
