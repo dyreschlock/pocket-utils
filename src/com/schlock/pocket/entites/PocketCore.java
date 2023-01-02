@@ -60,7 +60,8 @@ public class PocketCore
 
     public boolean isRomsSorted()
     {
-        return !isArcadeCore();
+        return true;
+//        return !isArcadeCore();
     }
 
     public Long getId()
