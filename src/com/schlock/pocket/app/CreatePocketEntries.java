@@ -75,6 +75,11 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
     {
         String romLocation = getRomLocationAbsolutePath(core);
         File coreRomsDirectory = new File(romLocation);
+        if (!coreRomsDirectory.exists())
+        {
+            System.out.println("Directories don't exist for core: " + core.getNamespace());
+            return;
+        }
 
         if (core.isRomsSorted())
         {

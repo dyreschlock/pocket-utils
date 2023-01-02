@@ -17,6 +17,7 @@ import java.util.*;
 public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 {
     private static final String MRA_FOLDER_NAME = "mra";
+    private static final String DUPLICATE_FOLDER = "duplicate";
 
     private static final String MRA_FILE_EXT = ".mra";
     private static final String ROM_FILE_EXT = ".rom";
@@ -121,6 +122,10 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
         info.namespace = mraXML.getElementsByTagName(NAMESPACE_TAG).item(0).getTextContent();
         info.generateRom = mraXML.getElementsByTagName(GENERATED_ROM_TAG).item(0).getTextContent() + ROM_FILE_EXT;
+        if (info.generateRom == null || info.generateRom.isEmpty())
+        {
+            throw new RuntimeException("setname is blank");
+        }
 
         NodeList romTags = mraXML.getElementsByTagName(ROM_TAG);
         for (int i = 0; i < romTags.getLength(); i++)
@@ -299,6 +304,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
         if (newFile.exists())
         {
             System.out.println("MRA file already exists at location: " + moveLocation);
+            moveToDuplicateLocation(mraFile);
         }
         else
         {
@@ -315,6 +321,22 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
         }
     }
 
+    private void moveToDuplicateLocation(File mraFile)
+    {
+        String moveFolder = mraFile.getParentFile().getAbsolutePath() + "/" + DUPLICATE_FOLDER;
+        createDirectories(moveFolder);
+
+        String moveLocation = moveFolder + "/" + mraFile.getName();
+
+        try
+        {
+            FileUtils.moveFile(mraFile, new File(moveLocation));
+        }
+        catch(Exception e)
+        {
+            System.out.println("Couldn't move duplicate file: " + mraFile.getName());
+        }
+    }
 
     public static void main(String[] args) throws Exception
     {
