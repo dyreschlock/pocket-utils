@@ -47,7 +47,7 @@ public enum PlatformInfo
 
 
     //Atari
-    ATARI_LYNX("Atari_-_Lynx", "lnx", "lnx"),
+    ATARI_LYNX("Atari_-_Lynx", "lynx", "lnx"),
 
     ATARI_7800("Atari_-_7800", "7800", "a78"),
     ATARI_5200("Atari_-_5200", "5200", "a52"),
@@ -55,7 +55,7 @@ public enum PlatformInfo
 
 
     //Other Consoles
-    INTELLIVSION("Mattel_-_Intellivision", "intv", "int"),
+    INTELLIVSION("Mattel_-_Intellivision", "intv", "intv"),
     COLECOVISION("Coleco_-_ColecoVision", "coleco", "col", "bin", "rom"),
     ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
     CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
