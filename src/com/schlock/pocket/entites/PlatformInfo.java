@@ -42,8 +42,8 @@ public enum PlatformInfo
 
 
     //Bandai
-    WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wsc", "wsc"),
-    WONDERSWAN("Bandai_-_WonderSwan", "wsc", "ws"),
+    WONDERSWAN_COLOR("Bandai_-_WonderSwan_Color", "wonderswan", "wsc", "ws"),
+    WONDERSWAN("Bandai_-_WonderSwan", "wonderswan", "ws"),
 
 
     //Atari
