@@ -11,6 +11,10 @@ import java.util.List;
 
 public class ProcessPlatforms extends AbstractDatabaseApplication
 {
+    private static final boolean USE_UNCATEGORIZE = true;
+
+    private static final String UNCATEGORIZED_NAME = "~";
+
     protected ProcessPlatforms(String context)
     {
         super(context);
@@ -51,7 +55,10 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
                     {
                         //This will output "category": "some category" rather than the entire category object.
                         String categoryName = src.getName();
-
+                        if (core.isUncategorized() && USE_UNCATEGORIZE)
+                        {
+                            categoryName = UNCATEGORIZED_NAME;
+                        }
                         return new JsonPrimitive(categoryName);
                     }
                 })

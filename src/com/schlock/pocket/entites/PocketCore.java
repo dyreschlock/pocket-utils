@@ -40,6 +40,9 @@ public class PocketCore
     @Column(name = "copy")
     private boolean copy;
 
+    @Column(name = "uncat")
+    private boolean uncategorized;
+
     public PocketCore()
     {
     }
@@ -152,5 +155,15 @@ public class PocketCore
     public void setCopy(boolean copy)
     {
         this.copy = copy;
+    }
+
+    public boolean isUncategorized()
+    {
+        return uncategorized;
+    }
+
+    public void setUncategorized(boolean uncategorized)
+    {
+        this.uncategorized = uncategorized;
     }
 }
