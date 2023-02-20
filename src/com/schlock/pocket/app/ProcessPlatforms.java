@@ -11,9 +11,9 @@ import java.util.List;
 
 public class ProcessPlatforms extends AbstractDatabaseApplication
 {
-    private static final boolean USE_UNCATEGORIZE = true;
+    private static final boolean USE_INNER_CATEGORIES = true;
 
-    private static final String UNCATEGORIZED_NAME = "~";
+    private static final String INNER_CATEGORY_PREFIX = "~";
 
     protected ProcessPlatforms(String context)
     {
@@ -55,10 +55,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
                     {
                         //This will output "category": "some category" rather than the entire category object.
                         String categoryName = src.getName();
-                        if (core.isUncategorized() && USE_UNCATEGORIZE)
-                        {
-                            categoryName = UNCATEGORIZED_NAME;
-                        }
                         return new JsonPrimitive(categoryName);
                     }
                 })
@@ -72,8 +68,18 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         JsonObject base = new JsonObject();
         JsonElement tree = gson.toJsonTree(core);
 
-        base.add(PLATFORM, tree);
+        if (core.isUncategorized() && USE_INNER_CATEGORIES)
+        {
+            String coreName = INNER_CATEGORY_PREFIX + " " + core.getName();
 
+            JsonObject object = tree.getAsJsonObject();
+            object.remove("name");
+            object.add("name", new JsonPrimitive(coreName));
+
+            tree = object;
+        }
+
+        base.add(PLATFORM, tree);
         return gson.toJson(base);
     }
 
