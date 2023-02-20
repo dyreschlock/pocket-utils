@@ -39,6 +39,7 @@ public enum PlatformInfo
     //NEC
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
+    PC_ENGINE_CD("NEC_-_PC_Engine_CD_-_TurboGrafx-CD", "pcecd", "json"),
 
 
     //Bandai
@@ -78,7 +79,7 @@ public enum PlatformInfo
 
     //Computers
     COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
-    COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
+//    COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
