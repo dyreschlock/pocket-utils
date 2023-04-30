@@ -3,7 +3,7 @@
 source _load_properties.sh
 
 #Run Updater Program
-${utility_directory}pocket_updater -u --platformsfolder --all -p ${pocket_directory}
+${utility_directory}pocket_updater --update --platformsfolder --path ${pocket_directory}
 
 echo "update complete"
 
