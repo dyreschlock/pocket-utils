@@ -14,6 +14,15 @@ public class PocketGame
     @Column(name = "gameName")
     private String gameName;
 
+    @Column(name = "developer")
+    private String developer;
+
+    @Column(name = "publisher")
+    private String publisher;
+
+    @Column(name = "releaseDate")
+    private String releaseDate;
+
     @Column(name = "game_filename")
     private String gameFilename;
 
@@ -63,6 +72,36 @@ public class PocketGame
     public void setGameName(String gameName)
     {
         this.gameName = gameName;
+    }
+
+    public String getDeveloper()
+    {
+        return developer;
+    }
+
+    public void setDeveloper(String developer)
+    {
+        this.developer = developer;
+    }
+
+    public String getPublisher()
+    {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher)
+    {
+        this.publisher = publisher;
+    }
+
+    public String getReleaseDate()
+    {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate)
+    {
+        this.releaseDate = releaseDate;
     }
 
     public String getGameFilename()
