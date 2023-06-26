@@ -26,6 +26,9 @@ public class DeploymentConfiguration
 
     private static final String MRA_TODO_FOLDER = "mra_to_process/";
 
+    private static final String WEBSITE_IMAGE_DIRECTORY = "website.image.directory";
+    private static final String WEBSITE_DATA_DIRECTORY = "website.data.directory";
+
 
     public static final String LOCAL = "local";
     public static final String TEST = "test";
@@ -110,6 +113,17 @@ public class DeploymentConfiguration
     {
         return getPocketUtilityDirectory() + BOXART_CONVERTED_FOLDER;
     }
+
+    public String getWebsiteImageDirectory()
+    {
+        return getProperties().getProperty(WEBSITE_IMAGE_DIRECTORY);
+    }
+
+    public String getWebsiteDataDirectory()
+    {
+        return getProperties().getProperty(WEBSITE_DATA_DIRECTORY);
+    }
+
 
     private Properties getProperties()
     {

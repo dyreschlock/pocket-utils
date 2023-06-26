@@ -1,6 +1,7 @@
 package com.schlock.pocket.services.database;
 
 import com.schlock.pocket.entites.PocketCore;
+import com.schlock.pocket.entites.PocketGame;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -13,6 +14,13 @@ public class PocketCoreDAO
     public PocketCoreDAO(Session session)
     {
         this.session = session;
+    }
+
+    public List<PocketCore> getAll()
+    {
+        String text = "from PocketCore c order by c.id";
+        Query query = session.createQuery(text);
+        return query.list();
     }
 
     public PocketCore getByNamespace(String namespace)

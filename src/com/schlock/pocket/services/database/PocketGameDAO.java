@@ -15,6 +15,13 @@ public class PocketGameDAO
         this.session = session;
     }
 
+    public List<PocketGame> getAll()
+    {
+        String text = "from PocketGame g order by g.id";
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public PocketGame getByFilename(String filename)
     {
         String text = " select g " +
