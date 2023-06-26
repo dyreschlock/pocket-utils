@@ -39,7 +39,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
             String json = generateJSONforCore(core);
 
             deleteOldFile(filepath);
-            writeToFile(filepath, json);
+            writeStringToFile(filepath, json);
         }
     }
 
@@ -81,33 +81,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 
         base.add(PLATFORM, tree);
         return gson.toJson(base);
-    }
-
-    private void deleteOldFile(String filepath)
-    {
-        File file = new File(filepath);
-        if (file.exists())
-        {
-            file.delete();
-        }
-    }
-
-    private void writeToFile(String filepath, String contents)
-    {
-        File file = new File(filepath);
-
-        try
-        {
-            FileWriter writer = new FileWriter(file, false);
-            writer.write(contents);
-            writer.close();
-
-            System.out.println("New core file written: " + filepath);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 
     public static void main(String args[]) throws Exception

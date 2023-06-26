@@ -3,9 +3,7 @@ package com.schlock.pocket.app;
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +45,33 @@ public abstract class AbstractApplication
             {
                 folder.mkdirs();
             }
+        }
+    }
+
+    protected void deleteOldFile(String filepath)
+    {
+        File file = new File(filepath);
+        if (file.exists())
+        {
+            file.delete();
+        }
+    }
+
+    protected void writeStringToFile(String filepath, String contents)
+    {
+        File file = new File(filepath);
+
+        try
+        {
+            FileWriter writer = new FileWriter(file, false);
+            writer.write(contents);
+            writer.close();
+
+            System.out.println("New core file written: " + filepath);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 

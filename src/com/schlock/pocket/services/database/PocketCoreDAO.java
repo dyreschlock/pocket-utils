@@ -16,13 +16,6 @@ public class PocketCoreDAO
         this.session = session;
     }
 
-    public List<PocketCore> getAll()
-    {
-        String text = "from PocketCore c order by c.id";
-        Query query = session.createQuery(text);
-        return query.list();
-    }
-
     public PocketCore getByNamespace(String namespace)
     {
         String text = " select c " +

@@ -1,15 +1,22 @@
 package com.schlock.pocket.app;
 
+import com.google.gson.*;
+import com.schlock.pocket.entites.PocketCore;
+import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class ProcessPlaylists extends AbstractDatabaseApplication
 {
+    private static final String GAME_JSON_FILENAME = "games.json";
+    private static final String CORE_JSON_FILENAME = "cores.json";
+
     protected ProcessPlaylists(String context)
     {
         super(context);
@@ -17,15 +24,44 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
 
     void process()
     {
-        generateCoreJson();
+        updateCoreJson();
         generateGameJson();
         copyBoxartImagesToWebRepo();
     }
 
-    private void generateCoreJson()
+    private void updateCoreJson()
     {
+        String coreJson = generateCoreJson();
 
+        String filepath = config().getWebsiteDataDirectory() + CORE_JSON_FILENAME;
+
+        deleteOldFile(filepath);
+        writeStringToFile(filepath, coreJson);
     }
+
+    private String generateCoreJson()
+    {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PocketCoreCategory.class, new JsonSerializer<PocketCoreCategory>()
+                {
+                    @Override
+                    public JsonElement serialize(PocketCoreCategory src, Type typeOfSrc, JsonSerializationContext context)
+                    {
+                        //This will output "category": "some category" rather than the entire category object.
+                        String categoryName = src.getName();
+                        return new JsonPrimitive(categoryName);
+                    }
+                })
+                .excludeFieldsWithoutExposeAnnotation()
+                .setPrettyPrinting()
+                .create();
+
+        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
+
+        return gson.toJson(cores);
+    }
+
+
 
     private void generateGameJson()
     {
