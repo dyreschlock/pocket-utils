@@ -1,6 +1,7 @@
 package com.schlock.pocket.app;
 
 import com.google.gson.*;
+import com.schlock.pocket.entites.PlatformInfo;
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.entites.PocketGame;
@@ -25,21 +26,22 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
     void process()
     {
         updateCoreJson();
-        generateGameJson();
+        updateGameJson();
         copyBoxartImagesToWebRepo();
     }
 
     private void updateCoreJson()
     {
-        String coreJson = generateCoreJson();
+        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
 
+        String coreJson = generateCoreJson(cores);
         String filepath = config().getWebsiteDataDirectory() + CORE_JSON_FILENAME;
 
         deleteOldFile(filepath);
         writeStringToFile(filepath, coreJson);
     }
 
-    private String generateCoreJson()
+    private String generateCoreJson(Object list)
     {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCoreCategory.class, new JsonSerializer<PocketCoreCategory>()
@@ -56,17 +58,48 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .setPrettyPrinting()
                 .create();
 
-        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
-
-        return gson.toJson(cores);
+        return gson.toJson(list);
     }
 
-
-
-    private void generateGameJson()
+    private void updateGameJson()
     {
-        config().getWebsiteDataDirectory();
+        List<PocketGame> games = pocketGameDAO().getAll();
+
+        String gameJson = generateGameJson(games);
+        String filepath = config().getWebsiteDataDirectory() + GAME_JSON_FILENAME;
+
+        deleteOldFile(filepath);
+        writeStringToFile(filepath, gameJson);
     }
+
+    private String generateGameJson(Object list)
+    {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PocketCore.class, new JsonSerializer<PocketCore>()
+                {
+                    @Override
+                    public JsonElement serialize(PocketCore src, Type typeOfSrc, JsonSerializationContext context)
+                    {
+                        //This will output "category": "some category" rather than the entire category object.
+                        String namespace = src.getNamespace();
+                        return new JsonPrimitive(namespace);
+                    }
+                })
+                .registerTypeAdapter(PlatformInfo.class, new JsonSerializer<PlatformInfo>()
+                {
+                    public JsonElement serialize(PlatformInfo src, Type typeOfSrc, JsonSerializationContext context)
+                    {
+                        String platCode = src.getCoreCode();
+                        return new JsonPrimitive(platCode);
+                    }
+                })
+                .excludeFieldsWithoutExposeAnnotation()
+                .setPrettyPrinting()
+                .create();
+
+        return gson.toJson(list);
+    }
+
 
     private void copyBoxartImagesToWebRepo()
     {

@@ -1,5 +1,7 @@
 package com.schlock.pocket.entites;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.File;
 
@@ -12,15 +14,19 @@ public class PocketGame
     private Long id;
 
     @Column(name = "gameName")
+    @Expose
     private String gameName;
 
     @Column(name = "developer")
+    @Expose
     private String developer;
 
     @Column(name = "publisher")
+    @Expose
     private String publisher;
 
     @Column(name = "releaseDate")
+    @Expose
     private String releaseDate;
 
     @Column(name = "game_filename")
@@ -33,18 +39,22 @@ public class PocketGame
     private boolean imageCopied;
 
     @Column(name = "genre")
+    @Expose
     private String genre;
 
     @ManyToOne
     @JoinColumn(name = "core_id",
             foreignKey = @ForeignKey(name = "CORE_ID_FK"))
+    @Expose
     private PocketCore core;
 
     @Column(name = "platform")
     @Enumerated(EnumType.STRING)
+    @Expose
     private PlatformInfo platform;
 
     @Column(name = "fileHash")
+    @Expose
     private String fileHash;
 
     @Column(name = "inLibrary")
