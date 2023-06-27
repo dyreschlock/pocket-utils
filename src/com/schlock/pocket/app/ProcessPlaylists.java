@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessPlaylists extends AbstractDatabaseApplication
@@ -32,17 +33,17 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
 
     private void updateCoreJson()
     {
-        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
-
-        String coreJson = generateCoreJson(cores);
+        String coreJson = generateCoreJson();
         String filepath = config().getWebsiteDataDirectory() + CORE_JSON_FILENAME;
 
         deleteOldFile(filepath);
         writeStringToFile(filepath, coreJson);
     }
 
-    private String generateCoreJson(Object list)
+    private String generateCoreJson()
     {
+        List<JsonObject> jsonObjects = new ArrayList<>();
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCoreCategory.class, new JsonSerializer<PocketCoreCategory>()
                 {
@@ -58,29 +59,39 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .setPrettyPrinting()
                 .create();
 
-        return gson.toJson(list);
+        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
+        for(PocketCore core : cores)
+        {
+            // I don't want to add an @Expose tag for namespace because it'll cause problems with the ProcessPlatforms task
+
+            JsonObject element = gson.toJsonTree(core).getAsJsonObject();
+            element.add("namespace", new JsonPrimitive(core.getNamespace()));
+
+            jsonObjects.add(element);
+        }
+        return gson.toJson(jsonObjects);
     }
 
     private void updateGameJson()
     {
-        List<PocketGame> games = pocketGameDAO().getAll();
-
-        String gameJson = generateGameJson(games);
+        String gameJson = generateGameJson();
         String filepath = config().getWebsiteDataDirectory() + GAME_JSON_FILENAME;
 
         deleteOldFile(filepath);
         writeStringToFile(filepath, gameJson);
     }
 
-    private String generateGameJson(Object list)
+    private String generateGameJson()
     {
+        List<PocketGame> games = pocketGameDAO().getAll();
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCore.class, new JsonSerializer<PocketCore>()
                 {
                     @Override
                     public JsonElement serialize(PocketCore src, Type typeOfSrc, JsonSerializationContext context)
                     {
-                        //This will output "category": "some category" rather than the entire category object.
+                        //This will output "core": "namespace" rather than the entire category object.
                         String namespace = src.getNamespace();
                         return new JsonPrimitive(namespace);
                     }
@@ -89,6 +100,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 {
                     public JsonElement serialize(PlatformInfo src, Type typeOfSrc, JsonSerializationContext context)
                     {
+                        //we don't need the enum name, just the core code, which is where the images are stored
                         String platCode = src.getCoreCode();
                         return new JsonPrimitive(platCode);
                     }
@@ -97,7 +109,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .setPrettyPrinting()
                 .create();
 
-        return gson.toJson(list);
+        return gson.toJson(games);
     }
 
 
