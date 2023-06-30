@@ -18,6 +18,7 @@ public enum PlatformInfo
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
 
     POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
+    GAME_AND_WATCH("", "gameandwatch", "gnw"),
 
 
     //SNK
