@@ -5,6 +5,7 @@ pocket.directory=
 utility.directory=
 
 boxart.source.url=https://raw.githubusercontent.com/libretro-thumbnails/%s/master/Named_Boxarts/
+titlescreen.source.url=
 
 romzip.source.url=
 romzip.hbsource.url=

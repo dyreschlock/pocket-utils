@@ -40,11 +40,23 @@ public class PocketGameDAO
         return games.get(0);
     }
 
-    public List<PocketGame> getByThumbnailNotCopied()
+    public List<PocketGame> getByMissingBoxartThumbnail()
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.imageCopied is false ";
+                " where g.boxartCopied is false ";
+
+        Query query = session.createQuery(text);
+
+        List<PocketGame> games = query.list();
+        return games;
+    }
+
+    public List<PocketGame> getByMissingTitleThumbnail()
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.titleCopied is false ";
 
         Query query = session.createQuery(text);
 
@@ -56,7 +68,7 @@ public class PocketGameDAO
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.imageCopied is true " +
+                " where g.titleCopied is true " +
                 " and g.inLibrary is false ";
 
         Query query = session.createQuery(text);

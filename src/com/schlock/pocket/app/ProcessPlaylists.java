@@ -28,7 +28,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
     {
         updateCoreJson();
         updateGameJson();
-        copyBoxartImagesToWebRepo();
+        copyImagesToWebRepo();
     }
 
     private void updateCoreJson()
@@ -113,16 +113,16 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
     }
 
 
-    private void copyBoxartImagesToWebRepo()
+    private void copyImagesToWebRepo()
     {
         List<PocketGame> games = pocketGameDAO().getAll();
         for(PocketGame game : games)
         {
-            if (game.isInLibrary())
+            if (game.isTitleCopied())
             {
                 String coreCode = game.getPlatform().getCoreCode();
 
-                String bmpLocation = config().getProcessingLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
+                String bmpLocation = config().getTitleThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
                 String bmpDestination = config().getWebsiteImageDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
 
                 File input = new File(bmpLocation);

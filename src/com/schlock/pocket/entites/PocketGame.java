@@ -32,11 +32,17 @@ public class PocketGame
     @Column(name = "game_filename")
     private String gameFilename;
 
-    @Column(name = "image_filename")
-    private String imageFilename;
+    @Column(name = "boxart_filename")
+    private String boxartFilename;
 
-    @Column(name = "imageCopied")
-    private boolean imageCopied;
+    @Column(name = "boxartCopied")
+    private boolean boxartCopied;
+
+    @Column(name = "title_filename")
+    private String titleFilename;
+
+    @Column(name = "titleCopied")
+    private boolean titleCopied;
 
     @Column(name = "genre")
     @Expose
@@ -124,24 +130,44 @@ public class PocketGame
         this.gameFilename = gameFilename;
     }
 
-    public String getImageFilename()
+    public String getBoxartFilename()
     {
-        return imageFilename;
+        return boxartFilename;
     }
 
-    public void setImageFilename(String imageFilename)
+    public void setBoxartFilename(String boxartFilename)
     {
-        this.imageFilename = imageFilename;
+        this.boxartFilename = boxartFilename;
     }
 
-    public boolean isImageCopied()
+    public boolean isBoxartCopied()
     {
-        return imageCopied;
+        return boxartCopied;
     }
 
-    public void setImageCopied(boolean imageCopied)
+    public void setBoxartCopied(boolean boxartCopied)
     {
-        this.imageCopied = imageCopied;
+        this.boxartCopied = boxartCopied;
+    }
+
+    public String getTitleFilename()
+    {
+        return titleFilename;
+    }
+
+    public void setTitleFilename(String titleFilename)
+    {
+        this.titleFilename = titleFilename;
+    }
+
+    public boolean isTitleCopied()
+    {
+        return titleCopied;
+    }
+
+    public void setTitleCopied(boolean titleCopied)
+    {
+        this.titleCopied = titleCopied;
     }
 
     public String getGenre()
@@ -200,8 +226,10 @@ public class PocketGame
 
         game.gameName = getGameNameFromFile(file);
         game.gameFilename = file.getName();
-        game.imageFilename = game.gameName + ".png";
-        game.imageCopied = false;
+        game.boxartFilename = game.gameName + ".png";
+        game.boxartCopied = false;
+        game.titleFilename = game.gameName + ".png";
+        game.titleCopied = false;
 
         if (core.isRomsSorted())
         {

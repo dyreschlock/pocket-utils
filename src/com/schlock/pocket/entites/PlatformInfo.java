@@ -11,7 +11,7 @@ public enum PlatformInfo
     FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
 
-    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
+//    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
     GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "gba"),
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
@@ -80,7 +80,7 @@ public enum PlatformInfo
 
     //Computers
     COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
-//    COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
+    COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
