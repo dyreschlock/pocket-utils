@@ -38,12 +38,6 @@ public class PocketGame
     @Column(name = "boxartCopied")
     private boolean boxartCopied;
 
-    @Column(name = "title_filename")
-    private String titleFilename;
-
-    @Column(name = "titleCopied")
-    private boolean titleCopied;
-
     @Column(name = "genre")
     @Expose
     private String genre;
@@ -150,26 +144,6 @@ public class PocketGame
         this.boxartCopied = boxartCopied;
     }
 
-    public String getTitleFilename()
-    {
-        return titleFilename;
-    }
-
-    public void setTitleFilename(String titleFilename)
-    {
-        this.titleFilename = titleFilename;
-    }
-
-    public boolean isTitleCopied()
-    {
-        return titleCopied;
-    }
-
-    public void setTitleCopied(boolean titleCopied)
-    {
-        this.titleCopied = titleCopied;
-    }
-
     public String getGenre()
     {
         return genre;
@@ -228,8 +202,6 @@ public class PocketGame
         game.gameFilename = file.getName();
         game.boxartFilename = game.gameName + ".png";
         game.boxartCopied = false;
-        game.titleFilename = game.gameName + ".png";
-        game.titleCopied = false;
 
         if (core.isRomsSorted())
         {

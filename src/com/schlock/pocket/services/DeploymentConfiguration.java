@@ -16,10 +16,6 @@ public class DeploymentConfiguration
     private static final String BOXART_STORAGE_FOLDER = "library_images/boxart/";
     private static final String BOXART_CONVERTED_FOLDER = "library_images/boxart_converted/";
 
-    private static final String TITLE_SOURCE_URL = "titlescreen.source.url";
-    private static final String TITLE_STORAGE_FOLDER = "library_images/title/";
-    private static final String TITLE_CONVERTED_FOLDER = "library_images/title_converted/";
-
     private static final String ASSETS_FOLDER = "Assets/";
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
     private static final String PLATFORMS_FOLDER = "Platforms/";
@@ -69,29 +65,14 @@ public class DeploymentConfiguration
         return getProperties().getProperty(BOXART_SOURCE_URL);
     }
 
-    public String getTitleSourceUrl()
-    {
-        return getProperties().getProperty(TITLE_SOURCE_URL);
-    }
-
     public String getBoxartStorageDirectory()
     {
         return getPocketUtilityDirectory() + BOXART_STORAGE_FOLDER;
     }
 
-    public String getTitleStorageDirectory()
-    {
-        return getPocketUtilityDirectory() + TITLE_STORAGE_FOLDER;
-    }
-
     public String getBoxartThumbnailProcessingDirectory()
     {
         return getPocketUtilityDirectory() + BOXART_CONVERTED_FOLDER;
-    }
-
-    public String getTitleThumbnailProcessingDirectory()
-    {
-        return getPocketUtilityDirectory() + TITLE_CONVERTED_FOLDER;
     }
 
     public String getPocketAssetsDirectory()

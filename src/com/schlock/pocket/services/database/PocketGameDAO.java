@@ -52,23 +52,11 @@ public class PocketGameDAO
         return games;
     }
 
-    public List<PocketGame> getByMissingTitleThumbnail()
-    {
-        String text = " select g " +
-                " from PocketGame g " +
-                " where g.titleCopied is false ";
-
-        Query query = session.createQuery(text);
-
-        List<PocketGame> games = query.list();
-        return games;
-    }
-
     public List<PocketGame> getByThumbnailCopiedNotInLibrary()
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.titleCopied is true " +
+                " where g.boxartCopied is true " +
                 " and g.inLibrary is false ";
 
         Query query = session.createQuery(text);

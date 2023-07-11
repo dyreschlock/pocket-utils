@@ -28,9 +28,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
     void process()
     {
         downloadConvertMissingBoxarts();
-        downloadConvertMissingTitles();
-
-//        verifyConvertedLibraryImages();
+        verifyConvertedLibraryImages();
     }
 
     private void downloadConvertMissingBoxarts()
@@ -62,6 +60,10 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
                         boolean success = convertBoxartPNGtoBMP(localFile, localConvertedFile);
                         game.setBoxartCopied(success);
                     }
+                    else
+                    {
+                        game.setBoxartCopied(true);
+                    }
 
                     save(game);
                 }
@@ -69,50 +71,6 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
             catch(Exception e)
             {
                 System.err.println("Could not find boxart for " + game.getGameName());
-            }
-        }
-    }
-
-    private void downloadConvertMissingTitles()
-    {
-        List<PocketGame> needBoxart = pocketGameDAO().getByMissingTitleThumbnail();
-        for(PocketGame game : needBoxart)
-        {
-            try
-            {
-                File localFile = getTitleThumbnailPNGFile(game);
-                String onlineFileURL = getUrlLocation(config().getTitleSourceUrl(), game.getTitleFilename(), game);
-
-                findAndDownloadImage(localFile, onlineFileURL);
-
-                if (localFile.exists())
-                {
-                    System.out.println("Local Title Screen file available: " + game.getGameName());
-
-                    if (game.getFileHash() == null || game.getFileHash().isBlank())
-                    {
-                        String romPath = getRomFileAbsolutePath(game);
-                        String filehash = calculateCRC32(romPath);
-                        game.setFileHash(filehash);
-                    }
-
-                    File localConvertedFile = getTitleThumbnailBMPFile(game);
-                    if (!localConvertedFile.exists())
-                    {
-                        boolean success = convertBoxartPNGtoBMP(localFile, localConvertedFile);
-                        game.setTitleCopied(success);
-                    }
-                    else
-                    {
-                        game.setTitleCopied(true);
-                    }
-
-                    save(game);
-                }
-            }
-            catch(Exception e)
-            {
-                System.err.println("Could not find Title Screen for " + game.getGameName());
             }
         }
     }
@@ -149,7 +107,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private String getUrlLocation(String baseUrl, String filename, PocketGame game) throws Exception
     {
-        String imageFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+        String imageFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20");
 
         String coreRepo = game.getPlatform().getRepoName();
 
@@ -315,24 +273,10 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         return new File(filepath);
     }
 
-    private File getTitleThumbnailPNGFile(PocketGame game)
-    {
-        String coreCode = game.getPlatform().getCoreCode();
-        String filepath = config().getTitleStorageDirectory() + coreCode + "/" + game.getTitleFilename();
-        return new File(filepath);
-    }
-
     private File getBoxartThumbnailBMPFile(PocketGame game)
     {
         String coreCode = game.getPlatform().getCoreCode();
         String filepath = config().getBoxartThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
-        return new File(filepath);
-    }
-
-    private File getTitleThumbnailBMPFile(PocketGame game)
-    {
-        String coreCode = game.getPlatform().getCoreCode();
-        String filepath = config().getTitleThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
         return new File(filepath);
     }
 

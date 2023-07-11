@@ -118,11 +118,11 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         List<PocketGame> games = pocketGameDAO().getAll();
         for(PocketGame game : games)
         {
-            if (game.isTitleCopied())
+            if (game.isBoxartCopied())
             {
                 String coreCode = game.getPlatform().getCoreCode();
 
-                String bmpLocation = config().getTitleThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
+                String bmpLocation = config().getBoxartThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
                 String bmpDestination = config().getWebsiteImageDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
 
                 File input = new File(bmpLocation);
