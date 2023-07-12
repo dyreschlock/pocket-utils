@@ -44,7 +44,7 @@ public class PocketGameDAO
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.boxartCopied is false ";
+                " where g.boxartConverted is false ";
 
         Query query = session.createQuery(text);
 
@@ -56,7 +56,7 @@ public class PocketGameDAO
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.boxartCopied is true " +
+                " where g.boxartConverted is true " +
                 " and g.inLibrary is false ";
 
         Query query = session.createQuery(text);

@@ -118,7 +118,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         List<PocketGame> games = pocketGameDAO().getAll();
         for(PocketGame game : games)
         {
-            if (game.isBoxartCopied())
+            if (game.isBoxartConverted())
             {
                 String coreCode = game.getPlatform().getCoreCode();
 

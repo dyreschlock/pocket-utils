@@ -4,6 +4,10 @@ import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.zip.CRC32;
 
 @Entity
 @Table(name = "pocket_game")
@@ -32,11 +36,11 @@ public class PocketGame
     @Column(name = "game_filename")
     private String gameFilename;
 
-    @Column(name = "boxart_filename")
+    @Column(name = "img_filename")
     private String boxartFilename;
 
-    @Column(name = "boxartCopied")
-    private boolean boxartCopied;
+    @Column(name = "img_convrtd")
+    private boolean boxartConverted;
 
     @Column(name = "genre")
     @Expose
@@ -134,14 +138,14 @@ public class PocketGame
         this.boxartFilename = boxartFilename;
     }
 
-    public boolean isBoxartCopied()
+    public boolean isBoxartConverted()
     {
-        return boxartCopied;
+        return boxartConverted;
     }
 
-    public void setBoxartCopied(boolean boxartCopied)
+    public void setBoxartConverted(boolean boxartConverted)
     {
-        this.boxartCopied = boxartCopied;
+        this.boxartConverted = boxartConverted;
     }
 
     public String getGenre()
@@ -201,12 +205,14 @@ public class PocketGame
         game.gameName = getGameNameFromFile(file);
         game.gameFilename = file.getName();
         game.boxartFilename = game.gameName + ".png";
-        game.boxartCopied = false;
+        game.boxartConverted = false;
 
         if (core.isRomsSorted())
         {
             game.genre = file.getParentFile().getName();
         }
+
+        game.fileHash = calculateCRC32(file);
 
         game.core = core;
         game.platform = platform;
@@ -222,5 +228,31 @@ public class PocketGame
 
         int EXTpoint = fullName.lastIndexOf(".");
         return fullName.substring(0, EXTpoint);
+    }
+
+    public static String calculateCRC32(File file)
+    {
+        try
+        {
+            FileInputStream input = new FileInputStream(file);
+
+            CRC32 crcMaker = new CRC32();
+            byte[] buffer = new byte[65536];
+            int bytesRead;
+            while ((bytesRead = input.read(buffer)) != -1)
+            {
+                crcMaker.update(buffer, 0, bytesRead);
+            }
+            long crc = crcMaker.getValue();
+            return Long.toHexString(crc);
+        } catch (FileNotFoundException e)
+        {
+            System.err.println("File does not exist for: " + file.getAbsolutePath());
+        }
+        catch (IOException e)
+        {
+            System.err.println("Reading file causes error: " + file.getAbsolutePath());
+        }
+        return null;
     }
 }
