@@ -26,7 +26,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
     void process()
     {
         downloadConvertMissingBoxarts();
-        processConvertedToLibraryImages();
+//        processConvertedToLibraryImages();
     }
 
     private void downloadConvertMissingBoxarts()
