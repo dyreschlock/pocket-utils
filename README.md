@@ -59,6 +59,8 @@ All Java programs depends on this being run first.
 - This will create a Game object by iterating over all cores in the database. For each core, if the `executionDir` has been set, it will look in that folder for roms. If the `executionDir` has not been set, it will look in the core's `common` directory. If `rom_zips` has been set on the core, it will assume that ROMs are not sorted and desired Games are in the execution directory root. Otherwise, if `rom_zips` is not set, it will assume that ROMs are sorted into genre folders. 
 
 
+- This will also create a text file listing all games in an `_unsorted` directory within each core. This text file will be placed in the root of the `{utility.directory}`
+
 Any missing data is expected to be manually completed by using a SQL viewing application.
 
 
@@ -108,4 +110,10 @@ Finally, if the image has been successfully converted to the BIN format and exis
 ## Creating Playlists for Library
 
 Upcoming feature, hopefully.
+
+But, for now, this actions does two things.
+
+- One, this will create JSON data files of all cores and games in the database. This data is used by `schlock-website` to populate the Pocket Games pages. You can view there here: <a href="https://theschlock.com/apps/pocket/">https://theschlock.com/apps/pocket/</a>
+
+- Two, this will also copy all of the converted box art images into my web repo, which is also used on the Pocket Games pages.
 
