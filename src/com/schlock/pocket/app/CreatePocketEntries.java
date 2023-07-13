@@ -155,9 +155,11 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
             if (UNSORTED_FOLDER.equals(folder.getName()))
             {
-                String coreCode = core.getNamespace();
-
-                unsortedGames.add(coreCode + " / " + filename);
+                String gameEntry = core.getNamespace() + " / " + filename;
+                if (!unsortedGames.contains(gameEntry))
+                {
+                    unsortedGames.add(gameEntry);
+                }
             }
             else
             {
