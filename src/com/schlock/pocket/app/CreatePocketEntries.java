@@ -5,12 +5,20 @@ import com.schlock.pocket.entites.PlatformInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreatePocketEntries extends AbstractDatabaseApplication
 {
+    private static final String UNSORTED_FOLDER = "__unsorted";
+    private static final String UNSORTED_FILENAME = "unsorted_games.txt";
+
+    private List<String> unsortedGames = new ArrayList<>();
+
     protected CreatePocketEntries(String context)
     {
         super(context);
@@ -20,6 +28,8 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
     {
         searchForNewCores();
         searchForNewGames();
+
+        writeUnsortedGames();
     }
 
     private void searchForNewCores()
@@ -91,7 +101,9 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                     boolean directory = file.isDirectory();
                     boolean notIgnore = !file.getName().startsWith("_");
 
-                    return directory && notIgnore;
+                    boolean unsorted = UNSORTED_FOLDER.equals(file.getName());
+
+                    return unsorted || (directory && notIgnore);
                 }
             };
 
@@ -141,16 +153,66 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         {
             String filename = file.getName();
 
-            PocketGame game = pocketGameDAO().getByFilename(filename);
-            if (game == null)
+            if (UNSORTED_FOLDER.equals(folder.getName()))
             {
-                game = PocketGame.createGame(file, core, platform);
-                save(game);
+                String coreCode = core.getNamespace();
 
-                System.out.println("New game created in database: " + game.getGameName());
+                unsortedGames.add(coreCode + " / " + filename);
+            }
+            else
+            {
+                PocketGame game = pocketGameDAO().getByFilename(filename);
+                if (game == null)
+                {
+                    game = PocketGame.createGame(file, core, platform);
+                    save(game);
+
+                    System.out.println("New game created in database: " + game.getGameName());
+                }
             }
         }
     }
+
+    private void writeUnsortedGames()
+    {
+        String filepath = config().getPocketUtilityDirectory() + UNSORTED_FILENAME;
+        File unsortedFile = new File(filepath);
+        if (unsortedFile.exists())
+        {
+            System.out.println("Unsorted Games file already exists.");
+        }
+        else
+        {
+            try
+            {
+                String message = "Number of Unsorted Games: " + unsortedGames.size();
+                System.out.println(message);
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(unsortedFile));
+
+                writer.write(message);
+                writer.newLine();
+                writer.newLine();
+
+                for(String game : unsortedGames)
+                {
+                    writer.write(game);
+                    writer.newLine();
+                }
+
+                writer.flush();
+                writer.close();
+
+                System.out.println("Unsorted Games file written.");
+            }
+            catch (Exception e)
+            {
+                System.err.println("Problem writing Unsorted Games file.");
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static void main(String[] args)
     {

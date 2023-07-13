@@ -4,7 +4,6 @@ import com.mysql.jdbc.StringUtils;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
