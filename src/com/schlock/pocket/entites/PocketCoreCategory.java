@@ -13,6 +13,9 @@ public class PocketCoreCategory
     @Column(name = "name")
     private String name;
 
+    @Column(name = "copy")
+    private boolean copy;
+
 
     public Long getId()
     {
@@ -32,5 +35,15 @@ public class PocketCoreCategory
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public boolean isCopy()
+    {
+        return copy;
+    }
+
+    public void setCopy(boolean copy)
+    {
+        this.copy = copy;
     }
 }

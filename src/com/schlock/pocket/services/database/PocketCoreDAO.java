@@ -1,7 +1,6 @@
 package com.schlock.pocket.services.database;
 
 import com.schlock.pocket.entites.PocketCore;
-import com.schlock.pocket.entites.PocketGame;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -38,7 +37,9 @@ public class PocketCoreDAO
     {
         String text = " select c " +
                 " from PocketCore c " +
+                " join c.category cat " +
                 " where c.copy is true " +
+                " and cat.copy is true " +
                 " and c.name is not null " +
                 " and c.namespace is not null " +
                 " and c.category is not null " +
