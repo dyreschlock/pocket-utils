@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CreatePocketEntries extends AbstractDatabaseApplication
@@ -177,6 +178,9 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
     private void writeUnsortedGames()
     {
+        String totalGamesMessage = "Number of Unsorted Games: " + unsortedGames.size();
+        System.out.println(totalGamesMessage);
+
         String filepath = config().getPocketUtilityDirectory() + UNSORTED_FILENAME;
         File unsortedFile = new File(filepath);
         if (unsortedFile.exists())
@@ -185,14 +189,13 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
         }
         else
         {
+            Collections.sort(unsortedGames);
+
             try
             {
-                String message = "Number of Unsorted Games: " + unsortedGames.size();
-                System.out.println(message);
-
                 BufferedWriter writer = new BufferedWriter(new FileWriter(unsortedFile));
 
-                writer.write(message);
+                writer.write(totalGamesMessage);
                 writer.newLine();
                 writer.newLine();
 
