@@ -53,7 +53,7 @@ public enum PlatformInfo
 
     ATARI_7800("Atari_-_7800", "7800", "a78"),
     ATARI_5200("Atari_-_5200", "5200", "a52"),
-    ATARI_2600("Atari_-_2600", "2600", "a26"),
+    ATARI_2600("Atari_-_2600", "2600", "a26", "bin"),
 
 
     //Other Consoles
