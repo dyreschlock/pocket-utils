@@ -43,6 +43,9 @@ public class PocketCore
     @Column(name = "uncat")
     private boolean uncategorized;
 
+    @Column(name = "fav")
+    private boolean favorite;
+
     public PocketCore()
     {
     }
@@ -165,5 +168,15 @@ public class PocketCore
     public void setUncategorized(boolean uncategorized)
     {
         this.uncategorized = uncategorized;
+    }
+
+    public boolean isFavorite()
+    {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite)
+    {
+        this.favorite = favorite;
     }
 }

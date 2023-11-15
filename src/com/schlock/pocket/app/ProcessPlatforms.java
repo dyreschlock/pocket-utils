@@ -5,7 +5,6 @@ import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
-import java.io.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -13,7 +12,8 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 {
     private static final boolean USE_INNER_CATEGORIES = true;
 
-    private static final String INNER_CATEGORY_PREFIX = "~";
+    private static final String INNER_CATEGORY_NEG_PREFIX = "★";
+    private static final String INNER_CATEGORY_POS_PREFIX = " ";
 
     protected ProcessPlatforms(String context)
     {
@@ -68,9 +68,17 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         JsonObject base = new JsonObject();
         JsonElement tree = gson.toJsonTree(core);
 
-        if (core.isUncategorized() && USE_INNER_CATEGORIES)
+        if (USE_INNER_CATEGORIES)
         {
-            String coreName = INNER_CATEGORY_PREFIX + " " + core.getName();
+            String coreName = core.getName();
+            if (!core.isFavorite())
+            {
+                coreName = INNER_CATEGORY_NEG_PREFIX + coreName;
+            }
+//            if (core.isUncategorized() && core.isArcadeCore())
+//            {
+//                coreName = INNER_CATEGORY_NEG_PREFIX + coreName;
+//            }
 
             JsonObject object = tree.getAsJsonObject();
             object.remove("name");
