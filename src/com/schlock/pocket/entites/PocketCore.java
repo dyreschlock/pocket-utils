@@ -46,6 +46,12 @@ public class PocketCore
     @Column(name = "fav")
     private boolean favorite;
 
+    @Column(name = "coreDev")
+    private String coreDev;
+
+    @Column(name = "released")
+    private boolean released;
+
     public PocketCore()
     {
     }

@@ -16,6 +16,9 @@ public class PocketCoreCategory
     @Column(name = "copy")
     private boolean copy;
 
+    @Column(name = "notes")
+    private String notes;
+
 
     public Long getId()
     {
