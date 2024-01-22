@@ -82,7 +82,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
                 success = downloadRomZips(mraInfo, core);
                 if (success)
                 {
-                    success = generateArcadeRoms(mraFile, core);
+                    success = generateArcadeRoms(mraFile, mraInfo, core);
                     if (!success)
                     {
                         clearArcadeRomFile(mraInfo);
@@ -240,7 +240,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     private static final String MRA_ARCADE_ROM_GENERATION_PROGRAM_NAME = "./mra";
 
-    private boolean generateArcadeRoms(File mraFile, PocketCore core)
+    private boolean generateArcadeRoms(File mraFile, MRAInfo mraInfo, PocketCore core)
     {
         String romDirectoryName = core.getRomZipFolder();
 
@@ -253,14 +253,32 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
         String setOutputLocation = "-O";
         String outputLocation = coreCommonDirectory + "/";
         String mraFileLocation = mraFile.getAbsolutePath();
+        String setOutputFilename = "-o";
+        String outputFilename = mraInfo.generateRom;
 
-        String[] commandString = new String[6];
-        commandString[0] = programExec;
-        commandString[1] = setRomZipLocation;
-        commandString[2] = romzipsLocation;
-        commandString[3] = setOutputLocation;
-        commandString[4] = outputLocation;
-        commandString[5] = mraFileLocation;
+        String[] commandString;
+        if (core.isJotego())
+        {
+            commandString = new String[8];
+            commandString[0] = programExec;
+            commandString[1] = setRomZipLocation;
+            commandString[2] = romzipsLocation;
+            commandString[3] = setOutputFilename;
+            commandString[4] = outputFilename;
+            commandString[5] = setOutputLocation;
+            commandString[6] = outputLocation;
+            commandString[7] = mraFileLocation;
+        }
+        else
+        {
+            commandString = new String[6];
+            commandString[0] = programExec;
+            commandString[1] = setRomZipLocation;
+            commandString[2] = romzipsLocation;
+            commandString[3] = setOutputLocation;
+            commandString[4] = outputLocation;
+            commandString[5] = mraFileLocation;
+        }
 
         List<String> output = executeShellCommand(commandString);
         if (doesOutputContainErrors(output))

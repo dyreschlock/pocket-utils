@@ -8,6 +8,9 @@ import javax.persistence.*;
 @Table(name = "pocket_core")
 public class PocketCore
 {
+    private static final String ROMS_JOTEGO = "jotego";
+    private static final String ROMS_CPS = "cps";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -40,9 +43,6 @@ public class PocketCore
     @Column(name = "copy")
     private boolean copy;
 
-    @Column(name = "uncat")
-    private boolean uncategorized;
-
     @Column(name = "fav")
     private boolean favorite;
 
@@ -68,6 +68,11 @@ public class PocketCore
     {
         return true;
 //        return !isArcadeCore();
+    }
+
+    public boolean isJotego()
+    {
+        return ROMS_JOTEGO.equals(this.romZipFolder) || ROMS_CPS.equals(this.romZipFolder) || "coinop".equals(this.romZipFolder);
     }
 
     public Long getId()
@@ -158,16 +163,6 @@ public class PocketCore
     public void setCopy(boolean copy)
     {
         this.copy = copy;
-    }
-
-    public boolean isUncategorized()
-    {
-        return uncategorized;
-    }
-
-    public void setUncategorized(boolean uncategorized)
-    {
-        this.uncategorized = uncategorized;
     }
 
     public boolean isFavorite()

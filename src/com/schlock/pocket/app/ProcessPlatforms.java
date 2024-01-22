@@ -75,10 +75,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
             {
                 coreName = INNER_CATEGORY_NEG_PREFIX + coreName;
             }
-//            if (core.isUncategorized() && core.isArcadeCore())
-//            {
-//                coreName = INNER_CATEGORY_NEG_PREFIX + coreName;
-//            }
 
             JsonObject object = tree.getAsJsonObject();
             object.remove("name");
