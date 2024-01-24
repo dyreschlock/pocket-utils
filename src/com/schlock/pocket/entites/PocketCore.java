@@ -52,6 +52,9 @@ public class PocketCore
     @Column(name = "released")
     private boolean released;
 
+    @Column(name = "notes")
+    private String notes;
+
     public PocketCore()
     {
     }
