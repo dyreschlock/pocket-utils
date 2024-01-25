@@ -4,6 +4,7 @@ import com.schlock.pocket.entites.PocketCore;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class PocketCoreDAO
@@ -47,6 +48,33 @@ public class PocketCoreDAO
                 " and c.year is not null ";
 
         Query query = session.createQuery(text);
+
+        return query.list();
+    }
+
+    public List<PocketCore> getByCatCopyAndCatName(String catName, boolean released)
+    {
+        return getByCatCopyAndCatName(Arrays.asList(catName), released);
+    }
+
+    public List<PocketCore> getByCatCopyAndCatName(List<String> catName, boolean released)
+    {
+        String text = " select c from PocketCore c " +
+                " join c.category cat " +
+                " where cat.copy is true " +
+                " and cat.name in (:names) ";
+
+        if(released)
+        {
+            text += " and c.released is true ";
+        }
+        else
+        {
+            text += " and c.released is false ";
+        }
+
+        Query query = session.createQuery(text);
+        query.setParameterList("names", catName);
 
         return query.list();
     }

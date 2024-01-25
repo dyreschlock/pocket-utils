@@ -5,9 +5,6 @@ import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreCategory;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -17,9 +14,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 
     private static final String INNER_CATEGORY_NEG_PREFIX = "★";
     private static final String INNER_CATEGORY_POS_PREFIX = " ";
-
-    private static final String IMAGES_RELEASED_ARCADE_FILE = "images_released_arcade.md";
-    private static final String IMAGES_UNRELEASED_FILE = "images_unreleased.md";
 
     protected ProcessPlatforms(String context)
     {
@@ -31,8 +25,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         updatePlatforms();
 
         executeShellScript(OVERWRITE_PLATFORM_IMAGES_SCRIPT);
-
-//        updateImageReadmeFiles();
     }
 
     private static final String JSON_FILE_EXT = ".json";
@@ -95,55 +87,6 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         return gson.toJson(base);
     }
 
-
-    private void updateImageReadmeFiles()
-    {
-        try
-        {
-            String releasedArcadeContents = "";
-            String unreleasedCoreContents = "";
-
-            updateFile(IMAGES_RELEASED_ARCADE_FILE, releasedArcadeContents);
-            updateFile(IMAGES_UNRELEASED_FILE, unreleasedCoreContents);
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-
-
-
-    private void updateFile(String filename, String newContents) throws Exception
-    {
-        File baseFile = new File(config().getDataDirectory() + filename);
-
-        StringBuilder contents = readFileContents(baseFile);
-
-        File updatedFile = new File(config().getPlatformImagesDirectory() + filename);
-
-        String fullContents = contents.toString() + newContents;
-
-        writeStringToFile(updatedFile.getAbsolutePath(), fullContents);
-    }
-
-    private StringBuilder readFileContents(File file) throws Exception
-    {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-
-        StringBuilder contents = new StringBuilder();
-
-        String line;
-        while((line = reader.readLine()) != null)
-        {
-            contents.append(line);
-            contents.append("\r\n");
-        }
-        return contents;
-    }
 
     public static void main(String args[]) throws Exception
     {

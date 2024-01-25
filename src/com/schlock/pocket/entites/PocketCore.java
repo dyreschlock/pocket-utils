@@ -183,4 +183,14 @@ public class PocketCore
     {
         this.favorite = favorite;
     }
+
+    public String getCoreDev()
+    {
+        return coreDev;
+    }
+
+    public void setCoreDev(String coreDev)
+    {
+        this.coreDev = coreDev;
+    }
 }
