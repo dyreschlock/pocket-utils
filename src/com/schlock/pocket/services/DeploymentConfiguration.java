@@ -26,9 +26,12 @@ public class DeploymentConfiguration
 
     private static final String MRA_TODO_FOLDER = "mra_to_process/";
 
+    private static final String PLATFORM_IMAGES_FOLDER = "platform_images/";
+
     private static final String WEBSITE_IMAGE_DIRECTORY = "website.image.directory";
     private static final String WEBSITE_DATA_DIRECTORY = "website.data.directory";
 
+    private static final String DATA_DIRECTORY = "data/";
 
     public static final String LOCAL = "local";
     public static final String TEST = "test";
@@ -90,6 +93,10 @@ public class DeploymentConfiguration
         return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
     }
 
+    public String getDataDirectory()
+    {
+        return DATA_DIRECTORY;
+    }
 
 
     public String getRomzipSourceUrl()
@@ -112,6 +119,11 @@ public class DeploymentConfiguration
     public String getMRAToBeProcessedDirectory()
     {
         return getPocketUtilityDirectory() + MRA_TODO_FOLDER;
+    }
+
+    public String getPlatformImagesDirectory()
+    {
+        return getPocketUtilityDirectory() + PLATFORM_IMAGES_FOLDER;
     }
 
     public String getWebsiteImageDirectory()
