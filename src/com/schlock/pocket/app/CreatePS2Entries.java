@@ -12,6 +12,9 @@ public class CreatePS2Entries extends AbstractDatabaseApplication
     private static final String PS2_FOLDER = "DVD";
     private static final String PS1_FOLDER = "POPS";
 
+    private static final String ART_FOLDER = "ART";
+    private static final String CFG_FOLDER = "CFG";
+
     protected CreatePS2Entries(String context)
     {
         super(context);
@@ -43,14 +46,42 @@ public class CreatePS2Entries extends AbstractDatabaseApplication
 
         for(File gameFile : new File(location).listFiles(filenameFilter))
         {
-            PlaystationGame game = PlaystationGame.create(gameFile, platform);
+            PlaystationGame gameData = PlaystationGame.create(gameFile, platform);
 
-            boolean exists = playstationGameDAO().getByGameId(game.getGameId()) != null;
-            if (!exists)
+            PlaystationGame game = playstationGameDAO().getByGameId(gameData.getGameId());
+            if (game == null)
             {
-                save(game);
+                game = gameData;
             }
+
+            boolean art = checkForFile(ART_FOLDER, game);
+            boolean cfg = checkForFile(CFG_FOLDER, game);
+
+            game.setHaveArt(art);
+            game.setHaveCfg(cfg);
+//            game.setCopied(true);
+
+            save(game);
         }
+    }
+
+    private boolean checkForFile(final String FOLDER_NAME, PlaystationGame game)
+    {
+        String folderPath = config().getPlaystationDirectory() + FOLDER_NAME;
+
+        FilenameFilter filter = new FilenameFilter()
+        {
+            public boolean accept(File dir, String name)
+            {
+                return name.startsWith(game.getGameId());
+            }
+        };
+
+        for(File file : new File(folderPath).listFiles(filter))
+        {
+            return true;
+        }
+        return false;
     }
 
 
