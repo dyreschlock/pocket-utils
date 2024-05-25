@@ -12,7 +12,7 @@ public class DeploymentConfiguration
     private static final String POCKET_DIRECTORY = "pocket.directory";
     private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
 
-    private static final String PLAYSTATION_DIRECTORY = "ps2.directory";
+    private static final String PLAYSTATION_DIRECTORY = "playstation.directory";
 
     private static final String BOXART_SOURCE_URL = "boxart.source.url";
     private static final String BOXART_STORAGE_FOLDER = "library_images/boxart/";
