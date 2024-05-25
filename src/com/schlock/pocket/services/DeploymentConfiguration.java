@@ -12,6 +12,8 @@ public class DeploymentConfiguration
     private static final String POCKET_DIRECTORY = "pocket.directory";
     private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
 
+    private static final String PLAYSTATION_DIRECTORY = "ps2.directory";
+
     private static final String BOXART_SOURCE_URL = "boxart.source.url";
     private static final String BOXART_STORAGE_FOLDER = "library_images/boxart/";
     private static final String BOXART_CONVERTED_FOLDER = "library_images/boxart_converted/";
@@ -61,6 +63,11 @@ public class DeploymentConfiguration
     public String getPocketUtilityDirectory()
     {
         return getProperties().getProperty(POCKET_UTILITY_DIRECTORY);
+    }
+
+    public String getPlaystationDirectory()
+    {
+        return getProperties().getProperty(PLAYSTATION_DIRECTORY);
     }
 
     public String getBoxartSourceUrl()

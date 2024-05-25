@@ -27,6 +27,7 @@
         <mapping class="com.schlock.pocket.entites.PocketGame" />
         <mapping class="com.schlock.pocket.entites.PocketCore" />
         <mapping class="com.schlock.pocket.entites.PocketCoreCategory" />
+        <mapping class="com.schlock.pocket.entites.PlaystationGame" />
 
     </session-factory>
 </hibernate-configuration>

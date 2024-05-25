@@ -84,6 +84,9 @@ public enum PlatformInfo
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
+    PS1("Playstation 1", "ps1"),
+    PS2("Playstation 2", "ps2"),
+
 
     ARCADE("MAME", "arcade", "json");
 
