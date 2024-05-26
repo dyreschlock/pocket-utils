@@ -59,7 +59,9 @@ public class CreatePS2Entries extends AbstractDatabaseApplication
 
             game.setHaveArt(art);
             game.setHaveCfg(cfg);
-//            game.setCopied(true);
+
+            String driveName = location.split("/")[2];
+            game.setLocation(driveName);
 
             save(game);
         }
@@ -76,12 +78,7 @@ public class CreatePS2Entries extends AbstractDatabaseApplication
                 return name.startsWith(game.getGameId());
             }
         };
-
-        for(File file : new File(folderPath).listFiles(filter))
-        {
-            return true;
-        }
-        return false;
+        return new File(folderPath).listFiles(filter).length != 0;
     }
 
 

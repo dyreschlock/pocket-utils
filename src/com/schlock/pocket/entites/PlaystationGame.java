@@ -21,8 +21,8 @@ public class PlaystationGame
     @Enumerated(EnumType.STRING)
     private PlatformInfo platform;
 
-    @Column(name = "copied")
-    private boolean copied;
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "working")
     private boolean working;
@@ -78,14 +78,14 @@ public class PlaystationGame
         this.platform = platform;
     }
 
-    public boolean isCopied()
+    public String getLocation()
     {
-        return copied;
+        return location;
     }
 
-    public void setCopied(boolean copied)
+    public void setLocation(String location)
     {
-        this.copied = copied;
+        this.location = location;
     }
 
     public boolean isWorking()
@@ -129,7 +129,6 @@ public class PlaystationGame
 
         game.platform = platform;
 
-        game.copied = false;
         game.working = false;
         game.haveArt = false;
         game.haveCfg = false;
