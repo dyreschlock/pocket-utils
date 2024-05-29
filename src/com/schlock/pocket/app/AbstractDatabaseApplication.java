@@ -1,6 +1,5 @@
 package com.schlock.pocket.app;
 
-import com.schlock.pocket.services.database.PlaystationGameDAO;
 import com.schlock.pocket.services.database.PocketCoreCategoryDAO;
 import com.schlock.pocket.services.database.PocketCoreDAO;
 import com.schlock.pocket.services.database.PocketGameDAO;
@@ -60,11 +59,6 @@ public abstract class AbstractDatabaseApplication extends AbstractApplication
     protected PocketCoreCategoryDAO pocketCoreCategoryDAO()
     {
         return new PocketCoreCategoryDAO(session);
-    }
-
-    protected PlaystationGameDAO playstationGameDAO()
-    {
-        return new PlaystationGameDAO(session);
     }
 
     protected void save(Object object)
