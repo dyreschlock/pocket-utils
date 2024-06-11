@@ -3,6 +3,8 @@ package com.schlock.pocket.entites;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pocket_core")
@@ -83,6 +85,24 @@ public class PocketCore
     {
         return ROMS_JOTEGO.equals(this.romZipFolder) || ROMS_CPS.equals(this.romZipFolder) || "coinop".equals(this.romZipFolder);
     }
+
+    public List<String> getExecutionDirectories()
+    {
+        if (executionDirectory == null)
+        {
+            return new ArrayList<>();
+        }
+
+        String[] directories = executionDirectory.split(",");
+
+        List<String> dirs = new ArrayList<>();
+        for(String dir : directories)
+        {
+            dirs.add(dir.trim());
+        }
+        return dirs;
+    }
+
 
     public Long getId()
     {

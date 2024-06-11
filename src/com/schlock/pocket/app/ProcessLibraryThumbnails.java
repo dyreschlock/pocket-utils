@@ -235,18 +235,6 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
 
 
-    private File getRomFile(PocketGame game)
-    {
-        String romFilepath = getRomLocationAbsolutePath(game.getCore());
-        if (game.getCore().isRomsSorted())
-        {
-            romFilepath += game.getGenre() + "/";
-        }
-        romFilepath += game.getGameFilename();
-
-        return new File(romFilepath);
-    }
-
     private File getBoxartThumbnailPNGFile(PocketGame game)
     {
         String coreCode = game.getPlatform().getCoreCode();

@@ -84,38 +84,40 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
     private void searchForNewGames(PocketCore core)
     {
-        String romLocation = getRomLocationAbsolutePath(core);
-        File coreRomsDirectory = new File(romLocation);
-        if (!coreRomsDirectory.exists())
+        for(String romLocation : getRomLocationAbsolutePath(core))
         {
-            System.out.println("Directories don't exist for core: " + core.getNamespace());
-            return;
-        }
-
-        if (core.isRomsSorted())
-        {
-            FileFilter filter = new FileFilter()
+            File coreRomsDirectory = new File(romLocation);
+            if (!coreRomsDirectory.exists())
             {
-                @Override
-                public boolean accept(File file)
-                {
-                    boolean directory = file.isDirectory();
-                    boolean notIgnore = !file.getName().startsWith("_");
-
-                    boolean unsorted = UNSORTED_FOLDER.equals(file.getName());
-
-                    return unsorted || (directory && notIgnore);
-                }
-            };
-
-            for(File folder : coreRomsDirectory.listFiles(filter))
-            {
-                processFolder(folder, core);
+                System.out.println("Directories don't exist for core: " + core.getNamespace());
+                return;
             }
-        }
-        else
-        {
-            processFolder(coreRomsDirectory, core);
+
+            if (core.isRomsSorted())
+            {
+                FileFilter filter = new FileFilter()
+                {
+                    @Override
+                    public boolean accept(File file)
+                    {
+                        boolean directory = file.isDirectory();
+                        boolean notIgnore = !file.getName().startsWith("_");
+
+                        boolean unsorted = UNSORTED_FOLDER.equals(file.getName());
+
+                        return unsorted || (directory && notIgnore);
+                    }
+                };
+
+                for(File folder : coreRomsDirectory.listFiles(filter))
+                {
+                    processFolder(folder, core);
+                }
+            }
+            else
+            {
+                processFolder(coreRomsDirectory, core);
+            }
         }
     }
 
@@ -171,6 +173,13 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                     save(game);
 
                     System.out.println("New game created in database: " + game.getGameName());
+                }
+                else if (!game.getCore().equals(core))
+                {
+                    game.setCore(core);
+                    save(game);
+
+                    System.out.println("Game updated with new core: " + game.getGameName() + " w/ core: " + core.getNamespace());
                 }
             }
         }

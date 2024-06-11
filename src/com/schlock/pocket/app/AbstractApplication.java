@@ -26,14 +26,23 @@ public abstract class AbstractApplication
         return config;
     }
 
-    protected String getRomLocationAbsolutePath(PocketCore core)
+    protected List<String> getRomLocationAbsolutePath(PocketCore core)
     {
         String coreDirectory = config().getPocketAssetsDirectory() + core.getNamespace() + "/";
-        if (core.getExecutionDirectory() != null)
+
+        List<String> paths = new ArrayList<>();
+        if (core.getExecutionDirectories().isEmpty())
         {
-            return coreDirectory + core.getExecutionDirectory() + "/";
+            paths.add(coreDirectory + COMMON_FOLDER);
         }
-        return coreDirectory + COMMON_FOLDER;
+        else
+        {
+            for(String dir : core.getExecutionDirectories())
+            {
+                paths.add(coreDirectory + dir + "/");
+            }
+        }
+        return paths;
     }
 
     protected void createDirectories(String... locations)

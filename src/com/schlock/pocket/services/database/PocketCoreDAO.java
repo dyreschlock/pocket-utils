@@ -34,6 +34,23 @@ public class PocketCoreDAO
         return cores.get(0);
     }
 
+    public List<PocketCore> getAllToCopyReleaseWithCompleteInformation()
+    {
+        String text = " select c " +
+                " from PocketCore c " +
+                " join c.category cat " +
+                " where cat.copy is true " +
+                " and (c.copy is true or c.released is true) " +
+                " and c.name is not null " +
+                " and c.namespace is not null " +
+                " and c.category is not null " +
+                " and c.manufacturer is not null " +
+                " and c.year is not null ";
+
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public List<PocketCore> getAllToCopyWithCompleteInformation()
     {
         String text = " select c " +

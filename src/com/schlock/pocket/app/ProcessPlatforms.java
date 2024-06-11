@@ -31,8 +31,9 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 
     private void updatePlatforms()
     {
-        List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
+        int count = 0;
 
+        List<PocketCore> cores = pocketCoreDAO().getAllToCopyReleaseWithCompleteInformation();
         for(PocketCore core : cores)
         {
             String filepath = config().getPocketPlatformsDirectory() + core.getNamespace() + JSON_FILE_EXT;
@@ -40,7 +41,11 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
 
             deleteOldFile(filepath);
             writeStringToFile(filepath, json);
+
+            count++;
         }
+
+        System.out.println("Number of Platform JSON written: " + count);
     }
 
     public static final String PLATFORM = "platform";
