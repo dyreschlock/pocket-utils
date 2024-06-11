@@ -83,7 +83,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
 
     private String generateGameJson()
     {
-        List<PocketGame> games = pocketGameDAO().getAll();
+        List<PocketGame> games = pocketGameDAO().getAllAvailable();
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCore.class, new JsonSerializer<PocketCore>()

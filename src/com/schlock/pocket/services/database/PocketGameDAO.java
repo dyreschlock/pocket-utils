@@ -22,6 +22,20 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public List<PocketGame> getAllAvailable()
+    {
+        String text = "select g " +
+                " from PocketGame g " +
+                " join g.core c " +
+                " join c.category cat " +
+                " where c.copy is true " +
+                " and cat.copy is true " +
+                " order by g.id ";
+
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public PocketGame getByFilename(String filename)
     {
         String text = " select g " +
