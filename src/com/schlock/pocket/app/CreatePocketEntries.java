@@ -48,22 +48,22 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
         for(File directory : assetDirectory.listFiles(filter))
         {
-            String namespace = directory.getName();
-            createCoreObjectIfDoesntExist(namespace);
+            String platformId = directory.getName();
+            createCoreObjectIfDoesntExist(platformId);
         }
     }
 
-    private void createCoreObjectIfDoesntExist(String namespace)
+    private void createCoreObjectIfDoesntExist(String platformId)
     {
-        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
+        PocketCore core = pocketCoreDAO().getByPlatformId(platformId);
         if (core == null)
         {
             core = new PocketCore();
-            core.setNamespace(namespace);
+            core.setPlatformId(platformId);
 
             save(core);
 
-            System.out.println("New core created in database: " + namespace);
+            System.out.println("New core created in database: " + platformId);
         }
     }
 
@@ -89,7 +89,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
             File coreRomsDirectory = new File(romLocation);
             if (!coreRomsDirectory.exists())
             {
-                System.out.println("Directories don't exist for core: " + core.getNamespace());
+                System.out.println("Directories don't exist for core: " + core.getPlatformId());
                 return;
             }
 
@@ -158,7 +158,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
             if (UNSORTED_FOLDER.equals(folder.getName()))
             {
-                String gameEntry = core.getNamespace() + " / " + filename;
+                String gameEntry = core.getPlatformId() + " / " + filename;
                 if (!unsortedGames.contains(gameEntry))
                 {
                     unsortedGames.add(gameEntry);
@@ -179,7 +179,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                     game.setCore(core);
                     save(game);
 
-                    System.out.println("Game updated with new core: " + game.getGameName() + " w/ core: " + core.getNamespace());
+                    System.out.println("Game updated with new core: " + game.getGameName() + " w/ core: " + core.getPlatformId());
                 }
             }
         }

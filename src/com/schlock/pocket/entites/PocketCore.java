@@ -17,8 +17,8 @@ public class PocketCore
     @GeneratedValue
     private Long id;
 
-    @Column(name = "namespace")
-    private String namespace;
+    @Column(name = "platform_id")
+    private String platformId;
 
     @Column(name = "name")
     @Expose
@@ -63,7 +63,7 @@ public class PocketCore
 
     public boolean isDataComplete()
     {
-        return namespace != null &&
+        return platformId != null &&
                 name != null &&
                 category != null &&
                 manufacturer != null &&
@@ -114,14 +114,14 @@ public class PocketCore
         this.id = id;
     }
 
-    public String getNamespace()
+    public String getPlatformId()
     {
-        return namespace;
+        return platformId;
     }
 
-    public void setNamespace(String namespace)
+    public void setPlatformId(String platformId)
     {
-        this.namespace = namespace;
+        this.platformId = platformId;
     }
 
     public String getName()

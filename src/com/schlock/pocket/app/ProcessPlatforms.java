@@ -36,7 +36,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         List<PocketCore> cores = pocketCoreDAO().getAllToCopyReleaseWithCompleteInformation();
         for(PocketCore core : cores)
         {
-            String filepath = config().getPocketPlatformsDirectory() + core.getNamespace() + JSON_FILE_EXT;
+            String filepath = config().getPocketPlatformsDirectory() + core.getPlatformId() + JSON_FILE_EXT;
             String json = generateJSONforCore(core);
 
             deleteOldFile(filepath);

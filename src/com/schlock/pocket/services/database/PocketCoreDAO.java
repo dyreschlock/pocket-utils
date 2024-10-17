@@ -16,14 +16,14 @@ public class PocketCoreDAO
         this.session = session;
     }
 
-    public PocketCore getByNamespace(String namespace)
+    public PocketCore getByPlatformId(String platformId)
     {
         String text = " select c " +
                 " from PocketCore c " +
-                " where c.namespace = :namespace ";
+                " where c.platformId = :platformId ";
 
         Query query = session.createQuery(text);
-        query.setParameter("namespace", namespace);
+        query.setParameter("platformId", platformId);
 
         List<PocketCore> cores = query.list();
 
@@ -42,7 +42,7 @@ public class PocketCoreDAO
                 " where cat.copy is true " +
                 " and (c.copy is true or c.released is true) " +
                 " and c.name is not null " +
-                " and c.namespace is not null " +
+                " and c.platformId is not null " +
                 " and c.category is not null " +
                 " and c.manufacturer is not null " +
                 " and c.year is not null ";
@@ -59,7 +59,7 @@ public class PocketCoreDAO
                 " where c.copy is true " +
                 " and cat.copy is true " +
                 " and c.name is not null " +
-                " and c.namespace is not null " +
+                " and c.platformId is not null " +
                 " and c.category is not null " +
                 " and c.manufacturer is not null " +
                 " and c.year is not null ";

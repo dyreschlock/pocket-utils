@@ -3,7 +3,6 @@ package com.schlock.pocket.app;
 import com.google.gson.*;
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketCoreCategory;
-import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -58,12 +57,12 @@ public class SetupPocketCoresFromJSON extends AbstractDatabaseApplication
 
     private void processJsonFile(File jsonFile) throws Exception
     {
-        String namespace = getCoreNamespaceFromFilename(jsonFile);
-        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
+        String platformId = getCorePlatformIdFromFilename(jsonFile);
+        PocketCore core = pocketCoreDAO().getByPlatformId(platformId);
         if (core == null)
         {
             core = getCoreFromJsonFile(jsonFile);
-            core.setNamespace(namespace);
+            core.setPlatformId(platformId);
 
             save(core);
         }
@@ -106,12 +105,12 @@ public class SetupPocketCoresFromJSON extends AbstractDatabaseApplication
         return core;
     }
 
-    private String getCoreNamespaceFromFilename(File jsonFile)
+    private String getCorePlatformIdFromFilename(File jsonFile)
     {
         String filename = jsonFile.getName();
 
-        String namespace = filename.substring(0, filename.indexOf(JSON_FILE_EXT));
-        return namespace;
+        String platformId = filename.substring(0, filename.indexOf(JSON_FILE_EXT));
+        return platformId;
     }
 
 

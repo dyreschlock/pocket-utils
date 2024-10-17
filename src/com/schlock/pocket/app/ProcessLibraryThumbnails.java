@@ -251,7 +251,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private File getLibraryBINFile(PocketGame game)
     {
-        String coreCode = game.getCore().getNamespace();
+        String coreCode = game.getCore().getPlatformId();
         String filepath = config().getPocketLibraryDirectory() + coreCode + "/" + game.getFileHash() + ".bin";
         return new File(filepath);
     }

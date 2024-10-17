@@ -22,7 +22,7 @@ public class ProcessPlatformImageFiles extends AbstractDatabaseApplication
     private static final String ERICLEWIS = "ericlewis";
     private static final String ANTONGALE = "antongale";
 
-    // namespace - name - namespace
+    // platform_id - name - platform_id
     private final String CORE_CELL_FORMAT = "  <td>%s - %s <img src=\"pics/arcade/%s.png\" /></td>";
     private final String HEADER_FORMAT = "<tr><th colspan=\"3\">%s</th></tr>";
 
@@ -82,7 +82,7 @@ public class ProcessPlatformImageFiles extends AbstractDatabaseApplication
                 currentDev = core.getCoreDev();
             }
 
-            String coreLine = String.format(CORE_CELL_FORMAT, core.getNamespace(), core.getName(), core.getNamespace());
+            String coreLine = String.format(CORE_CELL_FORMAT, core.getPlatformId(), core.getName(), core.getPlatformId());
             table.append(coreLine);
 
             currentColumn++;
@@ -164,7 +164,7 @@ public class ProcessPlatformImageFiles extends AbstractDatabaseApplication
 
             if (dev1 == dev2)
             {
-                return o1.getNamespace().compareTo(o2.getNamespace());
+                return o1.getPlatformId().compareTo(o2.getPlatformId());
             }
             return Integer.compare(dev2, dev1);
         }

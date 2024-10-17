@@ -62,10 +62,10 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         List<PocketCore> cores = pocketCoreDAO().getAllToCopyWithCompleteInformation();
         for(PocketCore core : cores)
         {
-            // I don't want to add an @Expose tag for namespace because it'll cause problems with the ProcessPlatforms task
+            // I don't want to add an @Expose tag for platformId because it'll cause problems with the ProcessPlatforms task
 
             JsonObject element = gson.toJsonTree(core).getAsJsonObject();
-            element.add("namespace", new JsonPrimitive(core.getNamespace()));
+            element.add("platformId", new JsonPrimitive(core.getPlatformId()));
 
             jsonObjects.add(element);
         }
@@ -91,9 +91,9 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                     @Override
                     public JsonElement serialize(PocketCore src, Type typeOfSrc, JsonSerializationContext context)
                     {
-                        //This will output "core": "namespace" rather than the entire category object.
-                        String namespace = src.getNamespace();
-                        return new JsonPrimitive(namespace);
+                        //This will output "core": "platformId" rather than the entire category object.
+                        String platformId = src.getPlatformId();
+                        return new JsonPrimitive(platformId);
                     }
                 })
                 .registerTypeAdapter(PlatformInfo.class, new JsonSerializer<PlatformInfo>()

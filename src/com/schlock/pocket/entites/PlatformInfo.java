@@ -62,7 +62,7 @@ public enum PlatformInfo
     ODYSSEY2("Magnavox_-_Odyssey2", "odyssey2", "bin"),
     CHANNEL_F("Fairchild_-_Channel_F", "channel_f", "bin"),
 
-    VECTREX("GCE_-_Vectrex", "vectrex", "vec", "bin"),
+    VECTREX("GCE_-_Vectrex", "vectrex", "json"),
 
     ARCADIA("Emerson_-_Arcadia_2001", "arcadia", "bin"),
     STUDIO2("RCA_-_Studio_II", "studio2", "st2"),
@@ -130,7 +130,7 @@ public enum PlatformInfo
         List<PlatformInfo> platforms = new ArrayList<>();
         for(PlatformInfo platform : values())
         {
-            if (core.getNamespace().equals(platform.coreCode))
+            if (core.getPlatformId().equals(platform.coreCode))
             {
                 platforms.add(platform);
             }

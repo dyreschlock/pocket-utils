@@ -101,7 +101,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
         }
     }
 
-    private static final String NAMESPACE_TAG = "rbf";
+    private static final String PLATFORM_ID_TAG = "rbf";
     private static final String GENERATED_ROM_TAG = "setname";
     private static final String ROM_TAG = "rom";
     private static final String ROM_ATTRIBUTE = "zip";
@@ -109,7 +109,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     private class MRAInfo
     {
-        public String namespace;
+        public String platformId;
         public String generateRom;
         public List<String> romZips = new ArrayList<>();
     }
@@ -120,7 +120,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
         Document mraXML = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(mraFile);
 
-        info.namespace = mraXML.getElementsByTagName(NAMESPACE_TAG).item(0).getTextContent();
+        info.platformId = mraXML.getElementsByTagName(PLATFORM_ID_TAG).item(0).getTextContent();
         info.generateRom = mraXML.getElementsByTagName(GENERATED_ROM_TAG).item(0).getTextContent() + ROM_FILE_EXT;
         if (info.generateRom == null || info.generateRom.isEmpty())
         {
@@ -152,23 +152,23 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     private boolean doesArcadeRomExist(MRAInfo mraInfo)
     {
-        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
+        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.platformId + "/";
         String romFilepath = coreFolder + COMMON_FOLDER + mraInfo.generateRom;
         return new File(romFilepath).exists();
     }
 
     private PocketCore getPocketCoreFromMRAInfo(MRAInfo mraInfo)
     {
-        String namespace = mraInfo.namespace;
-        PocketCore core = pocketCoreDAO().getByNamespace(namespace);
+        String platformId = mraInfo.platformId;
+        PocketCore core = pocketCoreDAO().getByPlatformId(platformId);
         if (core == null)
         {
             core = new PocketCore();
-            core.setNamespace(namespace);
+            core.setPlatformId(platformId);
 
             save(core);
 
-            System.out.println("New core created in database: " + namespace);
+            System.out.println("New core created in database: " + platformId);
         }
         return core;
     }
@@ -192,7 +192,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
         String romDirectory = core.getRomZipFolder();
         if (romDirectory == null || romDirectory.isEmpty())
         {
-            System.out.println("Rom Zip directory not set on core: " + core.getNamespace());
+            System.out.println("Rom Zip directory not set on core: " + core.getPlatformId());
             return false;
         }
 
@@ -244,7 +244,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
     {
         String romDirectoryName = core.getRomZipFolder();
 
-        String coreCommonDirectory = config().getPocketAssetsDirectory() + core.getNamespace() + "/" + COMMON;
+        String coreCommonDirectory = config().getPocketAssetsDirectory() + core.getPlatformId() + "/" + COMMON;
         createDirectories(coreCommonDirectory);
 
         String programExec = config().getPocketUtilityDirectory() + MRA_ARCADE_ROM_GENERATION_PROGRAM_NAME;
@@ -305,7 +305,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     private void clearArcadeRomFile(MRAInfo mraInfo)
     {
-        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/";
+        String coreFolder = config().getPocketAssetsDirectory() + mraInfo.platformId + "/";
         String romFilepath = coreFolder + COMMON_FOLDER + mraInfo.generateRom;
 
         new File(romFilepath).delete();
@@ -313,7 +313,7 @@ public class ProcessArcadeRomsAndMRA extends AbstractDatabaseApplication
 
     private void moveMRAFile(File mraFile, MRAInfo mraInfo)
     {
-        String mraFolder = config().getPocketAssetsDirectory() + mraInfo.namespace + "/" + MRA_FOLDER_NAME;
+        String mraFolder = config().getPocketAssetsDirectory() + mraInfo.platformId + "/" + MRA_FOLDER_NAME;
         createDirectories(mraFolder);
 
         String moveLocation = mraFolder + "/" + mraFile.getName();
