@@ -166,7 +166,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
             }
             else
             {
-                PocketGame game = pocketGameDAO().getByFilename(filename);
+                PocketGame game = pocketGameDAO().getByPocketFilename(filename);
                 if (game == null)
                 {
                     game = PocketGame.createGame(file, core, platform);

@@ -20,6 +20,9 @@ public class PocketCore
     @Column(name = "platform_id")
     private String platformId;
 
+    @Column(name = "mister_id")
+    private String misterId;
+
     @Column(name = "name")
     @Expose
     private String name;
@@ -122,6 +125,16 @@ public class PocketCore
     public void setPlatformId(String platformId)
     {
         this.platformId = platformId;
+    }
+
+    public String getMisterId()
+    {
+        return misterId;
+    }
+
+    public void setMisterId(String misterId)
+    {
+        this.misterId = misterId;
     }
 
     public String getName()

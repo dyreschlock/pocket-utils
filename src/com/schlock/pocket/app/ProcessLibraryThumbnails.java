@@ -129,7 +129,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         if (PlatformInfo.GAMEBOY_COLOR.equals(game.getPlatform()))
         {
             final String GB_EXTENSION = ".gb";
-            if (game.getGameFilename().endsWith(GB_EXTENSION))
+            if (game.getPocketFilename().endsWith(GB_EXTENSION))
             {
                 coreRepo = PlatformInfo.GAMEBOY.getRepoName();
             }
@@ -137,7 +137,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
         if (PlatformInfo.WONDERSWAN_COLOR.equals(game.getPlatform()))
         {
             final String WS_EXTENSION = ".ws";
-            if (game.getGameFilename().endsWith(WS_EXTENSION))
+            if (game.getPocketFilename().endsWith(WS_EXTENSION))
             {
                 coreRepo = PlatformInfo.WONDERSWAN.getRepoName();
             }

@@ -1,10 +1,7 @@
 package com.schlock.pocket.app;
 
 import com.google.gson.*;
-import com.schlock.pocket.entites.PlatformInfo;
-import com.schlock.pocket.entites.PocketCore;
-import com.schlock.pocket.entites.PocketCoreCategory;
-import com.schlock.pocket.entites.PocketGame;
+import com.schlock.pocket.entites.*;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import org.apache.commons.io.FileUtils;
 
@@ -83,8 +80,6 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
 
     private String generateGameJson()
     {
-        List<PocketGame> games = pocketGameDAO().getAllAvailable();
-
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCore.class, new JsonSerializer<PocketCore>()
                 {
@@ -108,6 +103,12 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .excludeFieldsWithoutExposeAnnotation()
                 .setPrettyPrinting()
                 .create();
+
+        List<PocketGame> games = pocketGameDAO().getAllAvailable();
+        for(PocketGame game : games)
+        {
+            game.setDevices();
+        }
 
         return gson.toJson(games);
     }

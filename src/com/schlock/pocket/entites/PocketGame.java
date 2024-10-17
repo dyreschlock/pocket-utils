@@ -1,12 +1,15 @@
 package com.schlock.pocket.entites;
 
 import com.google.gson.annotations.Expose;
+import com.mysql.jdbc.StringUtils;
 
 import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.CRC32;
 
 @Entity
@@ -33,8 +36,14 @@ public class PocketGame
     @Expose
     private String releaseDate;
 
-    @Column(name = "game_filename")
-    private String gameFilename;
+    @Column(name = "pocket_filename")
+    private String pocketFilename;
+
+    @Column(name = "mister_filename")
+    private String misterFilename;
+
+    @Column(name = "mister_filepath")
+    private String misterFilepath;
 
     @Column(name = "img_filename")
     private String boxartFilename;
@@ -64,9 +73,36 @@ public class PocketGame
     @Column(name = "inLibrary")
     private boolean inLibrary;
 
+    @Transient
+    @Expose
+    private List<String> devices = new ArrayList<>();
+
     public PocketGame()
     {
     }
+
+    public void setDevices()
+    {
+        if (isAvailableOnPocket())
+        {
+            devices.add(DeviceInfo.POCKET.name().toLowerCase());
+        }
+        if (isAvailableOnMister())
+        {
+            devices.add(DeviceInfo.MISTER.name().toLowerCase());
+        }
+    }
+
+    public boolean isAvailableOnPocket()
+    {
+        return !StringUtils.isNullOrEmpty(getPocketFilename());
+    }
+
+    public boolean isAvailableOnMister()
+    {
+        return !StringUtils.isNullOrEmpty(getMisterFilename()) && !StringUtils.isNullOrEmpty(getMisterFilepath());
+    }
+
 
     public Long getId()
     {
@@ -118,14 +154,34 @@ public class PocketGame
         this.releaseDate = releaseDate;
     }
 
-    public String getGameFilename()
+    public String getPocketFilename()
     {
-        return gameFilename;
+        return pocketFilename;
     }
 
-    public void setGameFilename(String gameFilename)
+    public void setPocketFilename(String pocketFilename)
     {
-        this.gameFilename = gameFilename;
+        this.pocketFilename = pocketFilename;
+    }
+
+    public String getMisterFilename()
+    {
+        return misterFilename;
+    }
+
+    public void setMisterFilename(String misterFilename)
+    {
+        this.misterFilename = misterFilename;
+    }
+
+    public String getMisterFilepath()
+    {
+        return misterFilepath;
+    }
+
+    public void setMisterFilepath(String misterFilepath)
+    {
+        this.misterFilepath = misterFilepath;
     }
 
     public String getBoxartFilename()
@@ -203,7 +259,7 @@ public class PocketGame
         PocketGame game = new PocketGame();
 
         game.gameName = getGameNameFromFile(file);
-        game.gameFilename = file.getName();
+        game.pocketFilename = file.getName();
         game.boxartFilename = game.gameName + ".png";
         game.boxartConverted = false;
 

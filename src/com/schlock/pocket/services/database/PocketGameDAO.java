@@ -36,11 +36,11 @@ public class PocketGameDAO
         return query.list();
     }
 
-    public PocketGame getByFilename(String filename)
+    public PocketGame getByPocketFilename(String filename)
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.gameFilename = :filename ";
+                " where g.pocketFilename = :filename ";
 
         Query query = session.createQuery(text);
         query.setParameter("filename", filename);
