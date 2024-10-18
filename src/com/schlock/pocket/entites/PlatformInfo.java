@@ -6,12 +6,15 @@ import java.util.List;
 
 public enum PlatformInfo
 {
+    PLAYSTATION("Sony_-_PlayStation", "playstation", "chd"),
+
     //Nintendo
+    NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "z64"),
     SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
     FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
 
-//    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
+    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
     GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "gba"),
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
@@ -22,14 +25,16 @@ public enum PlatformInfo
 
 
     //SNK
+    NEO_GEO_CD("SNK_-_Neo_Geo_CD", "ngcd", "chd"),
     NEO_GEO("SNK_-_Neo_Geo", "ng", "json"),
 
-    NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
+    NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
 
 
     //Sega
-    //SEGA_CD("Sega_-_Mega-CD_-_Sega_CD"
+    SEGA_SATURN("Sega_-_Saturn", "sat", "chd"),
+    SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "chd"),
     SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
@@ -79,8 +84,9 @@ public enum PlatformInfo
 
 
     //Computers
-    COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
+    COMMODORE_AMIGA_CD32("Commodore_-_CD32", "cd32", "chd"),
     COMMODORE_AMIGA("Commodore_-_Amiga", "amiga", "adf"),
+    COMMODORE_64("Commodore_-_64", "c64", "crt", "d64", "prg", "tap"),
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,

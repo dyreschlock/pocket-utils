@@ -169,7 +169,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                 PocketGame game = pocketGameDAO().getByPocketFilename(filename);
                 if (game == null)
                 {
-                    game = PocketGame.createGame(file, core, platform);
+                    game = PocketGame.createFromPocket(file, core, platform);
                     save(game);
 
                     System.out.println("New game created in database: " + game.getGameName());

@@ -36,6 +36,23 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public PocketGame getByMisterFilename(String filename)
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.misterFilename = :filename ";
+
+        Query query = session.createQuery(text);
+        query.setParameter("filename", filename);
+
+        List<PocketGame> games = query.list();
+        if (games.isEmpty())
+        {
+            return null;
+        }
+        return games.get(0);
+    }
+
     public PocketGame getByPocketFilename(String filename)
     {
         String text = " select g " +
@@ -46,7 +63,6 @@ public class PocketGameDAO
         query.setParameter("filename", filename);
 
         List<PocketGame> games = query.list();
-
         if (games.isEmpty())
         {
             return null;

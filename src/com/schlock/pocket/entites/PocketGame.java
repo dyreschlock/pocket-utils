@@ -254,12 +254,13 @@ public class PocketGame
         this.inLibrary = inLibrary;
     }
 
-    public static PocketGame createGame(File file, PocketCore core, PlatformInfo platform)
+
+
+    private static PocketGame createInitialGame(File file, PocketCore core, PlatformInfo platform)
     {
         PocketGame game = new PocketGame();
 
         game.gameName = getGameNameFromFile(file);
-        game.pocketFilename = file.getName();
         game.boxartFilename = game.gameName + ".png";
         game.boxartConverted = false;
 
@@ -278,6 +279,23 @@ public class PocketGame
         return game;
     }
 
+    public static PocketGame createFromMister(File file, PocketCore core, PlatformInfo platform, String misterFilepath)
+    {
+        PocketGame game = createInitialGame(file, core, platform);
+        game.misterFilename = file.getName();
+        game.misterFilepath = misterFilepath;
+
+        return game;
+    }
+
+    public static PocketGame createFromPocket(File file, PocketCore core, PlatformInfo platform)
+    {
+        PocketGame game = createInitialGame(file, core, platform);
+        game.pocketFilename = file.getName();
+
+        return game;
+    }
+
     private static String getGameNameFromFile(File file)
     {
         String fullName = file.getName();
@@ -286,7 +304,7 @@ public class PocketGame
         return fullName.substring(0, EXTpoint);
     }
 
-    public static String calculateCRC32(File file)
+    private static String calculateCRC32(File file)
     {
         try
         {

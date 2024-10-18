@@ -12,6 +12,9 @@ public class DeploymentConfiguration
     private static final String POCKET_DIRECTORY = "pocket.directory";
     private static final String POCKET_UTILITY_DIRECTORY = "utility.directory";
 
+    private static final String MISTER_MAIN_DIRECTORY = "mister.main.directory";
+    private static final String MISTER_USB_DIRECTORY = "mister.usb.directory";
+
     private static final String BOXART_SOURCE_URL = "boxart.source.url";
     private static final String BOXART_STORAGE_FOLDER = "library_images/boxart/";
     private static final String BOXART_CONVERTED_FOLDER = "library_images/boxart_converted/";
@@ -19,6 +22,8 @@ public class DeploymentConfiguration
     private static final String ASSETS_FOLDER = "Assets/";
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
     private static final String PLATFORMS_FOLDER = "Platforms/";
+
+    private static final String GAMES_FOLDER = "games/";
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
@@ -91,6 +96,16 @@ public class DeploymentConfiguration
     public String getPocketLibraryDirectory()
     {
         return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
+    }
+
+    public String getMisterMainGamesDirectory()
+    {
+        return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + GAMES_FOLDER;
+    }
+
+    public String getMisterUSBGamesDirectory()
+    {
+        return getProperties().getProperty(MISTER_USB_DIRECTORY) + GAMES_FOLDER;
     }
 
     public String getDataDirectory()
