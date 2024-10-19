@@ -64,7 +64,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
     private void processFolder(File folder, PocketCore core)
     {
-        List<PlatformInfo> platforms = PlatformInfo.getByCoreCode(core);
+        List<PlatformInfo> platforms = PlatformInfo.getByCore(core);
         for(PlatformInfo platform : platforms)
         {
             processFolder(folder, core, platform);
@@ -92,7 +92,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
         for(File file : folder.listFiles(filter))
         {
             String filename = file.getName();
-            String misterFilepath = core.getMisterDriveFilepath() + "/" + folder.getName() + "/" + file.getName();
+            String misterFilepath = core.getMisterRelativeFilepath() + "/" + folder.getName() + "/" + file.getName();
 
             PocketGame game = pocketGameDAO().getByMisterFilename(filename);
             if (game == null)
@@ -113,6 +113,16 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                     save(game);
 
                     System.out.println("Updated Pocket game in database: " + game.getGameName());
+                }
+            }
+            else
+            {
+                if (!game.getMisterFilepath().equals(misterFilepath))
+                {
+                    game.setMisterFilepath(misterFilepath);
+                    save(game);
+
+                    System.out.println("Updating filepath in database: " + game.getGameName());
                 }
             }
         }

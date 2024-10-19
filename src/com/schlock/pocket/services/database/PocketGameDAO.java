@@ -36,6 +36,17 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public List<PocketGame> getAllAvailableMister()
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.misterFilename is not null " +
+                " and g.misterFilepath is not null ";
+
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public PocketGame getByMisterFilename(String filename)
     {
         String text = " select g " +

@@ -5,7 +5,7 @@ import com.schlock.pocket.services.DeploymentConfiguration;
 public enum MisterDrive
 {
     SD("/media/fat/"),
-    USB1("/media/usb1/");
+    USB1("/media/usb0/");
 
     String filepath;
 
@@ -14,11 +14,6 @@ public enum MisterDrive
         this.filepath = filepath;
     }
 
-
-    protected String getDriveFilepath(PocketCore core)
-    {
-        return filepath + "games/" + core.getMisterId();
-    }
 
     protected String getLocalFilepath(DeploymentConfiguration config, PocketCore core)
     {

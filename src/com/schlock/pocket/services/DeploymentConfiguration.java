@@ -23,6 +23,7 @@ public class DeploymentConfiguration
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
     private static final String PLATFORMS_FOLDER = "Platforms/";
 
+    private static final String FAVORITES_FOLDER = "_@Favorites/_@All/";
     private static final String GAMES_FOLDER = "games/";
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
@@ -96,6 +97,11 @@ public class DeploymentConfiguration
     public String getPocketLibraryDirectory()
     {
         return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
+    }
+
+    public String getMisterFavoritesDirectory()
+    {
+        return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + FAVORITES_FOLDER;
     }
 
     public String getMisterMainGamesDirectory()

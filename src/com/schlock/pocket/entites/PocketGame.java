@@ -103,6 +103,10 @@ public class PocketGame
         return !StringUtils.isNullOrEmpty(getMisterFilename()) && !StringUtils.isNullOrEmpty(getMisterFilepath());
     }
 
+    public String getMisterAbsoluteFilepath()
+    {
+        return core.getMisterDrive().filepath + getMisterFilepath();
+    }
 
     public Long getId()
     {

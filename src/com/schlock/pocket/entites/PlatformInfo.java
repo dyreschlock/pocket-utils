@@ -94,13 +94,13 @@ public enum PlatformInfo
     ARCADE("MAME", "arcade", "json");
 
     String repoName;
-    String coreCode;
+    String platformId;
     List<String> extensions = new ArrayList<>();
 
-    PlatformInfo(String repoName, String coreCode, String... fileExtensions)
+    PlatformInfo(String repoName, String platformId, String... fileExtensions)
     {
         this.repoName = repoName;
-        this.coreCode = coreCode;
+        this.platformId = platformId;
 
         if (fileExtensions != null)
         {
@@ -111,14 +111,19 @@ public enum PlatformInfo
         }
     }
 
+    public boolean isArcade()
+    {
+        return this == ARCADE;
+    }
+
     public String getRepoName()
     {
         return repoName;
     }
 
-    public String getCoreCode()
+    public String getPlatformId()
     {
-        return coreCode;
+        return platformId;
     }
 
     public List<String> getFileExtensions()
@@ -126,7 +131,7 @@ public enum PlatformInfo
         return extensions;
     }
 
-    public static List<PlatformInfo> getByCoreCode(PocketCore core)
+    public static List<PlatformInfo> getByCore(PocketCore core)
     {
         if (core.isArcadeCore())
         {
@@ -136,7 +141,7 @@ public enum PlatformInfo
         List<PlatformInfo> platforms = new ArrayList<>();
         for(PlatformInfo platform : values())
         {
-            if (core.getPlatformId().equals(platform.coreCode))
+            if (core.getPlatformId().equals(platform.platformId))
             {
                 platforms.add(platform);
             }

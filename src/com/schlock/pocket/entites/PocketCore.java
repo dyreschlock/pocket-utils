@@ -111,9 +111,9 @@ public class PocketCore
         return dirs;
     }
 
-    public String getMisterDriveFilepath()
+    public String getMisterRelativeFilepath()
     {
-        return misterDrive.getDriveFilepath(this);
+        return "games/" + getMisterId();
     }
 
     public String getMisterLocalFilepath(DeploymentConfiguration config)

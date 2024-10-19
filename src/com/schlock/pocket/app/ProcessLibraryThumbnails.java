@@ -237,14 +237,14 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
     private File getBoxartThumbnailPNGFile(PocketGame game)
     {
-        String coreCode = game.getPlatform().getCoreCode();
+        String coreCode = game.getPlatform().getPlatformId();
         String filepath = config().getBoxartStorageDirectory() + coreCode + "/" + game.getBoxartFilename();
         return new File(filepath);
     }
 
     private File getBoxartThumbnailBMPFile(PocketGame game)
     {
-        String coreCode = game.getPlatform().getCoreCode();
+        String coreCode = game.getPlatform().getPlatformId();
         String filepath = config().getBoxartThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
         return new File(filepath);
     }

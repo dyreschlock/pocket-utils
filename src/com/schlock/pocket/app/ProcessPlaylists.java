@@ -96,7 +96,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                     public JsonElement serialize(PlatformInfo src, Type typeOfSrc, JsonSerializationContext context)
                     {
                         //we don't need the enum name, just the core code, which is where the images are stored
-                        String platCode = src.getCoreCode();
+                        String platCode = src.getPlatformId();
                         return new JsonPrimitive(platCode);
                     }
                 })
@@ -121,7 +121,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         {
             if (game.isBoxartConverted())
             {
-                String coreCode = game.getPlatform().getCoreCode();
+                String coreCode = game.getPlatform().getPlatformId();
 
                 String bmpLocation = config().getBoxartThumbnailProcessingDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";
                 String bmpDestination = config().getWebsiteImageDirectory() + coreCode + "/" + game.getFileHash() + ".bmp";

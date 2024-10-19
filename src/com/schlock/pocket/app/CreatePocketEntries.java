@@ -123,7 +123,7 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
 
     private void processFolder(File folder, PocketCore core)
     {
-        List<PlatformInfo> platforms = PlatformInfo.getByCoreCode(core);
+        List<PlatformInfo> platforms = PlatformInfo.getByCore(core);
         for(PlatformInfo platform : platforms)
         {
             processFolder(folder, core, platform);

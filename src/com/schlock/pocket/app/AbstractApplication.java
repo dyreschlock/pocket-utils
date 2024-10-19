@@ -28,7 +28,12 @@ public abstract class AbstractApplication
 
     protected List<String> getRomLocationAbsolutePath(PocketCore core)
     {
-        String coreDirectory = config().getPocketAssetsDirectory() + core.getNamespace() + "/";
+        if (core.getPlatformId().equals("vectrex"))
+        {
+            String temp = "";
+        }
+
+        String coreDirectory = config().getPocketAssetsDirectory() + core.getPlatformId() + "/";
 
         List<String> paths = new ArrayList<>();
         if (core.getExecutionDirectories().isEmpty())
