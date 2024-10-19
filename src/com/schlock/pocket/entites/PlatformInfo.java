@@ -45,7 +45,7 @@ public enum PlatformInfo
     //NEC
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
-    PC_ENGINE_CD("NEC_-_PC_Engine_CD_-_TurboGrafx-CD", "pcecd", "json"),
+    PC_ENGINE_CD("NEC_-_PC_Engine_CD_-_TurboGrafx-CD", "pcecd", "json", "chd"),
 
 
     //Bandai
