@@ -1,6 +1,7 @@
 package com.schlock.pocket.entites;
 
 import com.google.gson.annotations.Expose;
+import com.schlock.pocket.services.DeploymentConfiguration;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,6 +45,10 @@ public class PocketCore
     @Column(name = "year")
     @Expose
     private Integer year;
+
+    @Column(name = "drive")
+    @Enumerated(EnumType.STRING)
+    private MisterDrive misterDrive;
 
     @Column(name = "copy")
     private boolean copy;
@@ -104,6 +109,16 @@ public class PocketCore
             dirs.add(dir.trim());
         }
         return dirs;
+    }
+
+    public String getMisterDriveFilepath()
+    {
+        return misterDrive.getDriveFilepath(this);
+    }
+
+    public String getMisterLocalFilepath(DeploymentConfiguration config)
+    {
+        return misterDrive.getLocalFilepath(config, this);
     }
 
 
@@ -195,6 +210,16 @@ public class PocketCore
     public void setYear(Integer year)
     {
         this.year = year;
+    }
+
+    public MisterDrive getMisterDrive()
+    {
+        return misterDrive;
+    }
+
+    public void setMisterDrive(MisterDrive misterDrive)
+    {
+        this.misterDrive = misterDrive;
     }
 
     public boolean isCopy()

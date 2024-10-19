@@ -11,37 +11,6 @@ import java.util.List;
 
 public class CreateMisterEntries extends AbstractDatabaseApplication
 {
-    private enum MisterLocation
-    {
-        MISTER_SD("/media/fat/"),
-        MISTER_USB("/media/usb1/");
-
-        String filepath;
-
-        MisterLocation(String filepath)
-        {
-            this.filepath = filepath;
-        }
-
-        public String getMisterFilepath(PocketCore core)
-        {
-            return filepath + "games/" + core.getMisterId();
-        }
-
-        public String getLocalFilepath(DeploymentConfiguration config, PocketCore core)
-        {
-            if (this == MISTER_SD)
-            {
-                return config.getMisterMainGamesDirectory() + core.getMisterId();
-            }
-            if (this == MISTER_USB)
-            {
-                return config.getMisterUSBGamesDirectory() + core.getMisterId();
-            }
-            return null;
-        }
-    }
-
     protected CreateMisterEntries(String context)
     {
         super(context);
@@ -71,8 +40,8 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
     private void searchForNewGamesByCore(PocketCore core)
     {
-        MisterLocation location = getMisterLocation(core);
-        if (location != null)
+        File gamesFolder = new File(core.getMisterLocalFilepath(config()));
+        if (gamesFolder.exists())
         {
             FileFilter filter = new FileFilter()
             {
@@ -86,24 +55,23 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 }
             };
 
-            File gamesFolder = new File(location.getLocalFilepath(config(), core));
             for(File folder : gamesFolder.listFiles(filter))
             {
-                processFolder(folder, location, core);
+                processFolder(folder, core);
             }
         }
     }
 
-    private void processFolder(File folder, MisterLocation location, PocketCore core)
+    private void processFolder(File folder, PocketCore core)
     {
         List<PlatformInfo> platforms = PlatformInfo.getByCoreCode(core);
         for(PlatformInfo platform : platforms)
         {
-            processFolder(folder, location, core, platform);
+            processFolder(folder, core, platform);
         }
     }
 
-    private void processFolder(File folder, MisterLocation location, PocketCore core, PlatformInfo platform)
+    private void processFolder(File folder, PocketCore core, PlatformInfo platform)
     {
         FileFilter filter = new FileFilter()
         {
@@ -124,7 +92,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
         for(File file : folder.listFiles(filter))
         {
             String filename = file.getName();
-            String misterFilepath = location.getMisterFilepath(core) + "/" + folder.getName() + "/" + file.getName();
+            String misterFilepath = core.getMisterDriveFilepath() + "/" + folder.getName() + "/" + file.getName();
 
             PocketGame game = pocketGameDAO().getByMisterFilename(filename);
             if (game == null)
@@ -148,19 +116,6 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 }
             }
         }
-    }
-
-    private MisterLocation getMisterLocation(PocketCore core)
-    {
-        for(MisterLocation location : MisterLocation.values())
-        {
-            String path = location.getLocalFilepath(config(), core);
-            if (new File(path).exists())
-            {
-                return location;
-            }
-        }
-        return null;
     }
 
 
