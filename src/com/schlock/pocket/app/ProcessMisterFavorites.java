@@ -18,13 +18,20 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
 
     void process()
     {
-        eraseFavorites();
-        writeFavorites();
+        File favorites = new File(config().getMisterFavoritesDirectory());
+        if (favorites.exists())
+        {
+            eraseFavorites(favorites);
+            writeFavorites();
+        }
+        else
+        {
+            System.out.println("Favorites folder is missing.");
+        }
     }
 
-    private void eraseFavorites()
+    private void eraseFavorites(File favorites)
     {
-        File favorites = new File(config().getMisterFavoritesDirectory());
         if (favorites.exists())
         {
             for(File folder : favorites.listFiles())
