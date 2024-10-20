@@ -80,6 +80,8 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
 
     private String generateGameJson()
     {
+        List<JsonObject> jsonObjects = new ArrayList<>();
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PocketCore.class, new JsonSerializer<PocketCore>()
                 {
@@ -108,9 +110,13 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         for(PocketGame game : games)
         {
             game.setDevices();
-        }
 
-        return gson.toJson(games);
+            JsonObject element = gson.toJsonTree(game).getAsJsonObject();
+            element.add("coreName", new JsonPrimitive(game.getCore().getName()));
+
+            jsonObjects.add(element);
+        }
+        return gson.toJson(jsonObjects);
     }
 
 
