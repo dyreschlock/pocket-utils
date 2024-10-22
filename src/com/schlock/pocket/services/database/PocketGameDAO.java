@@ -1,5 +1,7 @@
 package com.schlock.pocket.services.database;
 
+import com.schlock.pocket.entites.PlatformInfo;
+import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -22,20 +24,6 @@ public class PocketGameDAO
         return query.list();
     }
 
-    public List<PocketGame> getAllAvailable()
-    {
-        String text = "select g " +
-                " from PocketGame g " +
-                " join g.core c " +
-                " join c.category cat " +
-                " where c.copy is true " +
-                " and cat.copy is true " +
-                " order by g.id ";
-
-        Query query = session.createQuery(text);
-        return query.list();
-    }
-
     public List<PocketGame> getAllAvailableMister()
     {
         String text = " select g " +
@@ -47,14 +35,17 @@ public class PocketGameDAO
         return query.list();
     }
 
-    public PocketGame getByMisterFilename(String filename)
+    public PocketGame getByMisterFilename(String filename, PocketCore core)
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.misterFilename = :filename ";
+                " join g.core c " +
+                " where g.misterFilename = :filename " +
+                " and c.id = :coreId ";
 
         Query query = session.createQuery(text);
         query.setParameter("filename", filename);
+        query.setParameter("coreId", core.getId());
 
         List<PocketGame> games = query.list();
         if (games.isEmpty())
@@ -79,6 +70,18 @@ public class PocketGameDAO
             return null;
         }
         return games.get(0);
+    }
+
+    public List<PocketGame> getByPlatform(PlatformInfo platform)
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.platform = :platform ";
+
+        Query query = session.createQuery(text);
+        query.setParameter("platform", platform);
+
+        return query.list();
     }
 
     public List<PocketGame> getByMissingBoxartThumbnail()

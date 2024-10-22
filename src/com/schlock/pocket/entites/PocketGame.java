@@ -268,7 +268,7 @@ public class PocketGame
         game.boxartFilename = game.gameName + ".png";
         game.boxartConverted = false;
 
-        if (core.isRomsSorted())
+        if (core != null && core.isRomsSorted())
         {
             game.genre = file.getParentFile().getName();
         }
@@ -280,6 +280,31 @@ public class PocketGame
 
         game.inLibrary = false;
 
+        return game;
+    }
+
+    public static PocketGame updateFromMisterArcade(PocketGame game, File file, String misterFilepath)
+    {
+        if (game.gameName == null)
+        {
+            game.gameName = getGameNameFromFile(file);
+        }
+        if (game.boxartFilename == null)
+        {
+            game.boxartFilename = game.gameName + ".png";
+        }
+        if (game.misterFilename == null)
+        {
+            game.misterFilename = file.getName();
+        }
+        if (game.misterFilepath == null)
+        {
+            game.misterFilepath = misterFilepath;
+        }
+        if (game.fileHash == null)
+        {
+            game.fileHash = calculateCRC32(file);
+        }
         return game;
     }
 

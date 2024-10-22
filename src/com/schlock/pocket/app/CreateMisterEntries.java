@@ -20,6 +20,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
     {
         searchForNewGamesByCore();
         searchForNewGamesByArcade();
+        searchForNewGamesByDOS();
     }
 
 
@@ -79,7 +80,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
             {
                 for(String EXT : platform.getFileExtensions())
                 {
-                    if (file.getName().endsWith(EXT) &&
+                    if (file.getName().toLowerCase().endsWith(EXT) &&
                         !file.getName().startsWith("."))
                     {
                         return true;
@@ -94,7 +95,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
             String filename = file.getName();
             String misterFilepath = core.getMisterRelativeFilepath() + "/" + folder.getName() + "/" + file.getName();
 
-            PocketGame game = pocketGameDAO().getByMisterFilename(filename);
+            PocketGame game = pocketGameDAO().getByMisterFilename(filename, core);
             if (game == null)
             {
                 game = pocketGameDAO().getByPocketFilename(filename);
@@ -130,6 +131,37 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
 
     private void searchForNewGamesByArcade()
+    {
+        String arcadeFilepath = config().getMisterArcadeDirectory();
+
+        for(PocketGame game : pocketGameDAO().getByPlatform(PlatformInfo.ARCADE))
+        {
+            if (game.getMisterFilepath() == null)
+            {
+                String filename = game.getMisterFilename();
+                if (filename == null)
+                {
+                    filename = game.getPocketFilename();
+                    filename = filename.substring(0, filename.indexOf(".json")) + ".mra";
+                }
+
+                String filepath = arcadeFilepath + filename;
+                String misterFilepath = "_Arcade/" + filename;
+
+                File gameFile = new File(filepath);
+                if (gameFile.exists())
+                {
+                    game = PocketGame.updateFromMisterArcade(game, gameFile, misterFilepath);
+
+                    save(game);
+
+                    System.out.println("Updated Arcade game in database: " + game.getGameName());
+                }
+            }
+        }
+    }
+
+    private void searchForNewGamesByDOS()
     {
 
     }

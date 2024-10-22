@@ -106,13 +106,23 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .setPrettyPrinting()
                 .create();
 
-        List<PocketGame> games = pocketGameDAO().getAllAvailable();
+        List<PocketGame> games = pocketGameDAO().getAll();
         for(PocketGame game : games)
         {
             game.setDevices();
 
+            String coreName = null;
+            if (game.getPlatform().isArcade())
+            {
+                coreName = "Arcade";
+            }
+            else if (game.getCore() != null)
+            {
+                coreName = game.getCore().getName();
+            }
+
             JsonObject element = gson.toJsonTree(game).getAsJsonObject();
-            element.add("coreName", new JsonPrimitive(game.getCore().getName()));
+            element.add("coreName", new JsonPrimitive(coreName));
 
             jsonObjects.add(element);
         }
