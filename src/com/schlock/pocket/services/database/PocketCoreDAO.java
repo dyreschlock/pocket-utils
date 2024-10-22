@@ -56,8 +56,7 @@ public class PocketCoreDAO
         String text = " select c " +
                 " from PocketCore c " +
                 " join c.category cat " +
-                " where c.copy is true " +
-                " and cat.copy is true " +
+                " where cat.copy is true " +
                 " and c.name is not null " +
                 " and c.platformId is not null " +
                 " and c.category is not null " +
@@ -74,8 +73,7 @@ public class PocketCoreDAO
         String text = " select c " +
                 " from PocketCore c " +
                 " join c.category cat " +
-                " where c.copy is true " +
-                " and cat.copy is true " +
+                " where cat.copy is true " +
                 " and c.name is not null " +
                 " and c.platformId is not null " +
                 " and c.category is not null " +
