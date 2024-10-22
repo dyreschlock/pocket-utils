@@ -51,7 +51,11 @@ public enum MisterMglInfo
 
     SUPERVISION("_Console/SuperVision", "1", "f", "1"),
 
-    ARCADE;
+
+    X68000("_Computer/X68000", "1", "s", "2"),
+
+    ARCADE,
+    DOS;
 
     String rbf;
     String delay;

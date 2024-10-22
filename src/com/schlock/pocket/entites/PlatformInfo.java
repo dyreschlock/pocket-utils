@@ -26,14 +26,14 @@ public enum PlatformInfo
 
     //SNK
     NEO_GEO_CD("SNK_-_Neo_Geo_CD", "ngcd", "chd"),
-    NEO_GEO("SNK_-_Neo_Geo", "ng", "json"),
+    NEO_GEO("SNK_-_Neo_Geo", "ng", "json", "neo"),
 
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
 
 
     //Sega
-    SEGA_SATURN("Sega_-_Saturn", "sat", "chd"),
+    SEGA_SATURN("Sega_-_Saturn", "saturn", "chd"),
     SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "chd"),
     SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
@@ -90,6 +90,11 @@ public enum PlatformInfo
 
     //Microsoft_-_MSX2
     //Microsoft_-_MSX,
+
+    X68000("Sharp_-_X68000", "x68000", "hdf"),
+
+    DOS("DOS", "", ""),
+
 
     ARCADE("MAME", "arcade", "json");
 
