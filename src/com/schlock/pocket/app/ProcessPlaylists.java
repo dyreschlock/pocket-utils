@@ -1,6 +1,7 @@
 package com.schlock.pocket.app;
 
 import com.google.gson.*;
+import com.mysql.jdbc.StringUtils;
 import com.schlock.pocket.entites.*;
 import com.schlock.pocket.services.DeploymentConfiguration;
 import org.apache.commons.io.FileUtils;
@@ -109,12 +110,15 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         List<PocketGame> games = pocketGameDAO().getAll();
         for(PocketGame game : games)
         {
-            game.setDevices();
+            if (!StringUtils.isNullOrEmpty(game.getGenre()))
+            {
+                game.setDevices();
 
-            JsonObject element = gson.toJsonTree(game).getAsJsonObject();
-            element.add("coreName", new JsonPrimitive(game.getCoreName()));
+                JsonObject element = gson.toJsonTree(game).getAsJsonObject();
+                element.add("coreName", new JsonPrimitive(game.getCoreName()));
 
-            jsonObjects.add(element);
+                jsonObjects.add(element);
+            }
         }
         return gson.toJson(jsonObjects);
     }
