@@ -108,6 +108,20 @@ public class PocketGame
         return core.getMisterDrive().filepath + getMisterFilepath();
     }
 
+    public String getCoreName()
+    {
+        if (platform.isArcade())
+        {
+            return "Arcade";
+        }
+        else if (core != null)
+        {
+            return core.getName();
+        }
+        return null;
+    }
+
+
     public Long getId()
     {
         return this.id;

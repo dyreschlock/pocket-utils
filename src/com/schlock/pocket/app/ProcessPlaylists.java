@@ -111,18 +111,8 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
         {
             game.setDevices();
 
-            String coreName = null;
-            if (game.getPlatform().isArcade())
-            {
-                coreName = "Arcade";
-            }
-            else if (game.getCore() != null)
-            {
-                coreName = game.getCore().getName();
-            }
-
             JsonObject element = gson.toJsonTree(game).getAsJsonObject();
-            element.add("coreName", new JsonPrimitive(coreName));
+            element.add("coreName", new JsonPrimitive(game.getCoreName()));
 
             jsonObjects.add(element);
         }

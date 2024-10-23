@@ -23,9 +23,10 @@ public class DeploymentConfiguration
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
     private static final String PLATFORMS_FOLDER = "Platforms/";
 
+    public static final String MISTER_ARCADE_FOLDER = "_Arcade/";
+
     private static final String FAVORITES_FOLDER = "_@Favorites/_@All/";
     private static final String GAMES_FOLDER = "games/";
-    public static final String ARCADE_FOLDER = "_Arcade/";
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
@@ -105,9 +106,9 @@ public class DeploymentConfiguration
         return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + FAVORITES_FOLDER;
     }
 
-    public String getMisterArcadeDirectory()
+    public String getMisterMainDirectory()
     {
-        return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + ARCADE_FOLDER;
+        return getProperties().getProperty(MISTER_MAIN_DIRECTORY);
     }
 
     public String getMisterMainGamesDirectory()

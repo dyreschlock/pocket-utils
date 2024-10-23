@@ -132,7 +132,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
     private void searchForNewGamesByArcade()
     {
-        String arcadeFilepath = config().getMisterArcadeDirectory();
+        String arcadeFilepath = config().getMisterMainDirectory() + DeploymentConfiguration.MISTER_ARCADE_FOLDER;
 
         for(PocketGame game : pocketGameDAO().getByPlatform(PlatformInfo.ARCADE))
         {
@@ -146,7 +146,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 }
 
                 String filepath = arcadeFilepath + filename;
-                String misterFilepath = "_Arcade/" + filename;
+                String misterFilepath = DeploymentConfiguration.MISTER_ARCADE_FOLDER + filename;
 
                 File gameFile = new File(filepath);
                 if (gameFile.exists())

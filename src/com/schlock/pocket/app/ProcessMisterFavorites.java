@@ -3,6 +3,7 @@ package com.schlock.pocket.app;
 import com.schlock.pocket.entites.MisterMglInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,20 +52,33 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
 
     private void writeFavorites()
     {
+        String mainDir = config().getMisterMainDirectory();
         String favoritesDir = config().getMisterFavoritesDirectory();
 
         for(PocketGame game : pocketGameDAO().getAllAvailableMister())
         {
             if (game.getPlatform().isArcade())
             {
+                File sourceMra = new File(mainDir + game.getMisterFilepath());
 
+                String filepath = favoritesDir + MisterMglInfo.ARCADE.getShortcutFilepath(game);
+                File destinationMra = new File(filepath);
+
+                try
+                {
+                    FileUtils.copyFile(sourceMra, destinationMra);
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
             else
             {
                 MisterMglInfo mgl = MisterMglInfo.getInfo(game);
                 if (mgl != null)
                 {
-                    String filepath = favoritesDir + mgl.getMglFilepath(game);
+                    String filepath = favoritesDir + mgl.getShortcutFilepath(game);
                     String contents = mgl.getMglContents(game);
 
                     File mglFile = new File(filepath);

@@ -74,11 +74,16 @@ public enum MisterMglInfo
     {
     }
 
-    public String getMglFilepath(PocketGame game)
+    public String getShortcutFilepath(PocketGame game)
     {
-        String filename = "_%s/%s (%s).mgl";
+        String fileExtension = "mgl";
+        if (this == ARCADE)
+        {
+            fileExtension = "mra";
+        }
 
-        return String.format(filename, game.getGenre(), game.getGameName(), game.getCore().getName());
+        String filepath = "_%s/%s (%s).%s";
+        return String.format(filepath, game.getGenre(), game.getGameName(), game.getCoreName(), fileExtension);
     }
 
     public String getMglContents(PocketGame game)
