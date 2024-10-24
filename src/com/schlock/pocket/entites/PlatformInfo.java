@@ -93,7 +93,7 @@ public enum PlatformInfo
 
     X68000("Sharp_-_X68000", "x68000", "hdf"),
 
-    DOS_486("DOS", "486pc", ""),
+    DOS_486("DOS", "486pc", "mgl"),
 
 
     ARCADE("MAME", "arcade", "json");
