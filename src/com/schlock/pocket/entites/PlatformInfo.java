@@ -93,7 +93,7 @@ public enum PlatformInfo
 
     X68000("Sharp_-_X68000", "x68000", "hdf"),
 
-    DOS("DOS", "", ""),
+    DOS_486("DOS", "486pc", ""),
 
 
     ARCADE("MAME", "arcade", "json");
@@ -119,6 +119,11 @@ public enum PlatformInfo
     public boolean isArcade()
     {
         return this == ARCADE;
+    }
+
+    public boolean isDos()
+    {
+        return this == DOS_486;
     }
 
     public String getRepoName()

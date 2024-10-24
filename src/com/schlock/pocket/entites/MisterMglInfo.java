@@ -55,7 +55,7 @@ public enum MisterMglInfo
     X68000("_Computer/X68000", "1", "s", "2"),
 
     ARCADE,
-    DOS;
+    DOS_486;
 
     String rbf;
     String delay;

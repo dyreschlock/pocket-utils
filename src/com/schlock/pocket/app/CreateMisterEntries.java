@@ -132,7 +132,8 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
     private void searchForNewGamesByArcade()
     {
-        String arcadeFilepath = config().getMisterMainDirectory() + DeploymentConfiguration.MISTER_ARCADE_FOLDER;
+        String mainFilepath = config().getMisterMainDirectory();
+        String arcadeFilepath = mainFilepath + DeploymentConfiguration.MISTER_ARCADE_FOLDER;
 
         for(PocketGame game : pocketGameDAO().getByPlatform(PlatformInfo.ARCADE))
         {
@@ -158,12 +159,55 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                     System.out.println("Updated Arcade game in database: " + game.getGameName());
                 }
             }
+            else if (game.getMisterFilename() == null)
+            {
+                String filepath = mainFilepath + game.getMisterFilepath();
+                File gameFile = new File(filepath);
+                if (gameFile.exists())
+                {
+                    game = PocketGame.updateFromMisterArcade(game, gameFile, game.getMisterFilepath());
+
+                    save(game);
+
+                    System.out.println("Updated Arcade game in database: " + game.getGameName());
+                }
+            }
         }
     }
 
     private void searchForNewGamesByDOS()
     {
+        final String DOS_FOLDER = "_DOS Games/";
+        final String MGL_EXT = ".mgl";
 
+        PlatformInfo platform = PlatformInfo.DOS_486;
+        PocketCore core = pocketCoreDAO().getByPlatformId(platform.getPlatformId());
+
+        String dosFilepath = config().getMisterMainDirectory() + DOS_FOLDER;
+
+        FileFilter filter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                return file.getName().toLowerCase().endsWith(MGL_EXT) &&
+                        !file.getName().startsWith(".");
+            }
+        };
+
+        for(File file : new File(dosFilepath).listFiles(filter))
+        {
+            PocketGame game = pocketGameDAO().getByMisterFilename(file.getName(), core);
+            if (game == null)
+            {
+                String misterFilepath = DOS_FOLDER + file.getName();
+
+                game = PocketGame.createFromMister(file, core, platform, misterFilepath);
+
+                save(game);
+
+                System.out.println("Create new DOS game: " + game.getGameName());
+            }
+        }
     }
 
     public static void main(String[] args)

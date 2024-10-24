@@ -57,16 +57,16 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
 
         for(PocketGame game : pocketGameDAO().getAllAvailableMister())
         {
-            if (game.getPlatform().isArcade())
+            if (game.getPlatform().isArcade() || game.getPlatform().isDos())
             {
-                File sourceMra = new File(mainDir + game.getMisterFilepath());
+                File source = new File(mainDir + game.getMisterFilepath());
 
-                String filepath = favoritesDir + MisterMglInfo.ARCADE.getShortcutFilepath(game);
+                String filepath = favoritesDir + MisterMglInfo.getInfo(game).getShortcutFilepath(game);
                 File destinationMra = new File(filepath);
 
                 try
                 {
-                    FileUtils.copyFile(sourceMra, destinationMra);
+                    FileUtils.copyFile(source, destinationMra);
                 }
                 catch (Exception e)
                 {
