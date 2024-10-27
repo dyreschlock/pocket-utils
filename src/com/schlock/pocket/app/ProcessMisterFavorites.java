@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 
 public class ProcessMisterFavorites extends AbstractDatabaseApplication
 {
+    private static final String FAVORITES_FOLDER = "_TapTo";
+
     protected ProcessMisterFavorites(String context)
     {
         super(context);
@@ -33,9 +35,17 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
 
     private void eraseFavorites(File favorites)
     {
-        if (favorites.exists())
+        String favfavFilepath = favorites.getParentFile().getAbsolutePath() + FAVORITES_FOLDER;
+
+        deleteFolderAndContents(favorites);
+        deleteFolderAndContents(new File(favfavFilepath));
+    }
+
+    private void deleteFolderAndContents(File sourceFolder)
+    {
+        if (sourceFolder.exists())
         {
-            for(File folder : favorites.listFiles())
+            for(File folder : sourceFolder.listFiles())
             {
                 if (folder.isDirectory())
                 {
@@ -46,14 +56,16 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
                 }
                 folder.delete();
             }
-            favorites.delete();
+            sourceFolder.delete();
         }
     }
 
     private void writeFavorites()
     {
+        String favorites = config().getMisterFavoritesDirectory();
+        String favfavFilepath = new File(favorites).getParentFile().getAbsolutePath() + "/" + FAVORITES_FOLDER + "/";
+
         String mainDir = config().getMisterMainDirectory();
-        String favoritesDir = config().getMisterFavoritesDirectory();
 
         for(PocketGame game : pocketGameDAO().getAllAvailableMister())
         {
@@ -61,16 +73,13 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
             {
                 File source = new File(mainDir + game.getMisterFilepath());
 
-                String filepath = favoritesDir + MisterMglInfo.getInfo(game).getShortcutFilepath(game);
-                File destinationMra = new File(filepath);
+                String filepath = favorites + MisterMglInfo.getInfo(game).getShortcutFilepath(game);
+                copySourceFileToDestination(source, filepath);
 
-                try
+                if (game.isFavorite())
                 {
-                    FileUtils.copyFile(source, destinationMra);
-                }
-                catch (Exception e)
-                {
-                    throw new RuntimeException(e);
+                    filepath = favfavFilepath + MisterMglInfo.getInfo(game).getShortcutFilepath(game);
+                    copySourceFileToDestination(source, filepath);
                 }
             }
             else
@@ -78,22 +87,48 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
                 MisterMglInfo mgl = MisterMglInfo.getInfo(game);
                 if (mgl != null)
                 {
-                    String filepath = favoritesDir + mgl.getShortcutFilepath(game);
                     String contents = mgl.getMglContents(game);
 
-                    File mglFile = new File(filepath);
-                    mglFile.getParentFile().mkdirs();
+                    String filepath = favorites + mgl.getShortcutFilepath(game);
+                    writeContentsToDestination(contents, filepath);
 
-                    try
+                    if (game.isFavorite())
                     {
-                        Files.write(Paths.get(filepath), contents.getBytes());
-                    }
-                    catch (IOException e)
-                    {
-                        throw new RuntimeException(e);
+                        filepath = favfavFilepath + mgl.getShortcutFilepath(game);
+                        writeContentsToDestination(contents, filepath);
                     }
                 }
             }
+        }
+    }
+
+    private void copySourceFileToDestination(File source, String destination)
+    {
+        File destinationFile = new File(destination);
+        destinationFile.getParentFile().mkdirs();
+
+        try
+        {
+            FileUtils.copyFile(source, destinationFile);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeContentsToDestination(String contents, String destination)
+    {
+        File mglFile = new File(destination);
+        mglFile.getParentFile().mkdirs();
+
+        try
+        {
+            Files.write(Paths.get(destination), contents.getBytes());
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 

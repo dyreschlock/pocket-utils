@@ -57,10 +57,10 @@ public enum MisterMglInfo
     ARCADE,
     DOS_486;
 
-    String rbf;
-    String delay;
-    String type;
-    String index;
+    private String rbf;
+    private String delay;
+    private String type;
+    private String index;
 
     MisterMglInfo(String rbf, String delay, String type, String index)
     {

@@ -36,6 +36,9 @@ public class PocketGame
     @Expose
     private String releaseDate;
 
+    @Column(name = "fav")
+    private boolean favorite;
+
     @Column(name = "pocket_filename")
     private String pocketFilename;
 
@@ -105,7 +108,7 @@ public class PocketGame
 
     public String getMisterAbsoluteFilepath()
     {
-        return core.getMisterDrive().filepath + getMisterFilepath();
+        return core.getMisterDrive().getMisterFilepath() + getMisterFilepath();
     }
 
     public String getCoreName()
@@ -170,6 +173,16 @@ public class PocketGame
     public void setReleaseDate(String releaseDate)
     {
         this.releaseDate = releaseDate;
+    }
+
+    public boolean isFavorite()
+    {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite)
+    {
+        this.favorite = favorite;
     }
 
     public String getPocketFilename()
@@ -277,6 +290,8 @@ public class PocketGame
     private static PocketGame createInitialGame(File file, PocketCore core, PlatformInfo platform)
     {
         PocketGame game = new PocketGame();
+
+        game.favorite = false;
 
         game.gameName = getGameNameFromFile(file);
         game.boxartFilename = game.gameName + ".png";
