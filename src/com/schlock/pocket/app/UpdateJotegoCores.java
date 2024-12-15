@@ -29,11 +29,11 @@ public class UpdateJotegoCores extends AbstractDatabaseApplication
         {
             if (S16_COMBO.equalsIgnoreCase(core.getPlatformId()))
             {
-                updateSegaComboCore(core);
+                updateSegaComboCore();
             }
             else if (CZ80_COMBO.equalsIgnoreCase(core.getPlatformId()))
             {
-                updateCapcomComboCore(core);
+                updateCapcomComboCore();
             }
             else
             {
@@ -72,7 +72,7 @@ public class UpdateJotegoCores extends AbstractDatabaseApplication
         }
     }
 
-    private void updateSegaComboCore(PocketCore core)
+    private void updateSegaComboCore()
     {
         final String S16 = "jts16.rbf_r";
         final String S16B = "jts16b.rbf_r";
@@ -91,13 +91,59 @@ public class UpdateJotegoCores extends AbstractDatabaseApplication
         }
         else
         {
-            System.out.println("Problems with copy files for Sega System 16 Combo core.");
+            System.out.println("Problems with copying files for Sega System 16 Combo core.");
         }
     }
 
-    private void updateCapcomComboCore(PocketCore core)
+    private void updateCapcomComboCore()
     {
+        final String cz80_1 = "jotego.Capcom_Z80";
+        final String cz80_2 = "jotego.Capcom_Z80_256x240";
+        final String cz80_3 = "jotego.Capcom_Z80_384x224";
 
+        final String j1942 = "jt1942";
+        final String j1943 = "jt1943";
+        final String btiger = "jtbtiger";
+        final String commnd = "jtcommnd";
+        final String exed = "jtexed";
+        final String gunsmk = "jtgunsmk";
+        final String sectnz = "jtsectnz";
+        final String trojan = "jttrojan";
+        final String sarms = "jtsarms";
+
+        boolean success1 = updateCapcomComboCore(cz80_1, j1942, j1943, btiger, commnd, exed, gunsmk);
+        boolean success2 = updateCapcomComboCore(cz80_2, sectnz, trojan);
+        boolean success3 = updateCapcomComboCore(cz80_3, sarms);
+
+        if (success1 && success2 && success3)
+        {
+            System.out.println("Core files successfully copies for Capcom Z80 Combo core.");
+        }
+        else
+        {
+            System.out.println("Problems with copying files for Capcom Z80 Combo core.");
+        }
+    }
+
+    private boolean updateCapcomComboCore(String comboFolder, String... coreNames)
+    {
+        String destFolder = config().getPocketCoresDirectory() + comboFolder + "/";
+
+        boolean successful = true;
+        for(String coreName : coreNames)
+        {
+            String rbf = coreName + RBF_EXT;
+            String folderName = JOTEGO + "." + coreName + "/";
+
+            String source = config().getJotegoCoresPath() + folderName + rbf;
+
+            boolean success = copyFile(source, destFolder + rbf);
+            if (!success)
+            {
+                successful = false;
+            }
+        }
+        return successful;
     }
 
 
