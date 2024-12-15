@@ -111,4 +111,17 @@ public class PocketCoreDAO
 
         return query.list();
     }
+
+
+    public List<PocketCore> getAllToCopyByDev(String developer)
+    {
+        String text = " select c from PocketCore c " +
+                " where c.coreDev = :coreDev " +
+                " and c.copy is true ";
+
+        Query query = session.createQuery(text);
+        query.setParameter("coreDev", developer);
+
+        return query.list();
+    }
 }

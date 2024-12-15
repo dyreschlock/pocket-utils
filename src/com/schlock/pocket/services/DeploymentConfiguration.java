@@ -15,6 +15,8 @@ public class DeploymentConfiguration
     private static final String MISTER_MAIN_DIRECTORY = "mister.main.directory";
     private static final String MISTER_USB_DIRECTORY = "mister.usb.directory";
 
+    private static final String GITHUB_JOTEGO_DIRECTORY = "github.jotego.directory";
+
     private static final String BOXART_SOURCE_URL = "boxart.source.url";
     private static final String BOXART_STORAGE_FOLDER = "library_images/boxart/";
     private static final String BOXART_CONVERTED_FOLDER = "library_images/boxart_converted/";
@@ -22,11 +24,14 @@ public class DeploymentConfiguration
     private static final String ASSETS_FOLDER = "Assets/";
     private static final String LIBRARY_IMAGES_FOLDER = "System/Library/Images/";
     private static final String PLATFORMS_FOLDER = "Platforms/";
+    private static final String CORES_FOLDER = "Cores/";
 
     public static final String MISTER_ARCADE_FOLDER = "_Arcade/";
 
     private static final String FAVORITES_FOLDER = "_@Favorites/_@All/";
     private static final String GAMES_FOLDER = "games/";
+
+    private static final String JOTEGO_CORES_PATH = "pocket/raw/" + CORES_FOLDER;
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
     private static final String ROMZIP_HBSOURCE_URL = "romzip.hbsource.url";
@@ -101,6 +106,11 @@ public class DeploymentConfiguration
         return getProperties().getProperty(POCKET_DIRECTORY) + LIBRARY_IMAGES_FOLDER;
     }
 
+    public String getPocketCoresDirectory()
+    {
+        return getProperties().getProperty(POCKET_DIRECTORY) + CORES_FOLDER;
+    }
+
     public String getMisterFavoritesDirectory()
     {
         return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + FAVORITES_FOLDER;
@@ -120,6 +130,12 @@ public class DeploymentConfiguration
     {
         return getProperties().getProperty(MISTER_USB_DIRECTORY) + GAMES_FOLDER;
     }
+
+    public String getJotegoCoresPath()
+    {
+        return getProperties().getProperty(GITHUB_JOTEGO_DIRECTORY) + JOTEGO_CORES_PATH;
+    }
+
 
     public String getDataDirectory()
     {

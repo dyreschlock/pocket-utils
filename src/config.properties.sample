@@ -7,6 +7,8 @@ mister.usb.directory=
 # This is the local working directory. Check the README for more information
 utility.directory=
 
+github.jotego.directory=
+
 boxart.source.url=https://raw.githubusercontent.com/libretro-thumbnails/%s/master/Named_Boxarts/
 
 romzip.source.url=
