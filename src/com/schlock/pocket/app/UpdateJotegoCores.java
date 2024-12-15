@@ -66,14 +66,36 @@ public class UpdateJotegoCores extends AbstractDatabaseApplication
         {
             System.out.println("Core files successfully copied for: " + core.getPlatformId());
         }
-    }
-
-    private void updateCapcomComboCore(PocketCore core)
-    {
-
+        else
+        {
+            System.out.println("Problems with copying files for: " + core.getPlatformId());
+        }
     }
 
     private void updateSegaComboCore(PocketCore core)
+    {
+        final String S16 = "jts16.rbf_r";
+        final String S16B = "jts16b.rbf_r";
+
+        String s16_rbf = config().getJotegoCoresPath() + "jotego.jts16/" + S16;
+        String s16b_rbf = config().getJotegoCoresPath() + "jotego.jts16b/" + S16B;
+
+        String destFolder = config().getPocketCoresDirectory() + "jotego.jts16_c/";
+
+        boolean successS16 = copyFile(s16_rbf, destFolder + S16);
+        boolean successS16B = copyFile(s16b_rbf, destFolder + S16B);
+
+        if (successS16 && successS16B)
+        {
+            System.out.println("Core files successfully copied for Sega System 16 Combo core.");
+        }
+        else
+        {
+            System.out.println("Problems with copy files for Sega System 16 Combo core.");
+        }
+    }
+
+    private void updateCapcomComboCore(PocketCore core)
     {
 
     }
