@@ -5,8 +5,7 @@ import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.*;
 import java.util.List;
 
 public class CreateMisterEntries extends AbstractDatabaseApplication
@@ -18,9 +17,17 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
     void process()
     {
+        System.out.println("Searching for new games by core.");
         searchForNewGamesByCore();
-        searchForNewGamesByArcade();
-        searchForNewGamesByDOS();
+
+        System.out.println("Searching for new Arcade games.");
+        searchForNewGamesArcade();
+
+        System.out.println("Searching for new DOS games.");
+        searchForNewGamesDOS();
+
+//        System.out.println("Searching for new Amiga games.");
+//        searchForNewGamesAmiga();
     }
 
 
@@ -130,7 +137,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
     }
 
 
-    private void searchForNewGamesByArcade()
+    private void searchForNewGamesArcade()
     {
         String mainFilepath = config().getMisterMainDirectory();
         String arcadeFilepath = mainFilepath + DeploymentConfiguration.MISTER_ARCADE_FOLDER;
@@ -175,7 +182,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
         }
     }
 
-    private void searchForNewGamesByDOS()
+    private void searchForNewGamesDOS()
     {
         final String DOS_FOLDER = "_DOS Games/";
         final String MGL_EXT = ".mgl";
@@ -205,7 +212,41 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                 save(game);
 
-                System.out.println("Create new DOS game: " + game.getGameName());
+                System.out.println("Created new DOS game: " + game.getGameName());
+            }
+        }
+    }
+
+    private void searchForNewGamesAmiga()
+    {
+        String filepath = "";
+        if (new File(filepath).exists())
+        {
+            try
+            {
+                PlatformInfo platform = PlatformInfo.COMMODORE_AMIGA;
+                PocketCore core = pocketCoreDAO().getByPlatformId(platform.getPlatformId());
+
+                String line;
+                BufferedReader reader = new BufferedReader(new FileReader(filepath));
+
+                while((line = reader.readLine()) != null)
+                {
+                    PocketGame game = pocketGameDAO().getByPocketFilename(line);
+                    if (game == null)
+                    {
+                        game = PocketGame.createAmigaGame(line, core, platform);
+
+                        save(game);
+
+                        System.out.println("Create new Amiga game: " + game.getGameName());
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                System.out.println("Problems reading Amiga file.");
+                e.printStackTrace();
             }
         }
     }

@@ -286,7 +286,6 @@ public class PocketGame
     }
 
 
-
     private static PocketGame createInitialGame(File file, PocketCore core, PlatformInfo platform)
     {
         PocketGame game = new PocketGame();
@@ -354,12 +353,43 @@ public class PocketGame
         return game;
     }
 
+    public static PocketGame createAmigaGame(String gameEntry, PocketCore core, PlatformInfo platform)
+    {
+        PocketGame game = new PocketGame();
+
+        game.favorite = false;
+
+        game.gameName = gameEntry;
+        game.boxartFilename = game.gameName + ".png";
+        game.boxartConverted = false;
+
+        game.pocketFilename = gameEntry;
+        game.fileHash = calculateCRC32(gameEntry);
+
+        game.core = core;
+        game.platform = platform;
+
+        game.inLibrary = false;
+
+        return game;
+    }
+
+
     private static String getGameNameFromFile(File file)
     {
         String fullName = file.getName();
 
         int EXTpoint = fullName.lastIndexOf(".");
         return fullName.substring(0, EXTpoint);
+    }
+
+    private static String calculateCRC32(String text)
+    {
+        CRC32 crcMaker = new CRC32();
+        crcMaker.update(text.getBytes());
+
+        long crc = crcMaker.getValue();
+        return Long.toHexString(crc);
     }
 
     private static String calculateCRC32(File file)
