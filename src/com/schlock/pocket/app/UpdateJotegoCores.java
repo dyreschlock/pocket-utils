@@ -52,6 +52,12 @@ public class UpdateJotegoCores extends AbstractDatabaseApplication
         String sourceCoreFolder = config().getJotegoCoresPath() + coreFolder;
         String destinationCoreFolder = config().getPocketCoresDirectory() + coreFolder;
 
+        if (!new File(destinationCoreFolder).exists())
+        {
+            System.out.println("Skipping core files for: " + core.getPlatformId());
+            return;
+        }
+
         String srcJson = sourceCoreFolder + CORE_JSON;
         String destJson = destinationCoreFolder + CORE_JSON;
 
