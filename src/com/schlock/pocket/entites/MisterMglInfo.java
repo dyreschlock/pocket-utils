@@ -10,7 +10,7 @@ public enum MisterMglInfo
     NINTENDO_64("_Console/N64", "1", "f", "1"),
     SUPER_NINTENDO("_Console/SNES", "2", "f", "0"),
     FAMICOM_DISK("_Console/NES", "2", "f", "1"),
-    NES("_Console/NES", "2", "f", "1"),
+    NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
 
     GAMEBOY_ADVANCE("_Console/GBA", "2", "f", "1"),
     GAMEBOY_COLOR("_Console/Gameboy", "2", "f", "1"),
@@ -62,12 +62,21 @@ public enum MisterMglInfo
     private String type;
     private String index;
 
+    private String achievement_rbf;
+
     MisterMglInfo(String rbf, String delay, String type, String index)
+    {
+        this(rbf, null, delay, type, index);
+    }
+
+    MisterMglInfo(String rbf, String achievement_rbf, String delay, String type, String index)
     {
         this.rbf = rbf;
         this.delay = delay;
         this.type = type;
         this.index = index;
+
+        this.achievement_rbf = achievement_rbf;
     }
 
     MisterMglInfo()
@@ -83,16 +92,36 @@ public enum MisterMglInfo
         }
 
         String filepath = "_%s/%s (%s).%s";
-        return String.format(filepath, game.getGenre(), game.getGameName(), game.getCoreName(), fileExtension);
+        return String.format(filepath, game.getGenre(), game.getTitle(), game.getCoreName(), fileExtension);
     }
 
     public String getMglContents(PocketGame game)
     {
-        String contents = "" +
-                "<mistergamedescription>\r\n" +
-                "   <rbf>%s</rbf>\r\n" +
-                "   <file delay=\"%s\" type=\"%s\" index=\"%s\" path=\"%s\" />\r\n" +
-                "</mistergamedescription>";
+        String contents;
+        String rbf;
+        if (game.isHasAchievementProgress())
+        {
+            rbf = this.achievement_rbf;
+
+            String setname = this.rbf.split("/")[1];
+
+            contents = "" +
+                    "<mistergamedescription>\r\n" +
+                    "   <rbf>%s</rbf>\r\n" +
+                    "   <setname same_dir=\"1\">RA_" + setname +"</setname>\r\n" +
+                    "   <file delay=\"%s\" type=\"%s\" index=\"%s\" path=\"%s\" />\r\n" +
+                    "</mistergamedescription>";
+        }
+        else
+        {
+            rbf = this.rbf;
+
+            contents = "" +
+                    "<mistergamedescription>\r\n" +
+                    "   <rbf>%s</rbf>\r\n" +
+                    "   <file delay=\"%s\" type=\"%s\" index=\"%s\" path=\"%s\" />\r\n" +
+                    "</mistergamedescription>";
+        }
 
         return String.format(contents, rbf, delay, type, index, game.getMisterAbsoluteFilepath());
     }
@@ -100,10 +129,10 @@ public enum MisterMglInfo
 
     public static MisterMglInfo getInfo(PocketGame game)
     {
-        PlatformInfo platform = game.getPlatform();
+        String platformName = game.getPlatform().name();
         for(MisterMglInfo info : MisterMglInfo.values())
         {
-            if (info.name().equals(platform.name()))
+            if (info.name().equals(platformName))
             {
                 return info;
             }
