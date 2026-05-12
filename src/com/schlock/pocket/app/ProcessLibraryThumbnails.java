@@ -43,7 +43,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
 
                 if (localFile.exists())
                 {
-                    System.out.println("Local Boxart file available: " + game.getGameName());
+                    System.out.println("Local Boxart file available: " + game.getTitle());
 
                     // File hash should already be created.  But...  Just in case.
 //                    if (game.getFileHash() == null || game.getFileHash().isBlank())
@@ -69,7 +69,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
             }
             catch(Exception e)
             {
-                System.err.println("Could not find boxart for " + game.getGameName());
+                System.err.println("Could not find boxart for " + game.getTitle());
             }
         }
     }
@@ -85,7 +85,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
                 game.setInLibrary(true);
                 save(game);
 
-                System.out.println("Library Image Exists: " + game.getGameName());
+                System.out.println("Library Image Exists: " + game.getTitle());
             }
             else
             {
@@ -97,7 +97,7 @@ public class ProcessLibraryThumbnails extends AbstractDatabaseApplication
                     game.setInLibrary(true);
                     save(game);
 
-                    System.out.println("Library Image Created: " + game.getGameName());
+                    System.out.println("Library Image Created: " + game.getTitle());
                 }
             }
         }

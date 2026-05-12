@@ -145,11 +145,11 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                     try
                     {
                         FileUtils.copyFile(input, output);
-                        System.out.println("Image copied for game: " + game.getGameName());
+                        System.out.println("Image copied for game: " + game.getTitle());
                     }
                     catch (IOException e)
                     {
-                        System.out.println("Exception while copying game box art: " + game.getGameName());
+                        System.out.println("Exception while copying game box art: " + game.getTitle());
                     }
                 }
             }

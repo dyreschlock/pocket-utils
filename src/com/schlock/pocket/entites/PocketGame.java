@@ -20,9 +20,9 @@ public class PocketGame
     @GeneratedValue
     private Long id;
 
-    @Column(name = "gameName")
+    @Column(name = "title")
     @Expose
-    private String gameName;
+    private String title;
 
     @Column(name = "developer")
     @Expose
@@ -76,6 +76,10 @@ public class PocketGame
     @Column(name = "inLibrary")
     private boolean inLibrary;
 
+    @Column(name = "achievement")
+    @Enumerated(EnumType.STRING)
+    private AchievementLevel achievementLevel;
+
     @Transient
     @Expose
     private List<String> devices = new ArrayList<>();
@@ -124,6 +128,11 @@ public class PocketGame
         return null;
     }
 
+    public boolean isHasAchievementProgress()
+    {
+        return achievementLevel != null;
+    }
+
 
     public Long getId()
     {
@@ -135,14 +144,14 @@ public class PocketGame
         this.id = id;
     }
 
-    public String getGameName()
+    public String getTitle()
     {
-        return gameName;
+        return title;
     }
 
-    public void setGameName(String gameName)
+    public void setTitle(String title)
     {
-        this.gameName = gameName;
+        this.title = title;
     }
 
     public String getDeveloper()
@@ -285,6 +294,17 @@ public class PocketGame
         this.inLibrary = inLibrary;
     }
 
+    public AchievementLevel getAchievementLevel()
+    {
+        return achievementLevel;
+    }
+
+    public void setAchievementLevel(AchievementLevel achievementLevel)
+    {
+        this.achievementLevel = achievementLevel;
+    }
+
+
 
     private static PocketGame createInitialGame(File file, PocketCore core, PlatformInfo platform)
     {
@@ -292,8 +312,8 @@ public class PocketGame
 
         game.favorite = false;
 
-        game.gameName = getGameNameFromFile(file);
-        game.boxartFilename = game.gameName + ".png";
+        game.title = getTitleFromFile(file);
+        game.boxartFilename = game.title + ".png";
         game.boxartConverted = false;
 
         if (core != null && core.isRomsSorted())
@@ -313,13 +333,13 @@ public class PocketGame
 
     public static PocketGame updateFromMisterArcade(PocketGame game, File file, String misterFilepath)
     {
-        if (game.gameName == null)
+        if (game.title == null)
         {
-            game.gameName = getGameNameFromFile(file);
+            game.title = getTitleFromFile(file);
         }
         if (game.boxartFilename == null)
         {
-            game.boxartFilename = game.gameName + ".png";
+            game.boxartFilename = game.title + ".png";
         }
         if (game.misterFilename == null)
         {
@@ -359,8 +379,8 @@ public class PocketGame
 
         game.favorite = false;
 
-        game.gameName = gameEntry;
-        game.boxartFilename = game.gameName + ".png";
+        game.title = gameEntry;
+        game.boxartFilename = game.title + ".png";
         game.boxartConverted = false;
 
         game.pocketFilename = gameEntry;
@@ -375,7 +395,7 @@ public class PocketGame
     }
 
 
-    private static String getGameNameFromFile(File file)
+    private static String getTitleFromFile(File file)
     {
         String fullName = file.getName();
 

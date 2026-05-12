@@ -111,7 +111,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                     game = PocketGame.createFromMister(file, core, platform, misterFilepath);
                     save(game);
 
-                    System.out.println("New game created in database: " + game.getGameName());
+                    System.out.println("New game created in database: " + game.getTitle());
                 }
                 else if(!game.isAvailableOnMister())
                 {
@@ -120,7 +120,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                     save(game);
 
-                    System.out.println("Updated Pocket game in database: " + game.getGameName());
+                    System.out.println("Updated Pocket game in database: " + game.getTitle());
                 }
             }
             else
@@ -130,7 +130,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                     game.setMisterFilepath(misterFilepath);
                     save(game);
 
-                    System.out.println("Updating filepath in database: " + game.getGameName());
+                    System.out.println("Updating filepath in database: " + game.getTitle());
                 }
             }
         }
@@ -163,7 +163,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                     save(game);
 
-                    System.out.println("Updated Arcade game in database: " + game.getGameName());
+                    System.out.println("Updated Arcade game in database: " + game.getTitle());
                 }
             }
             else if (game.getMisterFilename() == null)
@@ -176,7 +176,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                     save(game);
 
-                    System.out.println("Updated Arcade game in database: " + game.getGameName());
+                    System.out.println("Updated Arcade game in database: " + game.getTitle());
                 }
             }
         }
@@ -212,7 +212,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                 save(game);
 
-                System.out.println("Created new DOS game: " + game.getGameName());
+                System.out.println("Created new DOS game: " + game.getTitle());
             }
         }
     }
@@ -239,7 +239,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
 
                         save(game);
 
-                        System.out.println("Create new Amiga game: " + game.getGameName());
+                        System.out.println("Create new Amiga game: " + game.getTitle());
                     }
                 }
             }

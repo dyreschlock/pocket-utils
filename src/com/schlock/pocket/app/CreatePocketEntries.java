@@ -172,14 +172,14 @@ public class CreatePocketEntries extends AbstractDatabaseApplication
                     game = PocketGame.createFromPocket(file, core, platform);
                     save(game);
 
-                    System.out.println("New game created in database: " + game.getGameName());
+                    System.out.println("New game created in database: " + game.getTitle());
                 }
                 else if (!game.getCore().equals(core))
                 {
                     game.setCore(core);
                     save(game);
 
-                    System.out.println("Game updated with new core: " + game.getGameName() + " w/ core: " + core.getPlatformId());
+                    System.out.println("Game updated with new core: " + game.getTitle() + " w/ core: " + core.getPlatformId());
                 }
             }
         }
