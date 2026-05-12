@@ -31,6 +31,8 @@ public class DeploymentConfiguration
     private static final String FAVORITES_FOLDER = "_@Favorites/_@All/";
     private static final String GAMES_FOLDER = "games/";
 
+    private static final String ACHIEVEMENTS_FOLDER = "_@Achievements/";
+
     private static final String JOTEGO_CORES_PATH = "pocket/raw/" + CORES_FOLDER;
 
     private static final String ROMZIP_SOURCE_URL = "romzip.source.url";
@@ -114,6 +116,11 @@ public class DeploymentConfiguration
     public String getMisterFavoritesDirectory()
     {
         return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + FAVORITES_FOLDER;
+    }
+
+    public String getMisterAchievementsDirectory()
+    {
+        return getProperties().getProperty(MISTER_MAIN_DIRECTORY) + ACHIEVEMENTS_FOLDER;
     }
 
     public String getMisterMainDirectory()

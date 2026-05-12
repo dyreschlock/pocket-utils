@@ -10,16 +10,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ProcessMisterFavorites extends AbstractDatabaseApplication
+public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 {
     private static final String FAVORITES_FOLDER = "_TapTo";
 
-    protected ProcessMisterFavorites(String context)
+    protected ProcessMisterShortcuts(String context)
     {
         super(context);
     }
 
     void process()
+    {
+//        processFavorites();
+        processAchievements();
+    }
+
+    void processFavorites()
     {
         File favorites = new File(config().getMisterFavoritesDirectory());
         if (favorites.exists())
@@ -33,12 +39,31 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
         }
     }
 
+    void processAchievements()
+    {
+        File achievements = new File(config().getMisterAchievementsDirectory());
+        if (achievements.exists())
+        {
+            eraseAchievements(achievements);
+            writeAchievements();
+        }
+        else
+        {
+            System.out.println("Achievements folder is missing.");
+        }
+    }
+
     private void eraseFavorites(File favorites)
     {
-        String favfavFilepath = favorites.getParentFile().getAbsolutePath() + FAVORITES_FOLDER;
+        String favFilepath = favorites.getParentFile().getAbsolutePath() + FAVORITES_FOLDER;
 
         deleteFolderAndContents(favorites);
-        deleteFolderAndContents(new File(favfavFilepath));
+        deleteFolderAndContents(new File(favFilepath));
+    }
+
+    private void eraseAchievements(File achievements)
+    {
+        deleteFolderAndContents(achievements);
     }
 
     private void deleteFolderAndContents(File sourceFolder)
@@ -102,6 +127,23 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
         }
     }
 
+    private void writeAchievements()
+    {
+        String achievements = config().getMisterAchievementsDirectory();
+
+        for(PocketGame game : pocketGameDAO().getAllMisterWithAchievements())
+        {
+            MisterMglInfo mgl = MisterMglInfo.getInfo(game);
+            if (mgl != null && mgl.isAchievementsOk())
+            {
+                String contents = mgl.getMglContents(game);
+                String filepath = achievements + mgl.getAchievementFilepath(game);
+
+                writeContentsToDestination(contents, filepath);
+            }
+        }
+    }
+
     private void copySourceFileToDestination(File source, String destination)
     {
         File destinationFile = new File(destination);
@@ -134,6 +176,6 @@ public class ProcessMisterFavorites extends AbstractDatabaseApplication
 
     public static void main(String[] args)
     {
-        new ProcessMisterFavorites(DeploymentConfiguration.LOCAL).run();
+        new ProcessMisterShortcuts(DeploymentConfiguration.LOCAL).run();
     }
 }

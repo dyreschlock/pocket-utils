@@ -83,6 +83,11 @@ public enum MisterMglInfo
     {
     }
 
+    public boolean isAchievementsOk()
+    {
+        return this.achievement_rbf != null;
+    }
+
     public String getShortcutFilepath(PocketGame game)
     {
         String fileExtension = "mgl";
@@ -93,6 +98,19 @@ public enum MisterMglInfo
 
         String filepath = "_%s/%s (%s).%s";
         return String.format(filepath, game.getGenre(), game.getTitle(), game.getCoreName(), fileExtension);
+    }
+
+    public String getAchievementFilepath(PocketGame game)
+    {
+        String filepath = "%s (%s).mgl";
+        filepath = String.format(filepath, game.getTitle(), game.getCoreName());
+
+        if (game.getAchievementLevel().isNotCurrent())
+        {
+            String folder = "_" + game.getAchievementLevel().name().toLowerCase();
+            filepath = folder + "/" + filepath;
+        }
+        return filepath;
     }
 
     public String getMglContents(PocketGame game)

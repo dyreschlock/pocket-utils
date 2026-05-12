@@ -35,6 +35,18 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public List<PocketGame> getAllMisterWithAchievements()
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.misterFilename is not null " +
+                " and g.misterFilepath is not null " +
+                " and g.achievementLevel is not null ";
+
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public PocketGame getByMisterFilename(String filename, PocketCore core)
     {
         String text = " select g " +
