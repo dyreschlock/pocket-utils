@@ -118,7 +118,7 @@ public enum MisterMglInfo
         }
         else if (game.getAchievementLevel().isNotCurrent())
         {
-            String folder = "_" + game.getAchievementLevel().name().toLowerCase();
+            String folder = "_" + game.getAchievementLevel().getName();
             filepath = folder + "/" + filepath;
         }
         return filepath;
