@@ -52,7 +52,7 @@ public class PocketGameDAO
                 " from PocketGame g " +
                 " where g.misterFilename is not null " +
                 " and g.misterFilepath is not null " +
-                " and g.achievementLevel is not null "; //TODO
+                " and g.achievementLevel is not null ";
 
         Query query = session.createQuery(text);
         return query.list();

@@ -12,4 +12,9 @@ public enum AchievementLevel
     {
         return this != CURRENT;
     }
+
+    public boolean isNotMastered()
+    {
+        return this != MASTERED;
+    }
 }

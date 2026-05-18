@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 {
-    private static final String FAVORITES_FOLDER = "_TapTo";
+    private static final String FAVORITES_FOLDER = "TapTo";
 
     protected ProcessMisterShortcuts(String context)
     {
@@ -55,14 +55,17 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 
     private void eraseFavorites(File favorites)
     {
-        String favFilepath = favorites.getParentFile().getAbsolutePath() + FAVORITES_FOLDER;
+        String favfavFilepath = favorites.getParentFile().getAbsolutePath() + FAVORITES_FOLDER;
 
         deleteFolderAndContents(favorites);
-        deleteFolderAndContents(new File(favFilepath));
+        deleteFolderAndContents(new File(favfavFilepath));
     }
 
     private void eraseAchievements(File achievements)
     {
+        String taptoFilepath = achievements.getAbsolutePath() + FAVORITES_FOLDER;
+
+        deleteFolderAndContents(new File(taptoFilepath));
         deleteFolderAndContents(achievements);
     }
 
@@ -130,6 +133,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
     private void writeAchievements()
     {
         String achievements = config().getMisterAchievementsDirectory();
+        String taptoAchievements = achievements + "/" + FAVORITES_FOLDER + "/";
 
         for(PocketGame game : pocketGameDAO().getAllMisterWithAchievements())
         {
@@ -140,6 +144,12 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
                 String filepath = achievements + mgl.getAchievementFilepath(game);
 
                 writeContentsToDestination(contents, filepath);
+
+                if (game.getAchievementLevel().isNotMastered())
+                {
+                    filepath = taptoAchievements + mgl.getShortcutFilename(game);
+                    writeContentsToDestination(contents, filepath);
+                }
             }
         }
     }

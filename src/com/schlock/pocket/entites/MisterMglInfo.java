@@ -88,7 +88,7 @@ public enum MisterMglInfo
         return this.achievement_rbf != null;
     }
 
-    public String getShortcutFilepath(PocketGame game)
+    public String getShortcutFilename(PocketGame game)
     {
         String fileExtension = "mgl";
         if (this == ARCADE)
@@ -96,14 +96,21 @@ public enum MisterMglInfo
             fileExtension = "mra";
         }
 
-        String filepath = "_%s/%s (%s).%s";
-        return String.format(filepath, game.getGenre(), game.getTitle(), game.getCoreName(), fileExtension);
+        String filename = "%s (%s).%s";
+        return String.format(filename, game.getTitle(), game.getCoreName(), fileExtension);
+    }
+
+    public String getShortcutFilepath(PocketGame game)
+    {
+        String filename = getShortcutFilename(game);
+
+        String filepath = "_%s/%s";
+        return String.format(filepath, game.getGenre(), filename);
     }
 
     public String getAchievementFilepath(PocketGame game)
     {
-        String filepath = "%s (%s).mgl";
-        filepath = String.format(filepath, game.getTitle(), game.getCoreName());
+        String filepath = getShortcutFilename(game);
 
         if (!game.getPlatform().isAchievementHardcore())
         {
