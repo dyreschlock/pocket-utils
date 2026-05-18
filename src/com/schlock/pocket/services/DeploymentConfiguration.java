@@ -46,6 +46,8 @@ public class DeploymentConfiguration
     private static final String WEBSITE_IMAGE_DIRECTORY = "website.image.directory";
     private static final String WEBSITE_DATA_DIRECTORY = "website.data.directory";
 
+    private static final String ACHIEVEMENTS_API_KEY = "achievements.apikey";
+
     private static final String DATA_DIRECTORY = "data/";
 
     public static final String LOCAL = "local";
@@ -185,6 +187,11 @@ public class DeploymentConfiguration
     public String getWebsiteDataDirectory()
     {
         return getProperties().getProperty(WEBSITE_DATA_DIRECTORY);
+    }
+
+    public String getAchievementsApiKey()
+    {
+        return getProperties().getProperty(ACHIEVEMENTS_API_KEY);
     }
 
 

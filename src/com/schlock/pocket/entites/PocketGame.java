@@ -76,6 +76,12 @@ public class PocketGame
     @Column(name = "inLibrary")
     private boolean inLibrary;
 
+    @Column(name = "raOnly")
+    private boolean achievementUseOnly;
+
+    @Column(name = "raTitle")
+    private String achievementTitle;
+
     @Column(name = "achievement")
     @Enumerated(EnumType.STRING)
     private AchievementLevel achievementLevel;
@@ -292,6 +298,26 @@ public class PocketGame
     public void setInLibrary(boolean inLibrary)
     {
         this.inLibrary = inLibrary;
+    }
+
+    public boolean isAchievementUseOnly()
+    {
+        return achievementUseOnly;
+    }
+
+    public void setAchievementUseOnly(boolean achievementUseOnly)
+    {
+        this.achievementUseOnly = achievementUseOnly;
+    }
+
+    public String getAchievementTitle()
+    {
+        return achievementTitle;
+    }
+
+    public void setAchievementTitle(String achievementTitle)
+    {
+        this.achievementTitle = achievementTitle;
     }
 
     public AchievementLevel getAchievementLevel()

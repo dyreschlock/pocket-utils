@@ -107,7 +107,7 @@ public class ProcessPlaylists extends AbstractDatabaseApplication
                 .setPrettyPrinting()
                 .create();
 
-        List<PocketGame> games = pocketGameDAO().getAll();
+        List<PocketGame> games = pocketGameDAO().getAllAvailable();
         for(PocketGame game : games)
         {
             if (!StringUtils.isNullOrEmpty(game.getGenre()))

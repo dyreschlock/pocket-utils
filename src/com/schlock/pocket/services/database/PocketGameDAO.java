@@ -24,12 +24,23 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public List<PocketGame> getAllAvailable()
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.achievementUseOnly is false ";
+
+        Query query = session.createQuery(text);
+        return query.list();
+    }
+
     public List<PocketGame> getAllAvailableMister()
     {
         String text = " select g " +
                 " from PocketGame g " +
                 " where g.misterFilename is not null " +
-                " and g.misterFilepath is not null ";
+                " and g.misterFilepath is not null " +
+                " and g.achievementUseOnly is false ";
 
         Query query = session.createQuery(text);
         return query.list();
@@ -41,7 +52,7 @@ public class PocketGameDAO
                 " from PocketGame g " +
                 " where g.misterFilename is not null " +
                 " and g.misterFilepath is not null " +
-                " and g.achievementLevel is not null ";
+                " and g.achievementLevel is not null "; //TODO
 
         Query query = session.createQuery(text);
         return query.list();

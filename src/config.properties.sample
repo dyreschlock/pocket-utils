@@ -18,3 +18,7 @@ hibernate.connection.url.local=
 hibernate.connection.username.local=
 hibernate.connection.password.local=
 
+website.image.directory=
+website.data.directory=
+
+achievements.apikey=
