@@ -6,7 +6,7 @@ import java.util.List;
 
 public enum PlatformInfo
 {
-    PLAYSTATION("Sony_-_PlayStation", "playstation", "chd"),
+    PLAYSTATION("Sony_-_PlayStation", "playstation", "PlayStation", false, "chd"),
 
     //Nintendo
     NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "z64"),
@@ -16,9 +16,9 @@ public enum PlatformInfo
 
     VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
-    GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "gba"),
+    GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "Game Boy Advance", false, "gba"),
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
-    GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
+    GAMEBOY("Nintendo_-_Game_Boy", "gb", "Game Boy", false, "gb"),
 
     POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
     GAME_AND_WATCH("", "gameandwatch", "gnw"),
@@ -35,7 +35,7 @@ public enum PlatformInfo
     //Sega
     SEGA_SATURN("Sega_-_Saturn", "saturn", "chd"),
     SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "Sega CD", "chd"),
-    SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
+    SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "Genesis/Mega Drive", false, "md"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
 

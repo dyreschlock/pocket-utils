@@ -1,11 +1,19 @@
 package com.schlock.pocket.app;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
+import com.schlock.pocket.entites.AchievementEntry;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplication
 {
@@ -24,17 +32,31 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
 
     void process()
     {
-        createGamesFromOnline();
+        careteGamesFormOnlineWantPlayList();
+        createGamesFromOnlineCompletedList();
         createGamesFromLocal();
     }
 
 
-
-    private void createGamesFromOnline()
+    private void careteGamesFormOnlineWantPlayList()
     {
-        String wantPlayResponse = getResponse(API_HTTP_REQUEST_WANT_TO_PLAY);
-        String completedResponse = getResponse(API_HTTP_REQUEST_COMPLETED);
+        Gson gson = new GsonBuilder().create();
+        Type wantPlayResults = new TypeToken<WantPlayResults>(){}.getType();
 
+        String wantPlayResponse = getResponse(API_HTTP_REQUEST_WANT_TO_PLAY);
+        WantPlayResults results = gson.fromJson(wantPlayResponse, wantPlayResults);
+
+        processEntries(results.Results);
+    }
+
+    private void createGamesFromOnlineCompletedList()
+    {
+        Gson gson = new GsonBuilder().create();
+        Type completedEntries = new TypeToken<ArrayList<AchievementEntry>>(){}.getType();
+
+        String completedResponse = getResponse(API_HTTP_REQUEST_COMPLETED);
+        List<AchievementEntry> games = gson.fromJson(completedResponse, completedEntries);
+        processEntries(games);
     }
 
     private String getResponse(final String baseURL)
@@ -66,10 +88,29 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
         return null;
     }
 
+    private void processEntries(List<AchievementEntry> entries)
+    {
+        // search for existing
+
+        // create
+        // search for game locally
+
+        String temp = "";
+    }
+
+
     private void createGamesFromLocal()
     {
 
     }
+
+
+    private class WantPlayResults
+    {
+        @Expose
+        public List<AchievementEntry> Results;
+    }
+
 
 
     public static void main(String[] args)
