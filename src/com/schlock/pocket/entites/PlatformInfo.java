@@ -10,9 +10,9 @@ public enum PlatformInfo
 
     //Nintendo
     NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "z64"),
-    SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "smc", "sfc"),
-    FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "fds"),
-    NES("Nintendo_-_Nintendo_Entertainment_System", "nes","nes"),
+    SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "SNES/Super Famicom", false, "smc", "sfc"),
+    FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "Famicom Disk System", true, "fds"),
+    NES("Nintendo_-_Nintendo_Entertainment_System", "nes", "NES/Famicom", true, "nes"),
 
     VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
@@ -34,7 +34,7 @@ public enum PlatformInfo
 
     //Sega
     SEGA_SATURN("Sega_-_Saturn", "saturn", "chd"),
-    SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "chd"),
+    SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "Sega CD", "chd"),
     SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "md"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
@@ -98,14 +98,26 @@ public enum PlatformInfo
 
     ARCADE("MAME", "arcade", "json");
 
-    String repoName;
-    String platformId;
-    List<String> extensions = new ArrayList<>();
+    private String repoName;
+    private String platformId;
+
+    private String achievementTitle;
+    private boolean achievementHardcore;
+
+    private List<String> extensions = new ArrayList<>();
 
     PlatformInfo(String repoName, String platformId, String... fileExtensions)
     {
+        this(repoName, platformId, "", false, fileExtensions);
+    }
+
+    PlatformInfo(String repoName, String platformId, String achievementTitle, boolean hardcore, String... fileExtensions)
+    {
         this.repoName = repoName;
         this.platformId = platformId;
+
+        this.achievementTitle = achievementTitle;
+        this.achievementHardcore = hardcore;
 
         if (fileExtensions != null)
         {
@@ -141,6 +153,11 @@ public enum PlatformInfo
         return extensions;
     }
 
+    public boolean isAchievementHardcore()
+    {
+        return achievementHardcore;
+    }
+
     public static List<PlatformInfo> getByCore(PocketCore core)
     {
         if (core.isArcadeCore())
@@ -157,5 +174,17 @@ public enum PlatformInfo
             }
         }
         return platforms;
+    }
+
+    public static PlatformInfo getByAchievementTitle(String title)
+    {
+        for(PlatformInfo info : values())
+        {
+            if (info.achievementTitle.equals(title))
+            {
+                return info;
+            }
+        }
+        return null;
     }
 }

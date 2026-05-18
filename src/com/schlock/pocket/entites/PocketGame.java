@@ -82,7 +82,7 @@ public class PocketGame
     @Column(name = "raTitle")
     private String achievementTitle;
 
-    @Column(name = "achievement")
+    @Column(name = "raLevel")
     @Enumerated(EnumType.STRING)
     private AchievementLevel achievementLevel;
 
@@ -354,6 +354,8 @@ public class PocketGame
 
         game.inLibrary = false;
 
+        game.achievementUseOnly = false;
+
         return game;
     }
 
@@ -416,6 +418,26 @@ public class PocketGame
         game.platform = platform;
 
         game.inLibrary = false;
+        game.achievementUseOnly = false;
+
+        return game;
+    }
+
+    public static PocketGame createAchievementGame(String title, PocketCore core, PlatformInfo platform)
+    {
+        PocketGame game = new PocketGame();
+
+        game.favorite = false;
+
+        game.title = title;
+        game.boxartFilename = game.title + ".png";
+        game.boxartConverted = false;
+
+        game.core = core;
+        game.platform = platform;
+
+        game.achievementUseOnly = false;
+        game.achievementTitle = title;
 
         return game;
     }

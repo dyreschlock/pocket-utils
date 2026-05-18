@@ -8,9 +8,9 @@ public enum MisterMglInfo
 
     //Nintendo
     NINTENDO_64("_Console/N64", "1", "f", "1"),
-    SUPER_NINTENDO("_Console/SNES", "_Console (Achievements)/cores/SNES", false, "2", "f", "0"),
-    FAMICOM_DISK("_Console/NES", "_Console (Achievements)/cores/NES", true, "2", "f", "1"),
-    NES("_Console/NES", "_Console (Achievements)/cores/NES", true, "2", "f", "1"),
+    SUPER_NINTENDO("_Console/SNES", "_Console (Achievements)/cores/SNES", "2", "f", "0"),
+    FAMICOM_DISK("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
+    NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
 
     GAMEBOY_ADVANCE("_Console/GBA", "2", "f", "1"),
     GAMEBOY_COLOR("_Console/Gameboy", "2", "f", "1"),
@@ -62,22 +62,20 @@ public enum MisterMglInfo
     private String type;
     private String index;
 
-    private boolean hardcore;
     private String achievement_rbf;
 
     MisterMglInfo(String rbf, String delay, String type, String index)
     {
-        this(rbf, null, false, delay, type, index);
+        this(rbf, null, delay, type, index);
     }
 
-    MisterMglInfo(String rbf, String achievement_rbf, boolean hardcore, String delay, String type, String index)
+    MisterMglInfo(String rbf, String achievement_rbf, String delay, String type, String index)
     {
         this.rbf = rbf;
         this.delay = delay;
         this.type = type;
         this.index = index;
 
-        this.hardcore = hardcore;
         this.achievement_rbf = achievement_rbf;
     }
 
@@ -107,7 +105,7 @@ public enum MisterMglInfo
         String filepath = "%s (%s).mgl";
         filepath = String.format(filepath, game.getTitle(), game.getCoreName());
 
-        if (!this.hardcore)
+        if (!game.getPlatform().isAchievementHardcore())
         {
             filepath = "_softcore/" + filepath;
         }
