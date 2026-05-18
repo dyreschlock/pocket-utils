@@ -47,6 +47,7 @@ public class DeploymentConfiguration
     private static final String WEBSITE_DATA_DIRECTORY = "website.data.directory";
 
     private static final String ACHIEVEMENTS_API_KEY = "achievements.apikey";
+    private static final String ACHIEVEMENTS_USERNAME = "achievements.username";
 
     private static final String DATA_DIRECTORY = "data/";
 
@@ -192,6 +193,11 @@ public class DeploymentConfiguration
     public String getAchievementsApiKey()
     {
         return getProperties().getProperty(ACHIEVEMENTS_API_KEY);
+    }
+
+    public String getAchievementsUsername()
+    {
+        return getProperties().getProperty(ACHIEVEMENTS_USERNAME);
     }
 
 
