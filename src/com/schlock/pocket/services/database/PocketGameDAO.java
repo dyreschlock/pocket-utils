@@ -95,6 +95,25 @@ public class PocketGameDAO
         return games.get(0);
     }
 
+    public PocketGame getByAchievementTitle(String title, PlatformInfo platform)
+    {
+        String text = " select g " +
+                " from PocketGame g" +
+                " where g.achievementTitle = :title " +
+                " and g.platform = :platform ";
+
+        Query query = session.createQuery(text);
+        query.setParameter("title", title);
+        query.setParameter("platform", platform);
+
+        List<PocketGame> games = query.list();
+        if (games.isEmpty())
+        {
+            return null;
+        }
+        return games.get(0);
+    }
+
     public List<PocketGame> getByPlatform(PlatformInfo platform)
     {
         String text = " select g " +

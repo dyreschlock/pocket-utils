@@ -19,6 +19,11 @@ public enum AchievementLevel
         return this != CURRENT;
     }
 
+    public boolean isMastered()
+    {
+        return this == MASTERED;
+    }
+
     public boolean isNotComplete()
     {
         return this != MASTERED && this != FINISHED;

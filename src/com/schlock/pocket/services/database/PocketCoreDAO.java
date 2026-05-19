@@ -1,5 +1,6 @@
 package com.schlock.pocket.services.database;
 
+import com.schlock.pocket.entites.MisterDrive;
 import com.schlock.pocket.entites.PocketCore;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -68,7 +69,7 @@ public class PocketCoreDAO
         return query.list();
     }
 
-    public List<PocketCore> getAllToCopyWithCompleteInformationMister()
+    public List<PocketCore> getAllToCopyWithCompleteInformationMister(MisterDrive misterDrive)
     {
         String text = " select c " +
                 " from PocketCore c " +
@@ -79,9 +80,11 @@ public class PocketCoreDAO
                 " and c.category is not null " +
                 " and c.manufacturer is not null " +
                 " and c.year is not null " +
-                " and c.misterId is not null ";
+                " and c.misterId is not null " +
+                " and c.misterDrive = :misterDrive ";
 
         Query query = session.createQuery(text);
+        query.setParameter("misterDrive", misterDrive);
         return query.list();
     }
 

@@ -1,5 +1,6 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.entites.MisterDrive;
 import com.schlock.pocket.entites.PlatformInfo;
 import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
@@ -10,6 +11,9 @@ import java.util.List;
 
 public class CreateMisterEntries extends AbstractDatabaseApplication
 {
+    private final String ACHIEVEMENT_PREFIX = "_ra ";
+
+
     protected CreateMisterEntries(String context)
     {
         super(context);
@@ -35,9 +39,10 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
     {
         try
         {
-            for(PocketCore core : pocketCoreDAO().getAllToCopyWithCompleteInformationMister())
+            for(PocketCore core : pocketCoreDAO().getAllToCopyWithCompleteInformationMister(MisterDrive.SD))
             {
                 searchForNewGamesByCore(core);
+                searchForNewAchievementGamesByCore(core);
             }
         }
         catch(Exception e)
@@ -57,13 +62,37 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 public boolean accept(File file)
                 {
                     boolean directory = file.isDirectory();
-                    boolean notIgnore = !file.getName().startsWith("_");
+                    boolean notIgnore = !file.getName().startsWith("_") && !file.getName().equals("Palettes");
 
                     return directory && notIgnore;
                 }
             };
 
             for(File folder : gamesFolder.listFiles(filter))
+            {
+                processFolder(folder, core);
+            }
+        }
+    }
+
+    private void searchForNewAchievementGamesByCore(PocketCore core)
+    {
+        String filepathAllGames = core.getMisterLocalFilepath(config()) + "/_all";
+        File allGames = new File(filepathAllGames);
+        if (allGames.exists())
+        {
+            FileFilter filter = new FileFilter()
+            {
+                public boolean accept(File file)
+                {
+                    boolean directory = file.isDirectory();
+                    boolean accept = file.getName().startsWith(ACHIEVEMENT_PREFIX);
+
+                    return directory && accept;
+                }
+            };
+
+            for(File folder : allGames.listFiles(filter))
             {
                 processFolder(folder, core);
             }
@@ -97,10 +126,16 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
             }
         };
 
+        boolean achievementUseOnly = folder.getName().startsWith(ACHIEVEMENT_PREFIX);
+
         for(File file : folder.listFiles(filter))
         {
             String filename = file.getName();
             String misterFilepath = core.getMisterRelativeFilepath() + "/" + folder.getName() + "/" + file.getName();
+            if (achievementUseOnly)
+            {
+                misterFilepath = core.getMisterRelativeFilepath() + "/" + folder.getParentFile().getName() + "/" + folder.getName() + "/" + file.getName();
+            }
 
             PocketGame game = pocketGameDAO().getByMisterFilename(filename, core);
             if (game == null)
@@ -109,6 +144,11 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 if (game == null)
                 {
                     game = PocketGame.createFromMister(file, core, platform, misterFilepath);
+                    if (achievementUseOnly)
+                    {
+                        game.setAchievementUseOnly(achievementUseOnly);
+                        game.setGenre(null);
+                    }
                     save(game);
 
                     System.out.println("New game created in database: " + game.getTitle());
@@ -117,6 +157,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
                 {
                     game.setMisterFilename(filename);
                     game.setMisterFilepath(misterFilepath);
+                    game.setAchievementUseOnly(achievementUseOnly);
 
                     save(game);
 

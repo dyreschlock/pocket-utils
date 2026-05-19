@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
-import com.schlock.pocket.entites.AchievementEntry;
+import com.schlock.pocket.entites.*;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplication
+public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 {
     /**
      * https://api-docs.retroachievements.org/v1/get-user-want-to-play-list.html
@@ -25,7 +25,7 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
     private static String API_HTTP_REQUEST_COMPLETED = "https://retroachievements.org/API/API_GetUserCompletedGames.php?u=%s&y=%s";
 
 
-    protected CreateMisterEntriesForAchievements(String context)
+    protected CreateMisterEntriesFromRAOnline(String context)
     {
         super(context);
     }
@@ -34,7 +34,6 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
     {
         careteGamesFormOnlineWantPlayList();
         createGamesFromOnlineCompletedList();
-        createGamesFromLocal();
     }
 
 
@@ -90,18 +89,73 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
 
     private void processEntries(List<AchievementEntry> entries)
     {
-        // search for existing
+        for(AchievementEntry entry : entries)
+        {
+            PlatformInfo platform = PlatformInfo.getByAchievementTitle(entry.getConsoleName());
+            if (platform != null && (
+                            (entry.isWantToPlay()) ||
+                                    (platform.isAchievementHardcore() && entry.isHardcore()) ||
+                                    (!platform.isAchievementHardcore() && !entry.isHardcore())))
+            {
+                boolean save = false;
 
-        // create
-        // search for game locally
+                PocketGame game = locateGame(entry, platform);
+                if (game == null)
+                {
+                    PocketCore core = pocketCoreDAO().getByPlatformId(platform.getPlatformId());
 
-        String temp = "";
+                    game = PocketGame.createAchievementGame(entry.getTitle(), core, platform);
+                    save = true;
+                }
+
+                if (game.getMisterFilepath() == null)
+                {
+                    //search for file
+
+                    save = true;
+                }
+
+                if (game.getAchievementTitle() == null)
+                {
+                    game.setAchievementTitle(entry.getTitle());
+                    save = true;
+                }
+                if (game.getAchievementLevel() == null)
+                {
+                    if (entry.isWantToPlay())
+                    {
+                        game.setAchievementLevel(AchievementLevel.UNSTARTED);
+                    }
+                    else
+                    {
+                        game.setAchievementLevel(AchievementLevel.UNFINISHED);
+                    }
+                    save = true;
+                }
+                if (entry.isMastered() && !game.getAchievementLevel().isMastered())
+                {
+                    game.setAchievementLevel(AchievementLevel.MASTERED);
+                    save = true;
+                }
+
+                if (save)
+                {
+                    save(game);
+                }
+            }
+        }
     }
 
-
-    private void createGamesFromLocal()
+    private PocketGame locateGame(AchievementEntry entry, PlatformInfo platform)
     {
+        PocketGame game = pocketGameDAO().getByAchievementTitle(entry.getTitle(), platform);
+        if (game == null)
+        {
 
+        }
+
+
+        return game;
     }
 
 
@@ -115,6 +169,6 @@ public class CreateMisterEntriesForAchievements extends AbstractDatabaseApplicat
 
     public static void main(String[] args)
     {
-        new CreateMisterEntriesForAchievements(DeploymentConfiguration.LOCAL).run();
+        new CreateMisterEntriesFromRAOnline(DeploymentConfiguration.LOCAL).run();
     }
 }

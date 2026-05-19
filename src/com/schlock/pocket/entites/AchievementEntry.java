@@ -28,6 +28,10 @@ public class AchievementEntry
         return HardcoreMode != null && HardcoreMode.equals("1");
     }
 
+    public boolean isWantToPlay()
+    {
+        return PctWon == null;
+    }
 
 
 

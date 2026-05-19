@@ -12,7 +12,7 @@ public enum MisterMglInfo
     FAMICOM_DISK("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
     NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
 
-    GAMEBOY_ADVANCE("_Console/GBA", "2", "f", "1"),
+    GAMEBOY_ADVANCE("_Console/GBA", "_Console (Achievements)/cores/GBA", "2", "f", "1"),
     GAMEBOY_COLOR("_Console/Gameboy", "2", "f", "1"),
     GAMEBOY("_Console/Gameboy", "2", "f", "1"),
 
