@@ -58,6 +58,28 @@ public class PocketGameDAO
         return query.list();
     }
 
+    public PocketGame getByTitleFilenameContains(String title, PlatformInfo platform)
+    {
+        String text = " select g " +
+                " from PocketGame g " +
+                " where g.platform = :platform " +
+                " and (g.title like :title " +
+                "     or g.misterFilename like :title) " +
+                " and g.achievementTitle is null ";
+
+        Query query = session.createQuery(text);
+        query.setParameter("platform", platform);
+        query.setParameter("title", title + "%");
+
+        List<PocketGame> games = query.list();
+        if (games.isEmpty())
+        {
+            return null;
+        }
+        return games.get(0);
+    }
+
+
     public PocketGame getByMisterFilename(String filename, PocketCore core)
     {
         String text = " select g " +

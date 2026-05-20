@@ -145,7 +145,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 
                 writeContentsToDestination(contents, filepath);
 
-                if (game.getAchievementLevel().isNotComplete())
+                if (game.getAchievementLevel().isNotComplete() && game.getPlatform().isAchievementHardcore())
                 {
                     filepath = taptoAchievements + mgl.getShortcutFilename(game);
                     writeContentsToDestination(contents, filepath);

@@ -436,6 +436,8 @@ public class PocketGame
         game.core = core;
         game.platform = platform;
 
+        game.inLibrary = false;
+
         game.achievementUseOnly = true;
         game.achievementTitle = title;
 

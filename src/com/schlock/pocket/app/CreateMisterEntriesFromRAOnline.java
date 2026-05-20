@@ -120,6 +120,7 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     game.setAchievementTitle(entry.getTitle());
                     save = true;
                 }
+
                 if (game.getAchievementLevel() == null)
                 {
                     if (entry.isWantToPlay())
@@ -132,11 +133,17 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     }
                     save = true;
                 }
-                if (entry.isMastered() && !game.getAchievementLevel().isMastered())
+                else if (entry.isMastered() && !game.getAchievementLevel().isMastered())
                 {
                     game.setAchievementLevel(AchievementLevel.MASTERED);
                     save = true;
                 }
+                else if(!entry.isWantToPlay() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED))
+                {
+                    game.setAchievementLevel(AchievementLevel.UNFINISHED);
+                    save = true;
+                }
+
 
                 if (save)
                 {
@@ -151,10 +158,15 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
         PocketGame game = pocketGameDAO().getByAchievementTitle(entry.getTitle(), platform);
         if (game == null)
         {
+            String standardName = entry.getTitle();
+            if (standardName.contains("~"))
+            {
+                standardName = standardName.split("~")[2].trim();
+            }
+            game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
 
+            //TODO more methods of searching for game
         }
-
-
         return game;
     }
 
