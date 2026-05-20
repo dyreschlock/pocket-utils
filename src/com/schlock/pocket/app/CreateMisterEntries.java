@@ -166,7 +166,7 @@ public class CreateMisterEntries extends AbstractDatabaseApplication
             }
             else
             {
-                if (!game.getMisterFilepath().equals(misterFilepath))
+                if(!misterFilepath.equals(game.getMisterFilepath()))
                 {
                     game.setMisterFilepath(misterFilepath);
                     save(game);

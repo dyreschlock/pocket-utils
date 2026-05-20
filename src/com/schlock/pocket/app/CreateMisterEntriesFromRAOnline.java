@@ -8,6 +8,8 @@ import com.schlock.pocket.entites.*;
 import com.schlock.pocket.services.DeploymentConfiguration;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -110,9 +112,19 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 
                 if (game.getMisterFilepath() == null)
                 {
-                    //search for file
+                    File file = locateFile(game);
+                    if (file != null)
+                    {
+                        String filename = file.getName();
+                        game.setMisterFilename(filename);
 
-                    save = true;
+                        String filepath = file.getAbsolutePath();
+                        filepath = filepath.substring(config().getMisterMainDirectory().length());
+
+                        game.setMisterFilepath(filepath);
+
+                        save = true;
+                    }
                 }
 
                 if (game.getAchievementTitle() == null)
@@ -156,20 +168,150 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
     private PocketGame locateGame(AchievementEntry entry, PlatformInfo platform)
     {
         PocketGame game = pocketGameDAO().getByAchievementTitle(entry.getTitle(), platform);
-        if (game == null)
+        if (game != null)
         {
-            String standardName = entry.getTitle();
-            if (standardName.contains("~"))
-            {
-                standardName = standardName.split("~")[2].trim();
-            }
-            game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
-
-            //TODO more methods of searching for game
+            return game;
         }
+
+        String standardName = getStandardName(entry.getTitle());
+        game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
+        if (game != null)
+        {
+            return game;
+        }
+
+        standardName = getBaseName(standardName);
+        game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
+        if (game != null)
+        {
+            return game;
+        }
+
+
+
+        //TODO more methods of searching for game
+
         return game;
     }
 
+    private File locateFile(PocketGame game)
+    {
+        String filepathAllGames = game.getCore().getMisterLocalFilepath(config()) + "/_all";
+        File allGames = new File(filepathAllGames);
+        if (allGames.exists())
+        {
+            FileFilter filter = new FileFilter()
+            {
+                public boolean accept(File file)
+                {
+                    boolean directory = file.isDirectory();
+                    boolean accept = !file.getName().startsWith(".");
+
+                    return directory && accept;
+                }
+            };
+
+            File gameFile;
+            for(File folder : allGames.listFiles(filter))
+            {
+                gameFile = locateFile(folder, game);
+                if (gameFile != null)
+                {
+                    return gameFile;
+                }
+            }
+        }
+        return null;
+    }
+
+    private File locateFile(File folder, PocketGame game)
+    {
+        FileFilter filter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                if (file.isDirectory())
+                {
+                    return true;
+                }
+                for(String EXT : game.getPlatform().getFileExtensions())
+                {
+                    if (file.getName().toLowerCase().endsWith(EXT) &&
+                            !file.getName().startsWith("."))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+
+        for(File file : folder.listFiles(filter))
+        {
+            if (file.isDirectory())
+            {
+                File result = locateFile(file, game);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            else
+            {
+                //check filename for matches
+
+                String filename = file.getName();
+
+                if (filename.equals(game.getMisterFilename()))
+                {
+                    return file;
+                }
+
+                if (filename.startsWith(game.getTitle()))
+                {
+                    return file;
+                }
+
+                String entityTitle = getStandardName(game.getAchievementTitle());
+                if (filename.startsWith(entityTitle))
+                {
+                    return file;
+                }
+
+                entityTitle = getBaseName(entityTitle);
+                if (filename.startsWith(entityTitle))
+                {
+                    return file;
+                }
+
+
+            }
+        }
+        return null;
+    }
+
+
+    private String getStandardName(String entryTitle)
+    {
+        String standardName = entryTitle;
+        if (standardName.contains("~"))
+        {
+            standardName = standardName.split("~")[2].trim();
+        }
+        return standardName;
+    }
+
+    private String getBaseName(String entryTitle)
+    {
+        final String THE = "The";
+
+        String baseName = entryTitle;
+        if (baseName.startsWith(THE))
+        {
+            baseName = baseName.substring(THE.length()).trim();
+        }
+        return baseName;
+    }
 
     private class WantPlayResults
     {
