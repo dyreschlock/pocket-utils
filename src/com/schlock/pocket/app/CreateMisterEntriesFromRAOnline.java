@@ -12,10 +12,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
 
 public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 {
@@ -34,8 +37,52 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 
     void process()
     {
+//        try
+//        {
+//            getMappings();
+//        }
+//        catch(Exception e)
+//        {
+//            e.printStackTrace();
+//        }
         careteGamesFormOnlineWantPlayList();
         createGamesFromOnlineCompletedList();
+    }
+
+    private void getMappings() throws Exception
+    {
+        String serviceUrl = "http://192.168.50.111:7497/api";
+
+        TapToRequest requestContent = new TapToRequest();
+        requestContent.jsonrpc = "2.0";
+        requestContent.id = "4b5da056-a5d4-436b-b4e6-b96231e99969";
+        requestContent.method = "mappings";
+
+        Gson gson = new GsonBuilder().create();
+
+        String requestDetails = gson.toJson(requestContent).toString();
+
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(serviceUrl))
+                .POST(HttpRequest.BodyPublishers.ofString(requestDetails))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println(response.body());
+    }
+
+    private class TapToRequest
+    {
+        @Expose
+        public String jsonrpc;
+        @Expose
+        public String id;
+        @Expose
+        public String method;
     }
 
 
@@ -93,6 +140,13 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
     {
         for(AchievementEntry entry : entries)
         {
+            String consoleName = entry.getConsoleName();
+            if ("Events".equals(consoleName) && entry.isHardcore())
+            {
+                System.out.println("Event: " + entry.getTitle());
+                continue;
+            }
+
             PlatformInfo platform = PlatformInfo.getByAchievementTitle(entry.getConsoleName());
             if (platform != null && (
                             (entry.isWantToPlay()) ||
@@ -106,7 +160,15 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                 {
                     PocketCore core = pocketCoreDAO().getByPlatformId(platform.getPlatformId());
 
-                    game = PocketGame.createAchievementGame(entry.getTitle(), core, platform);
+                    game = PocketGame.createAchievementGame(entry, core, platform);
+                    save = true;
+
+                    System.out.println("New Game Created: " + entry.getTitle());
+                }
+
+                if (game.getAchievementId() == null)
+                {
+                    game.setAchievementId(entry.getId());
                     save = true;
                 }
 
@@ -159,6 +221,7 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 
                 if (save)
                 {
+                    System.out.println("Updating Game: " + game.getTitle());
                     save(game);
                 }
             }
@@ -211,8 +274,18 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                 }
             };
 
+            List<File> files = Arrays.asList(allGames.listFiles(filter));
+            Collections.sort(files, new Comparator<File>()
+            {
+                public int compare(File o1, File o2)
+                {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+
             File gameFile;
-            for(File folder : allGames.listFiles(filter))
+            for(File folder : files)
             {
                 gameFile = locateFile(folder, game);
                 if (gameFile != null)
@@ -246,7 +319,17 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
             }
         };
 
-        for(File file : folder.listFiles(filter))
+        List<File> files = Arrays.asList(folder.listFiles(filter));
+        Collections.sort(files, new Comparator<File>()
+        {
+            public int compare(File o1, File o2)
+            {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+
+        for(File file : files)
         {
             if (file.isDirectory())
             {

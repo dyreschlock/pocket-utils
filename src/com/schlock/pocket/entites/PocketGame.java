@@ -79,6 +79,9 @@ public class PocketGame
     @Column(name = "raOnly")
     private boolean achievementUseOnly;
 
+    @Column(name = "raId")
+    private String achievementId;
+
     @Column(name = "raTitle")
     private String achievementTitle;
 
@@ -132,11 +135,6 @@ public class PocketGame
             return core.getName();
         }
         return null;
-    }
-
-    public boolean isHasAchievementProgress()
-    {
-        return achievementLevel != null;
     }
 
 
@@ -310,6 +308,16 @@ public class PocketGame
         this.achievementUseOnly = achievementUseOnly;
     }
 
+    public String getAchievementId()
+    {
+        return achievementId;
+    }
+
+    public void setAchievementId(String achievementId)
+    {
+        this.achievementId = achievementId;
+    }
+
     public String getAchievementTitle()
     {
         return achievementTitle;
@@ -423,13 +431,13 @@ public class PocketGame
         return game;
     }
 
-    public static PocketGame createAchievementGame(String title, PocketCore core, PlatformInfo platform)
+    public static PocketGame createAchievementGame(AchievementEntry entry, PocketCore core, PlatformInfo platform)
     {
         PocketGame game = new PocketGame();
 
         game.favorite = false;
 
-        game.title = title;
+        game.title = entry.getTitle();
         game.boxartFilename = game.title + ".png";
         game.boxartConverted = false;
 
@@ -439,7 +447,8 @@ public class PocketGame
         game.inLibrary = false;
 
         game.achievementUseOnly = true;
-        game.achievementTitle = title;
+        game.achievementId = entry.getId();
+        game.achievementTitle = entry.getTitle();
 
         return game;
     }

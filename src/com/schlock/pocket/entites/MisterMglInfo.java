@@ -7,7 +7,7 @@ public enum MisterMglInfo
 
 
     //Nintendo
-    NINTENDO_64("_Console/N64", "1", "f", "1"),
+    NINTENDO_64("_Console/N64", "_Console (Achievements)/cores/N64", "1", "f", "1"),
     SUPER_NINTENDO("_Console/SNES", "_Console (Achievements)/cores/SNES", "2", "f", "0"),
     FAMICOM_DISK("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
     NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
@@ -27,7 +27,7 @@ public enum MisterMglInfo
     //Sega
     SEGA_SATURN("_Console/Saturn", "1", "s", "0"),
     SEGA_CD("_Console/MegaCD", "1", "s", "0"),
-    SEGA_GENESIS("_Console/MegaDrive", "1", "f", "1"),
+    SEGA_GENESIS("_Console/MegaDrive", "_Console (Achievements)/cores/MegaDrive", "1", "f", "1"),
     SEGA_MASTER_SYSTEM("_Console/SMS", "1", "f", "1"),
     SEGA_SG1000("_Console/ColecoVision", "1", "f", "2"),
 
@@ -108,27 +108,12 @@ public enum MisterMglInfo
         return String.format(filepath, game.getGenre(), filename);
     }
 
-    public String getAchievementFilepath(PocketGame game)
-    {
-        String filepath = getShortcutFilename(game);
-
-        if (!game.getPlatform().isAchievementHardcore())
-        {
-            filepath = "_softcore/" + filepath;
-        }
-        else if (game.getAchievementLevel().isNotCurrent())
-        {
-            String folder = "_" + game.getAchievementLevel().getName();
-            filepath = folder + "/" + filepath;
-        }
-        return filepath;
-    }
-
     public String getMglContents(PocketGame game)
     {
         String contents;
         String rbf;
-        if (game.isHasAchievementProgress())
+
+        if (game.getPlatform().isHasAchievements())
         {
             rbf = this.achievement_rbf;
 

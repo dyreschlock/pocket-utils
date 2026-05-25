@@ -1,5 +1,6 @@
 package com.schlock.pocket.app;
 
+import com.schlock.pocket.entites.MisterDrive;
 import com.schlock.pocket.entites.MisterMglInfo;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.DeploymentConfiguration;
@@ -12,7 +13,7 @@ import java.nio.file.Paths;
 
 public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 {
-    private static final String FAVORITES_FOLDER = "TapTo";
+    public static final String FAVORITES_FOLDER = "_TapTo";
 
     protected ProcessMisterShortcuts(String context)
     {
@@ -21,7 +22,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 
     void process()
     {
-//        processFavorites();
+        processFavorites();
         processAchievements();
     }
 
@@ -97,7 +98,10 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 
         for(PocketGame game : pocketGameDAO().getAllAvailableMister())
         {
-            if (game.getPlatform().isArcade() || game.getPlatform().isDos())
+            if (game.getPlatform().isArcade())
+            {
+            }
+            else if (game.getPlatform().isDos())
             {
                 File source = new File(mainDir + game.getMisterFilepath());
 
@@ -113,7 +117,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
             else
             {
                 MisterMglInfo mgl = MisterMglInfo.getInfo(game);
-                if (mgl != null)
+                if (mgl != null && MisterDrive.SD.equals(game.getCore().getMisterDrive()))
                 {
                     String contents = mgl.getMglContents(game);
 
@@ -133,21 +137,23 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
     private void writeAchievements()
     {
         String achievements = config().getMisterAchievementsDirectory();
-        String taptoAchievements = achievements + "/" + FAVORITES_FOLDER + "/";
 
         for(PocketGame game : pocketGameDAO().getAllMisterWithAchievements())
         {
             MisterMglInfo mgl = MisterMglInfo.getInfo(game);
             if (mgl != null && mgl.isAchievementsOk())
             {
+                String filename = mgl.getShortcutFilename(game);
+                boolean softcore = !game.getPlatform().isAchievementHardcore();
+
                 String contents = mgl.getMglContents(game);
-                String filepath = achievements + mgl.getAchievementFilepath(game);
+                String filepath = achievements + game.getAchievementLevel().getAchievementFolderRelativeFilepath(filename, softcore);
 
                 writeContentsToDestination(contents, filepath);
 
-                if (game.getAchievementLevel().isNotComplete() && game.getPlatform().isAchievementHardcore())
+                if (game.getAchievementLevel().isCopyForTapTo() && game.getPlatform().isAchievementHardcore())
                 {
-                    filepath = taptoAchievements + mgl.getShortcutFilename(game);
+                    filepath = achievements + game.getAchievementLevel().getAchievementFolderTapToRelativeFilepath(filename);
                     writeContentsToDestination(contents, filepath);
                 }
             }
@@ -173,6 +179,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
     {
         File mglFile = new File(destination);
         mglFile.getParentFile().mkdirs();
+        mglFile.getParentFile().getParentFile().mkdirs();
 
         try
         {

@@ -1,9 +1,16 @@
 package com.schlock.pocket.entites;
 
 import com.google.gson.annotations.Expose;
+import com.mysql.jdbc.StringUtils;
 
 public class AchievementEntry
 {
+    @Expose
+    private String GameID;
+
+    @Expose
+    private String ID;
+
     @Expose
     private String Title;
 
@@ -34,44 +41,22 @@ public class AchievementEntry
     }
 
 
+    public String getId()
+    {
+        if (!StringUtils.isNullOrEmpty(ID))
+        {
+            return ID;
+        }
+        return GameID;
+    }
 
     public String getTitle()
     {
         return Title;
     }
 
-    public void setTitle(String title)
-    {
-        Title = title;
-    }
-
     public String getConsoleName()
     {
         return ConsoleName;
-    }
-
-    public void setConsoleName(String consoleName)
-    {
-        ConsoleName = consoleName;
-    }
-
-    public String getPctWon()
-    {
-        return PctWon;
-    }
-
-    public void setPctWon(String pctWon)
-    {
-        PctWon = pctWon;
-    }
-
-    public String getHardcoreMode()
-    {
-        return HardcoreMode;
-    }
-
-    public void setHardcoreMode(String hardcoreMode)
-    {
-        HardcoreMode = hardcoreMode;
     }
 }
