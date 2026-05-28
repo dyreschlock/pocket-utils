@@ -64,10 +64,18 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
 
     private void eraseAchievements(File achievements)
     {
-        String taptoFilepath = achievements.getAbsolutePath() + FAVORITES_FOLDER;
-
-        deleteFolderAndContents(new File(taptoFilepath));
-        deleteFolderAndContents(achievements);
+        for(File file : achievements.listFiles())
+        {
+            if (file.isDirectory())
+            {
+                eraseAchievements(file);
+            }
+            else
+            {
+                file.delete();
+            }
+        }
+        achievements.delete();
     }
 
     private void deleteFolderAndContents(File sourceFolder)
