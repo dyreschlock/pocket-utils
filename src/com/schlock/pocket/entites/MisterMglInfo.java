@@ -13,8 +13,8 @@ public enum MisterMglInfo
     NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
 
     GAMEBOY_ADVANCE("_Console/GBA", "_Console (Achievements)/cores/GBA", "2", "f", "1"),
-    GAMEBOY_COLOR("_Console/Gameboy", "2", "f", "1"),
-    GAMEBOY("_Console/Gameboy", "2", "f", "1"),
+    GAMEBOY_COLOR("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
+    GAMEBOY("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
 
     POKEMON_MINI("_Console/PokemonMini", "1", "f", "1"),
 

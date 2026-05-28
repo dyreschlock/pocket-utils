@@ -17,7 +17,7 @@ public enum PlatformInfo
     VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
     GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "Game Boy Advance", false, "gba"),
-    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
+    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "Game Boy Color", false, "gbc", "gb"),
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "Game Boy", false, "gb"),
 
     POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
