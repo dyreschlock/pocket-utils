@@ -203,7 +203,7 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     }
                     else
                     {
-                        game.setAchievementLevel(AchievementLevel.UNFINISHED);
+                        game.setAchievementLevel(AchievementLevel.IN_PROGRESS);
                     }
                     save = true;
                 }
@@ -214,7 +214,7 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                 }
                 else if(!entry.isWantToPlay() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED))
                 {
-                    game.setAchievementLevel(AchievementLevel.UNFINISHED);
+                    game.setAchievementLevel(AchievementLevel.IN_PROGRESS);
                     save = true;
                 }
 
