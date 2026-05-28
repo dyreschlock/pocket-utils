@@ -13,13 +13,13 @@ public enum AchievementLevel
     UNFINISHED("Not Finished"),
 
     UNSTARTED("Not Started"),
-    UNSTARTED_RPG("RPG"),
+    UNSTARTED_RPG("Not Started/RPG"),
 
     EVENT("Event"),
     SUBSET("Subset"),
 
     DONE("Done"),
-    MASTERED("Done");
+    MASTERED("Done/Mastered");
 
     private String name;
 
@@ -51,16 +51,10 @@ public enum AchievementLevel
         return FOR_TAPTO.contains(this);
     }
 
-    public boolean isUnstartedSub()
+    public boolean isSubFolder()
     {
-        if (!UNSTARTED.equals(this))
-        {
-            String prefix = this.name().split("_")[0];
-            return prefix.equalsIgnoreCase(UNSTARTED.name());
-        }
-        return false;
+        return this.name.contains("/");
     }
-
 
 
     private final String OTHERS = "_others";
@@ -82,14 +76,17 @@ public enum AchievementLevel
         {
             path = OTHERS + "/_." + getName();
         }
-        else if (isUnstartedSub())
-        {
-            path = "_" + UNSTARTED.getName() + "/_" + getName();
-        }
         else
         {
             path = "_" + getName();
         }
+
+        if (isSubFolder() && !softcore)
+        {
+            int index = path.lastIndexOf("/") +1;
+            path = path.substring(0, index) + "_" + path.substring(index);
+        }
+
         return path + "/" + filename;
     }
 
