@@ -18,7 +18,7 @@ public enum AchievementLevel
     EVENT("Event"),
     SUBSET("Subset"),
 
-    FINISHED("Done"),
+    DONE("Done"),
     MASTERED("Done");
 
     private String name;
