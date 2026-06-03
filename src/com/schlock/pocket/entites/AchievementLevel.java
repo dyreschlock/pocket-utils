@@ -8,27 +8,43 @@ import java.util.List;
 public enum AchievementLevel
 {
     CURRENT(""),
-    IN_PROGRESS("In Progress"),
 
-    UNFINISHED("Not Finished"),
+    BEATEN("Beaten - Not Mastered"),
+    MASTERED(BEATEN,"Mastered"),
+    EASY_MASTER(BEATEN,"Easy or Near Master"),
+    NEAR_MASTER(BEATEN,"Easy or Near Master"),
+
+    STARTED("Not Beaten - Started"),
 
     UNSTARTED("Not Started"),
-    UNSTARTED_RPG("Not Started/RPG"),
+    UNSTARTED_RPG(UNSTARTED, "RPG"),
 
     EVENT("Event"),
     SUBSET("Subset"),
 
-    DONE("Done"),
-    MASTERED("Done/Mastered");
+    SKIP("Skip"),
+    DONE("Done");
 
+    private AchievementLevel parent;
     private String name;
 
-    private final static List<AchievementLevel> ELEVATED = Arrays.asList(IN_PROGRESS, UNSTARTED, UNSTARTED_RPG, UNFINISHED);
-    private final static List<AchievementLevel> FOR_TAPTO = Arrays.asList(CURRENT, IN_PROGRESS, UNFINISHED, UNSTARTED);
+    private final static List<AchievementLevel> OTHER = Arrays.asList(DONE, EVENT, SKIP, SUBSET);
+    private final static List<AchievementLevel> FOR_TAPTO = Arrays.asList(CURRENT, BEATEN, STARTED, UNSTARTED);
 
     AchievementLevel(String name)
     {
+        this(null, name);
+    }
+
+    AchievementLevel(AchievementLevel parent, String name)
+    {
+        this.parent = parent;
         this.name = name;
+    }
+
+    public AchievementLevel getParent()
+    {
+        return parent;
     }
 
     public String getName()
@@ -36,14 +52,19 @@ public enum AchievementLevel
         return this.name;
     }
 
+    public boolean hasParent()
+    {
+        return parent != null;
+    }
+
     public boolean isMastered()
     {
         return this == MASTERED;
     }
 
-    public boolean isElevated()
+    public boolean isOthers()
     {
-        return ELEVATED.contains(this);
+        return OTHER.contains(this);
     }
 
     public boolean isCopyForTapTo()
@@ -57,7 +78,7 @@ public enum AchievementLevel
     }
 
 
-    private final String OTHERS = "_others";
+    private final String OTHERS = "__others";
     private final String SOFTCORE = "_Softcore";
     private final String TAPTO = ProcessMisterShortcuts.FAVORITES_FOLDER;
 
@@ -72,19 +93,18 @@ public enum AchievementLevel
         {
             return filename;
         }
-        else if (!isElevated())
+        else if (isOthers())
         {
             path = OTHERS + "/_." + getName();
+        }
+        else if(hasParent())
+        {
+            path = "_" + getParent().getName() + "/_" + getName();
         }
         else
         {
             path = "_" + getName();
-        }
 
-        if (isSubFolder() && !softcore)
-        {
-            int index = path.lastIndexOf("/") +1;
-            path = path.substring(0, index) + "_" + path.substring(index);
         }
 
         return path + "/" + filename;
