@@ -19,16 +19,19 @@ public enum AchievementLevel
     UNSTARTED("Not Started"),
     UNSTARTED_RPG(UNSTARTED, "RPG"),
 
-    EVENT("Event"),
-    SUBSET("Subset"),
+    OTHERS("others"),
+    EVENT(OTHERS,"Event"),
+    SUBSET(OTHERS,"Subset"),
+    SKIP(OTHERS,"Skip"),
+    DONE(OTHERS,"Done");
 
-    SKIP("Skip"),
-    DONE("Done");
+    private final String SOFTCORE_FOLDER = "_Softcore";
+    private final String TAPTO_FOLDER = ProcessMisterShortcuts.FAVORITES_FOLDER;
+
 
     private AchievementLevel parent;
     private String name;
 
-    private final static List<AchievementLevel> OTHER = Arrays.asList(DONE, EVENT, SKIP, SUBSET);
     private final static List<AchievementLevel> FOR_TAPTO = Arrays.asList(CURRENT, BEATEN, STARTED, UNSTARTED);
 
     AchievementLevel(String name)
@@ -64,7 +67,7 @@ public enum AchievementLevel
 
     public boolean isOthers()
     {
-        return OTHER.contains(this);
+        return getParent() != null && getParent().equals(OTHERS);
     }
 
     public boolean isCopyForTapTo()
@@ -72,22 +75,13 @@ public enum AchievementLevel
         return FOR_TAPTO.contains(this);
     }
 
-    public boolean isSubFolder()
-    {
-        return this.name.contains("/");
-    }
-
-
-    private final String OTHERS = "__others";
-    private final String SOFTCORE = "_Softcore";
-    private final String TAPTO = ProcessMisterShortcuts.FAVORITES_FOLDER;
 
     public String getAchievementFolderRelativeFilepath(String filename, boolean softcore)
     {
         String path;
         if (softcore)
         {
-            path = OTHERS + "/" + SOFTCORE;
+            path = "_" + OTHERS.name + "/" + SOFTCORE_FOLDER;
         }
         else if (this == CURRENT)
         {
@@ -95,7 +89,7 @@ public enum AchievementLevel
         }
         else if (isOthers())
         {
-            path = OTHERS + "/_." + getName();
+            path = "_" + getParent().getName() + "/_." + getName();
         }
         else if(hasParent())
         {
@@ -104,14 +98,12 @@ public enum AchievementLevel
         else
         {
             path = "_" + getName();
-
         }
-
         return path + "/" + filename;
     }
 
     public String getAchievementFolderTapToRelativeFilepath(String filename)
     {
-        return OTHERS + "/" + TAPTO + "/" + filename;
+        return "_" + OTHERS.getName() + "/" + TAPTO_FOLDER + "/" + filename;
     }
 }

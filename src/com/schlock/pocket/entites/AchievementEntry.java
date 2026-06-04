@@ -5,6 +5,10 @@ import com.mysql.jdbc.StringUtils;
 
 public class AchievementEntry
 {
+    private static final String BEATEN = "beaten-hardcore";
+    private static final String MASTERED = "mastered";
+
+
     @Expose
     private String GameID;
 
@@ -18,26 +22,29 @@ public class AchievementEntry
     private String ConsoleName;
 
     @Expose
-    private String PctWon;
+    private String HighestAwardKind;
 
     @Expose
-    private String HardcoreMode;
+    private Integer NumAwardedHardcore;
 
-
+    public boolean isBeaten()
+    {
+        return BEATEN.equals(HighestAwardKind);
+    }
 
     public boolean isMastered()
     {
-        return PctWon != null && PctWon.equals("1.0000");
+        return MASTERED.equals(HighestAwardKind);
     }
 
-    public boolean isHardcore()
+    public boolean isHasProgress()
     {
-        return HardcoreMode != null && HardcoreMode.equals("1");
+        return NumAwardedHardcore != null && NumAwardedHardcore > 0;
     }
 
     public boolean isWantToPlay()
     {
-        return PctWon == null;
+        return NumAwardedHardcore == null;
     }
 
 

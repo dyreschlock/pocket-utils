@@ -24,10 +24,10 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 {
     /**
      * https://api-docs.retroachievements.org/v1/get-user-want-to-play-list.html
-     * https://api-docs.retroachievements.org/v1/get-user-completed-games.html
+     * https://api-docs.retroachievements.org/v1/get-user-completion-progress.html
      */
     private static String API_HTTP_REQUEST_WANT_TO_PLAY = "https://retroachievements.org/API/API_GetUserWantToPlayList.php?u=%s&y=%s";
-    private static String API_HTTP_REQUEST_COMPLETED = "https://retroachievements.org/API/API_GetUserCompletedGames.php?u=%s&y=%s";
+    private static String API_HTTP_REQUEST_COMPLETED = "https://retroachievements.org/API/API_GetUserCompletionProgress.php?u=%s&y=%s";
 
 
     protected CreateMisterEntriesFromRAOnline(String context)
@@ -45,8 +45,10 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 //        {
 //            e.printStackTrace();
 //        }
-        careteGamesFormOnlineWantPlayList();
-        createGamesFromOnlineCompletedList();
+
+
+        createGamesFormOnlineList(API_HTTP_REQUEST_WANT_TO_PLAY);
+        createGamesFormOnlineList(API_HTTP_REQUEST_COMPLETED);
     }
 
     private void getMappings() throws Exception
@@ -86,25 +88,15 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
     }
 
 
-    private void careteGamesFormOnlineWantPlayList()
+    private void createGamesFormOnlineList(final String URL)
     {
         Gson gson = new GsonBuilder().create();
-        Type wantPlayResults = new TypeToken<WantPlayResults>(){}.getType();
+        Type resultsType = new TypeToken<ResultsObject>(){}.getType();
 
-        String wantPlayResponse = getResponse(API_HTTP_REQUEST_WANT_TO_PLAY);
-        WantPlayResults results = gson.fromJson(wantPlayResponse, wantPlayResults);
+        String response = getResponse(URL);
+        ResultsObject results = gson.fromJson(response, resultsType);
 
         processEntries(results.Results);
-    }
-
-    private void createGamesFromOnlineCompletedList()
-    {
-        Gson gson = new GsonBuilder().create();
-        Type completedEntries = new TypeToken<ArrayList<AchievementEntry>>(){}.getType();
-
-        String completedResponse = getResponse(API_HTTP_REQUEST_COMPLETED);
-        List<AchievementEntry> games = gson.fromJson(completedResponse, completedEntries);
-        processEntries(games);
     }
 
     private String getResponse(final String baseURL)
@@ -141,17 +133,14 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
         for(AchievementEntry entry : entries)
         {
             String consoleName = entry.getConsoleName();
-            if ("Events".equals(consoleName) && entry.isHardcore())
+            if ("Events".equals(consoleName))
             {
                 System.out.println("Event: " + entry.getTitle());
                 continue;
             }
 
             PlatformInfo platform = PlatformInfo.getByAchievementTitle(entry.getConsoleName());
-            if (platform != null && (
-                            (entry.isWantToPlay()) ||
-                                    (platform.isAchievementHardcore() && entry.isHardcore()) ||
-                                    (!platform.isAchievementHardcore() && !entry.isHardcore())))
+            if (platform != null)
             {
                 boolean save = false;
 
@@ -164,12 +153,6 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     save = true;
 
                     System.out.println("New Game Created: " + entry.getTitle());
-                }
-
-                if (game.getAchievementId() == null)
-                {
-                    game.setAchievementId(entry.getId());
-                    save = true;
                 }
 
                 if (game.getMisterFilepath() == null)
@@ -189,33 +172,44 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     }
                 }
 
+                if (game.getAchievementId() == null)
+                {
+                    game.setAchievementId(entry.getId());
+                    save = true;
+                }
+
                 if (game.getAchievementTitle() == null)
                 {
                     game.setAchievementTitle(entry.getTitle());
                     save = true;
                 }
 
-                if (game.getAchievementLevel() == null)
+                if (entry.isWantToPlay())
                 {
-                    if (entry.isWantToPlay())
+                    if (game.getAchievementLevel() == null)
                     {
                         game.setAchievementLevel(AchievementLevel.UNSTARTED);
+                        save = true;
                     }
-                    else
+                }
+                else
+                {
+                    if (entry.isMastered() && !game.getAchievementLevel().isMastered())
+                    {
+                        game.setAchievementLevel(AchievementLevel.MASTERED);
+                        save = true;
+                    }
+                    else if (entry.isBeaten() && game.getAchievementLevel().equals(AchievementLevel.STARTED))
+                    {
+                        game.setAchievementLevel(AchievementLevel.BEATEN);
+                        save = true;
+                    }
+                    else if (entry.isHasProgress() &&
+                            (game.getAchievementLevel().equals(AchievementLevel.UNSTARTED) || game.getAchievementLevel() == null))
                     {
                         game.setAchievementLevel(AchievementLevel.STARTED);
+                        save = true;
                     }
-                    save = true;
-                }
-                else if (entry.isMastered() && !game.getAchievementLevel().isMastered())
-                {
-                    game.setAchievementLevel(AchievementLevel.MASTERED);
-                    save = true;
-                }
-                else if(!entry.isWantToPlay() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED))
-                {
-                    game.setAchievementLevel(AchievementLevel.STARTED);
-                    save = true;
                 }
 
 
@@ -236,15 +230,22 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
             return game;
         }
 
-        String standardName = getStandardName(entry.getTitle());
-        game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
+        String gameTitle = removeTildaCategory(entry.getTitle());
+        game = pocketGameDAO().getByTitleFilenameContains(gameTitle, platform);
         if (game != null)
         {
             return game;
         }
 
-        standardName = getBaseName(standardName);
-        game = pocketGameDAO().getByTitleFilenameContains(standardName, platform);
+        gameTitle = removeThe(gameTitle);
+        game = pocketGameDAO().getByTitleFilenameContains(gameTitle, platform);
+        if (game != null)
+        {
+            return game;
+        }
+
+        gameTitle = convertColon(gameTitle);
+        game = pocketGameDAO().getByTitleFilenameContains(gameTitle, platform);
         if (game != null)
         {
             return game;
@@ -299,20 +300,35 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 
     private File locateFile(File folder, PocketGame game)
     {
+        if (game.getMisterFilename() != null)
+        {
+            String filepath = folder.getAbsolutePath() + "/" + game.getMisterFilename();
+            File file = new File(filepath);
+            if (file.exists())
+            {
+                return file;
+            }
+        }
+
         FileFilter filter = new FileFilter()
         {
             public boolean accept(File file)
             {
-                if (file.isDirectory())
+                if (!file.getName().startsWith("."))
                 {
-                    return true;
-                }
-                for(String EXT : game.getPlatform().getFileExtensions())
-                {
-                    if (file.getName().toLowerCase().endsWith(EXT) &&
-                            !file.getName().startsWith("."))
+                    if (file.isDirectory())
                     {
                         return true;
+                    }
+                    if (game.getMisterFilename() == null)
+                    {
+                        for(String EXT : game.getPlatform().getFileExtensions())
+                        {
+                            if (file.getName().toLowerCase().endsWith(EXT))
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
                 return false;
@@ -355,17 +371,24 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     return file;
                 }
 
-                String entityTitle = getStandardName(game.getAchievementTitle());
+                String entityTitle = removeTildaCategory(game.getAchievementTitle());
                 if (filename.startsWith(entityTitle))
                 {
                     return file;
                 }
 
-                entityTitle = getBaseName(entityTitle);
+                entityTitle = removeThe(entityTitle);
                 if (filename.startsWith(entityTitle))
                 {
                     return file;
                 }
+
+                entityTitle = convertColon(entityTitle);
+                if (filename.startsWith(entityTitle))
+                {
+                    return file;
+                }
+
 
 
             }
@@ -374,17 +397,18 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
     }
 
 
-    private String getStandardName(String entryTitle)
+    private String removeTildaCategory(String entryTitle)
     {
         String standardName = entryTitle;
-        if (standardName.contains("~"))
+        while(standardName.startsWith("~"))
         {
-            standardName = standardName.split("~")[2].trim();
+            standardName = standardName.substring(1);
+            standardName = standardName.substring(standardName.indexOf("~") + 1);
         }
         return standardName;
     }
 
-    private String getBaseName(String entryTitle)
+    private String removeThe(String entryTitle)
     {
         final String THE = "The";
 
@@ -396,7 +420,12 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
         return baseName;
     }
 
-    private class WantPlayResults
+    private String convertColon(String entryTitle)
+    {
+        return entryTitle.replaceAll(":", " -");
+    }
+
+    private class ResultsObject
     {
         @Expose
         public List<AchievementEntry> Results;
