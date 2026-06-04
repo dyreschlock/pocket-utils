@@ -28,10 +28,10 @@ public enum MisterMglInfo
     SEGA_SATURN("_Console/Saturn", "1", "s", "0"),
     SEGA_CD("_Console/MegaCD", "1", "s", "0"),
     SEGA_GENESIS("_Console/MegaDrive", "_Console (Achievements)/cores/MegaDrive", "1", "f", "1"),
-    SEGA_MASTER_SYSTEM("_Console/SMS", "1", "f", "1"),
+    SEGA_MASTER_SYSTEM("_Console/SMS", "_Console (Achievements)/cores/SMS", "1", "f", "1"),
     SEGA_SG1000("_Console/ColecoVision", "1", "f", "2"),
 
-    GAME_GEAR("_Console/SMS", "1", "f", "2"),
+    GAME_GEAR("_Console/SMS", "_Console (Achievements)/cores/SMS", "1", "f", "2"),
 
 
     //NEC

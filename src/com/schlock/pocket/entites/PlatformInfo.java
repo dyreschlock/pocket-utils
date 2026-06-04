@@ -34,12 +34,12 @@ public enum PlatformInfo
 
     //Sega
     SEGA_SATURN("Sega_-_Saturn", "saturn", "chd"),
-    SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "Sega CD", "chd"),
+    SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "Sega CD", false, "chd"),
     SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "Genesis/Mega Drive", true, "md"),
-    SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "sms"),
+    SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "Master System", false, "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
 
-    GAME_GEAR("Sega_-_Game_Gear", "gg", "gg"),
+    GAME_GEAR("Sega_-_Game_Gear", "gg", "Game Gear", false, "gg"),
 
 
     //NEC
