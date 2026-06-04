@@ -142,7 +142,7 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
             PlatformInfo platform = PlatformInfo.getByAchievementTitle(entry.getConsoleName());
             if (platform != null)
             {
-                boolean save = false;
+                List<String> updateMessages = new ArrayList<>();
 
                 PocketGame game = locateGame(entry, platform);
                 if (game == null)
@@ -150,9 +150,8 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     PocketCore core = pocketCoreDAO().getByPlatformId(platform.getPlatformId());
 
                     game = PocketGame.createAchievementGame(entry, core, platform);
-                    save = true;
 
-                    System.out.println("New Game Created: " + entry.getTitle());
+                    updateMessages.add("New Game Created: " + game.getTitle());
                 }
 
                 if (game.getMisterFilepath() == null)
@@ -168,20 +167,16 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
 
                         game.setMisterFilepath(filepath);
 
-                        save = true;
+                        updateMessages.add(String.format("Update on %s: Game found at %s", game.getTitle(), filepath));
                     }
                 }
 
-                if (game.getAchievementId() == null)
+                if (game.getAchievementId() == null || game.getAchievementTitle() == null)
                 {
                     game.setAchievementId(entry.getId());
-                    save = true;
-                }
-
-                if (game.getAchievementTitle() == null)
-                {
                     game.setAchievementTitle(entry.getTitle());
-                    save = true;
+
+                    updateMessages.add(String.format("Update on %s: RA Title and ID added", game.getTitle()));
                 }
 
                 if (entry.isWantToPlay())
@@ -189,15 +184,19 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     if (game.getAchievementLevel() == null)
                     {
                         game.setAchievementLevel(AchievementLevel.UNSTARTED);
-                        save = true;
+                        updateMessages.add(String.format("Update on %s: Achievement set to %s", game.getTitle(), game.getAchievementLevel().name()));
                     }
                 }
                 else
                 {
-                    if (entry.isMastered() && !game.getAchievementLevel().isMastered())
+                    boolean save = false;
+                    if (entry.isMastered())
                     {
-                        game.setAchievementLevel(AchievementLevel.MASTERED);
-                        save = true;
+                        if(!game.getAchievementLevel().isMastered())
+                        {
+                            game.setAchievementLevel(AchievementLevel.MASTERED);
+                            save = true;
+                        }
                     }
                     else if (entry.isBeaten() && game.getAchievementLevel().equals(AchievementLevel.STARTED))
                     {
@@ -205,18 +204,32 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                         save = true;
                     }
                     else if (entry.isHasProgress() &&
-                            (game.getAchievementLevel().equals(AchievementLevel.UNSTARTED) || game.getAchievementLevel() == null))
+                            (game.getAchievementLevel() == null || game.getAchievementLevel().equals(AchievementLevel.UNSTARTED)))
                     {
                         game.setAchievementLevel(AchievementLevel.STARTED);
                         save = true;
                     }
+                    else if (entry.isHasProgress() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED_PICROSS))
+                    {
+                        game.setAchievementLevel(AchievementLevel.CURRENT);
+                        save = true;
+                    }
+
+                    if(save)
+                    {
+                        updateMessages.add(String.format("Update on %s: Achievement set to %s", game.getTitle(), game.getAchievementLevel().name()));
+                    }
                 }
 
 
-                if (save)
+                if (!updateMessages.isEmpty())
                 {
-                    System.out.println("Updating Game: " + game.getTitle());
                     save(game);
+
+                    for(String message : updateMessages)
+                    {
+                        System.out.println(message);
+                    }
                 }
             }
         }
