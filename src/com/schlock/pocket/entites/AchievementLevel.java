@@ -18,11 +18,12 @@ public enum AchievementLevel
 
     UNSTARTED("Not Started"),
     UNSTARTED_RPG(UNSTARTED, "RPG"),
+    UNSTARTED_PICROSS(UNSTARTED, "Picross"),
 
     OTHERS("others"),
     EVENT(OTHERS,"Event"),
     SUBSET(OTHERS,"Subset"),
-    SKIP(OTHERS,"Skip"),
+    SKIP(OTHERS,"Done"),
     DONE(OTHERS,"Done");
 
     private final String SOFTCORE_FOLDER = "_Softcore";
