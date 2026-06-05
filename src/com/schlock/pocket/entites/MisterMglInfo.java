@@ -3,7 +3,7 @@ package com.schlock.pocket.entites;
 public enum MisterMglInfo
 {
     //Sony
-    PLAYSTATION("_Console/PSX", "1", "s", "1"),
+    PLAYSTATION("_Console/PSX", "_Console (Achievements)/cores/PSX", "1", "s", "1"),
 
 
     //Nintendo
@@ -21,12 +21,12 @@ public enum MisterMglInfo
 
     //SNK
     NEO_GEO_CD("_Console/NeoGeo", "1", "s", "1"),
-    NEO_GEO("_Console/NeoGeo", "1", "f", "1"),
+    NEO_GEO("_Console/NeoGeo", "_Console (Achievements)/cores/NeoGeo", "1", "f", "1"),
 
 
     //Sega
     SEGA_SATURN("_Console/Saturn", "1", "s", "0"),
-    SEGA_CD("_Console/MegaCD", "1", "s", "0"),
+    SEGA_CD("_Console/MegaCD", "_Console (Achievements)/cores/MegaCD", "1", "s", "0"),
     SEGA_GENESIS("_Console/MegaDrive", "_Console (Achievements)/cores/MegaDrive", "1", "f", "1"),
     SEGA_MASTER_SYSTEM("_Console/SMS", "_Console (Achievements)/cores/SMS", "1", "f", "1"),
     SEGA_SG1000("_Console/ColecoVision", "1", "f", "2"),
@@ -35,8 +35,8 @@ public enum MisterMglInfo
 
 
     //NEC
-    PC_ENGINE_CD("_Console/TurboGrafx16", "1", "s", "0"),
-    PC_ENGINE("_Console/TurboGrafx16", "1", "f", "0"),
+    PC_ENGINE_CD("_Console/TurboGrafx16", "_Console (Achievements)/cores/TurboGrafx16", "1", "s", "0"),
+    PC_ENGINE("_Console/TurboGrafx16", "_Console (Achievements)/cores/TurboGrafx16", "1", "f", "0"),
 
 
     //Atari
