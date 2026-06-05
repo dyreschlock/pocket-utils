@@ -32,7 +32,10 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
         if (favorites.exists())
         {
             eraseFavorites(favorites);
+            System.out.println("Favorites erased.");
+
             writeFavorites();
+            System.out.println("Favorites written.");
         }
         else
         {
@@ -46,7 +49,10 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
         if (achievements.exists())
         {
             eraseAchievements(achievements);
+            System.out.println("Achievements erased.");
+
             writeAchievements();
+            System.out.println("Achievements written.");
         }
         else
         {
