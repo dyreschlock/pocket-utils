@@ -10,7 +10,7 @@ public enum PlatformInfo
 
     //Nintendo
     NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "Nintendo 64", false, "z64"),
-    SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "SNES/Super Famicom", true, "smc", "sfc"),
+    SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "SNES/Super Famicom", true, "smc", "sfc", "bs"),
     FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "Famicom Disk System", true, "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes", "NES/Famicom", true, "nes"),
 
@@ -20,13 +20,15 @@ public enum PlatformInfo
     GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "Game Boy Color", false, "gbc", "gb"),
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "Game Boy", false, "gb"),
 
+    MEGA_DUCK_GB("Nintendo_-_Game_Boy", "mega_duck", "Mega Duck", false, "bin", "gb"),
+
     POKEMON_MINI("Nintendo_-_Pokemon_Mini", "poke_mini", "min"),
     GAME_AND_WATCH("", "gameandwatch", "gnw"),
 
 
     //SNK
     NEO_GEO_CD("SNK_-_Neo_Geo_CD", "ngcd", "chd"),
-    NEO_GEO("SNK_-_Neo_Geo", "ng", "json", "neo"),
+    NEO_GEO("SNK_-_Neo_Geo","ng", "Arcade", false,  "json", "neo"),
 
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
@@ -106,6 +108,8 @@ public enum PlatformInfo
 
     private List<String> extensions = new ArrayList<>();
 
+    private static final List<PlatformInfo> UNSUPPORTED_ACHIEVEMENTS = Arrays.asList(MEGA_DUCK_GB);
+
     PlatformInfo(String repoName, String platformId, String... fileExtensions)
     {
         this(repoName, platformId, "", false, fileExtensions);
@@ -133,6 +137,10 @@ public enum PlatformInfo
         return achievementTitle != null;
     }
 
+    public boolean isAchievementsUnsupported()
+    {
+        return UNSUPPORTED_ACHIEVEMENTS.contains(this);
+    }
 
     public boolean isArcade()
     {

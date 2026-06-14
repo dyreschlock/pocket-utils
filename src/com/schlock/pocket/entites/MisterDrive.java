@@ -5,7 +5,7 @@ import com.schlock.pocket.services.DeploymentConfiguration;
 public enum MisterDrive
 {
     SD("/media/fat/"),
-    USB1("/media/usb1/");
+    USB1("/media/usb0/");
 
     private String filepath;
 

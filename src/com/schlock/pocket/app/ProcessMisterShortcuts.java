@@ -155,7 +155,7 @@ public class ProcessMisterShortcuts extends AbstractDatabaseApplication
         for(PocketGame game : pocketGameDAO().getAllMisterWithAchievements())
         {
             MisterMglInfo mgl = MisterMglInfo.getInfo(game);
-            if (mgl != null && mgl.isAchievementsOk())
+            if (mgl != null && mgl.isAchievementsOk() && !game.getPlatform().isAchievementsUnsupported())
             {
                 String filename = mgl.getShortcutFilename(game);
                 boolean softcore = !game.getPlatform().isAchievementHardcore();

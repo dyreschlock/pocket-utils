@@ -199,7 +199,9 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                         }
                     }
                     else if (entry.isBeaten() &&
-                            (game.getAchievementLevel().equals(AchievementLevel.STARTED) || game.getAchievementLevel().equals(AchievementLevel.UNSTARTED)))
+                            (game.getAchievementLevel().equals(AchievementLevel.STARTED)
+                                    || game.getAchievementLevel().equals(AchievementLevel.UNSTARTED)
+                                    || game.getAchievementLevel().equals(AchievementLevel.EVENT)))
                     {
                         game.setAchievementLevel(AchievementLevel.BEATEN);
                         save = true;

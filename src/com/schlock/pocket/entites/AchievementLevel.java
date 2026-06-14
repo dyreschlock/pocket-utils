@@ -15,6 +15,7 @@ public enum AchievementLevel
     NEAR_MASTER(BEATEN,"Easy or Near Master"),
 
     STARTED("Not Beaten - Started"),
+    SKIP(STARTED,"Skip"),
 
     UNSTARTED("Not Started"),
     UNSTARTED_RPG(UNSTARTED, "RPG"),
@@ -23,7 +24,6 @@ public enum AchievementLevel
     OTHERS("others"),
     EVENT(OTHERS,"Event"),
     SUBSET(OTHERS,"Subset"),
-    SKIP(OTHERS,"Done"),
     DONE(OTHERS,"Done");
 
     private final String SOFTCORE_FOLDER = "_Softcore";

@@ -16,6 +16,8 @@ public enum MisterMglInfo
     GAMEBOY_COLOR("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
     GAMEBOY("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
 
+    MEGA_DUCK_GB("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
+
     POKEMON_MINI("_Console/PokemonMini", "1", "f", "1"),
 
 
