@@ -10,16 +10,19 @@ public enum AchievementLevel
     CURRENT(""),
 
     BEATEN("Beaten - Not Mastered"),
-    MASTERED(BEATEN,"Mastered"),
-    EASY_MASTER(BEATEN,"Easy or Near Master"),
-    NEAR_MASTER(BEATEN,"Easy or Near Master"),
+    MASTERED(BEATEN,".Mastered"),
+    EASY(BEATEN,"Easy Master - Free"),
+    MAYBE_EASY(BEATEN, "Easy Master - Maybe"),
+    NEAR_MASTER(BEATEN,"Near Master"),
+    TWO_HOUR(BEATEN, "Easy Master - Two+ Hours"),
 
     STARTED("Not Beaten - Started"),
+    PICROSS(STARTED, "Picross"),
     SKIP(STARTED,"Skip"),
+    BACKLOG(STARTED, "Backlog"),
 
     UNSTARTED("Not Started"),
     UNSTARTED_RPG(UNSTARTED, "RPG"),
-    UNSTARTED_PICROSS(UNSTARTED, "Picross"),
 
     OTHERS("others"),
     EVENT(OTHERS,"Event"),
