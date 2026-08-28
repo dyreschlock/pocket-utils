@@ -28,6 +28,7 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
     }
 
     private static final String JSON_FILE_EXT = ".json";
+    private static final String ARCHIVE_PATH = "_archive/";
 
     private void updatePlatforms()
     {
@@ -36,11 +37,20 @@ public class ProcessPlatforms extends AbstractDatabaseApplication
         List<PocketCore> cores = pocketCoreDAO().getAllToCopyReleaseWithCompleteInformation();
         for(PocketCore core : cores)
         {
-            String filepath = config().getPocketPlatformsDirectory() + core.getPlatformId() + JSON_FILE_EXT;
-            String json = generateJSONforCore(core);
+            String filename = core.getPlatformId() + JSON_FILE_EXT;
 
-            deleteOldFile(filepath);
-            writeStringToFile(filepath, json);
+            String filepath = config().getPocketPlatformsDirectory();
+
+            deleteOldFile(filepath + filename);
+
+            if (!core.isCopy() && !core.isFavorite())
+            {
+                filepath += ARCHIVE_PATH;
+                deleteOldFile(filepath + filename);
+            }
+
+            String json = generateJSONforCore(core);
+            writeStringToFile(filepath + filename, json);
 
             count++;
         }
