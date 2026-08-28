@@ -12,6 +12,8 @@ public enum MisterMglInfo
     FAMICOM_DISK("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
     NES("_Console/NES", "_Console (Achievements)/cores/NES", "2", "f", "1"),
 
+    VIRTUAL_BOY("_Console/VirtualBoy", "_Console (Achievements)/cores/VirtualBoy", "1", "f", "1"),
+
     GAMEBOY_ADVANCE("_Console/GBA", "_Console (Achievements)/cores/GBA", "2", "f", "1"),
     GAMEBOY_COLOR("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
     GAMEBOY("_Console/Gameboy", "_Console (Achievements)/cores/Gameboy", "2", "f", "1"),
@@ -27,7 +29,7 @@ public enum MisterMglInfo
 
 
     //Sega
-    SEGA_SATURN("_Console/Saturn", "1", "s", "0"),
+    SEGA_SATURN("_Console/Saturn", "_Console (Achievements)/cores/Saturn", "1", "s", "0"),
     SEGA_CD("_Console/MegaCD", "_Console (Achievements)/cores/MegaCD", "1", "s", "0"),
     SEGA_GENESIS("_Console/MegaDrive", "_Console (Achievements)/cores/MegaDrive", "1", "f", "1"),
     SEGA_MASTER_SYSTEM("_Console/SMS", "_Console (Achievements)/cores/SMS", "1", "f", "1"),
@@ -42,8 +44,8 @@ public enum MisterMglInfo
 
 
     //Atari
-    ATARI_7800("_Console/Atari7800", "1", "f", "1"),
-    ATARI_2600("_Console/Atari7800", "1", "f", "1"),
+    ATARI_7800("_Console/Atari7800", "_Console (Achievements)/cores/Atari7800", "1", "f", "1"),
+    ATARI_2600("_Console/Atari7800", "_Console (Achievements)/cores/Atari7800", "1", "f", "1"),
 
     //Bandai
     WONDERSWAN_COLOR("_Console/WonderSwan", "1", "f", "1"),
