@@ -192,16 +192,18 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                     boolean save = false;
                     if (entry.isMastered())
                     {
-                        if(!game.getAchievementLevel().isMastered())
+                        if(game.getAchievementLevel() == null || !game.getAchievementLevel().isMastered())
                         {
                             game.setAchievementLevel(AchievementLevel.MASTERED);
                             save = true;
                         }
                     }
                     else if (entry.isBeaten() &&
-                            (game.getAchievementLevel().equals(AchievementLevel.STARTED)
+                            (game.getAchievementLevel() == null
+                                    || game.getAchievementLevel().equals(AchievementLevel.STARTED)
                                     || game.getAchievementLevel().equals(AchievementLevel.UNSTARTED)
-                                    || game.getAchievementLevel().equals(AchievementLevel.EVENT)))
+                                    || game.getAchievementLevel().equals(AchievementLevel.EVENT)
+                                    || game.getAchievementLevel().equals(AchievementLevel.BACKLOG)))
                     {
                         game.setAchievementLevel(AchievementLevel.BEATEN);
                         save = true;
@@ -212,11 +214,11 @@ public class CreateMisterEntriesFromRAOnline extends AbstractDatabaseApplication
                         game.setAchievementLevel(AchievementLevel.STARTED);
                         save = true;
                     }
-                    else if (entry.isHasProgress() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED_PICROSS))
-                    {
-                        game.setAchievementLevel(AchievementLevel.CURRENT);
-                        save = true;
-                    }
+//                    else if (entry.isHasProgress() && game.getAchievementLevel().equals(AchievementLevel.UNSTARTED_PICROSS))
+//                    {
+//                        game.setAchievementLevel(AchievementLevel.CURRENT);
+//                        save = true;
+//                    }
 
                     if(save)
                     {
