@@ -6,19 +6,19 @@ import java.util.List;
 
 public enum PlatformInfo
 {
-    PLAYSTATION("Sony_-_PlayStation", "playstation", "PlayStation", false, "chd"),
+    PLAYSTATION("Sony_-_PlayStation", "playstation", "PlayStation", true, "chd", "cue"),
 
     //Nintendo
-    NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "Nintendo 64", false, "z64"),
+    NINTENDO_64("Nintendo_-_Nintendo_64", "n64", "Nintendo 64", true, "z64"),
     SUPER_NINTENDO("Nintendo_-_Super_Nintendo_Entertainment_System", "snes", "SNES/Super Famicom", true, "smc", "sfc", "bs"),
     FAMICOM_DISK("Nintendo_-_Family_Computer_Disk_System", "nes", "Famicom Disk System", true, "fds"),
     NES("Nintendo_-_Nintendo_Entertainment_System", "nes", "NES/Famicom", true, "nes"),
 
-    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
+    VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "Virtual Boy", false, "vb"),
 
     GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "Game Boy Advance", false, "gba"),
-    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "Game Boy Color", false, "gbc", "gb"),
-    GAMEBOY("Nintendo_-_Game_Boy", "gb", "Game Boy", false, "gb"),
+    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "Game Boy Color", true, "gbc", "gb"),
+    GAMEBOY("Nintendo_-_Game_Boy", "gb", "Game Boy", true, "gb"),
 
     MEGA_DUCK_GB("Nintendo_-_Game_Boy", "mega_duck", "Mega Duck", false, "bin", "gb"),
 
@@ -28,16 +28,17 @@ public enum PlatformInfo
 
     //SNK
     NEO_GEO_CD("SNK_-_Neo_Geo_CD", "ngcd", "chd"),
-    NEO_GEO("SNK_-_Neo_Geo","ng", "Arcade", false,  "json", "neo"),
+    NEO_GEO("SNK_-_Neo_Geo","ng",  "json", "neo"),
+//    NEO_GEO("SNK_-_Neo_Geo","ng", "Arcade", false,  "json", "neo"),
 
     NEO_GEO_POCKET_COLOR("SNK_-_Neo_Geo_Pocket_Color", "ngpc", "ngc"),
     NEO_GEO_POCKET("SNK_-_Neo_Geo_Pocket", "ngpc", "ngp"),
 
 
     //Sega
-    SEGA_SATURN("Sega_-_Saturn", "saturn", "chd"),
+    SEGA_SATURN("Sega_-_Saturn", "saturn", "Saturn", false, "chd", "cue"),
     SEGA_CD("Sega_-_Mega-CD_-_Sega_CD", "scd", "Sega CD", false, "chd"),
-    SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "Genesis/Mega Drive", true, "md"),
+    SEGA_GENESIS("Sega_-_Mega_Drive_-_Genesis", "genesis", "Genesis/Mega Drive", true, "md", "bin"),
     SEGA_MASTER_SYSTEM("Sega_-_Master_System_-_Mark_III", "sms", "Master System", false, "sms"),
     SEGA_SG1000("Sega_-_SG-1000", "sg1000", "sg"),
 
@@ -47,7 +48,7 @@ public enum PlatformInfo
     //NEC
     PC_ENGINE("NEC_-_PC_Engine_-_TurboGrafx_16", "pce", "PC Engine/TurboGrafx-16", false, "pce"),
     PC_ENGINE_SUPERGRAFX("NEC_-_PC_Engine_SuperGrafx", "pce", "sfx"),
-    PC_ENGINE_CD("NEC_-_PC_Engine_CD_-_TurboGrafx-CD", "pcecd", "PC Engine CD/TurboGrafx-CD", false, "json", "chd"),
+    PC_ENGINE_CD("NEC_-_PC_Engine_CD_-_TurboGrafx-CD", "pcecd", "PC Engine CD/TurboGrafx-CD", false, "json", "chd", "cue"),
 
 
     //Bandai
@@ -58,9 +59,9 @@ public enum PlatformInfo
     //Atari
     ATARI_LYNX("Atari_-_Lynx", "lynx", "lnx"),
 
-    ATARI_7800("Atari_-_7800", "7800", "a78"),
+    ATARI_7800("Atari_-_7800", "7800", "Atari 7800", false, "a78"),
     ATARI_5200("Atari_-_5200", "5200", "a52"),
-    ATARI_2600("Atari_-_2600", "2600", "a26", "bin"),
+    ATARI_2600("Atari_-_2600", "2600", "Atari 2600", false, "a26", "bin"),
 
 
     //Other Consoles
